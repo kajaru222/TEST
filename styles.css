@@ -27,3 +27,84 @@ main{max-width:var(--max);margin:0 auto;padding:0 16px 24px;}
 footer{border-top:1px solid var(--line);background:rgba(10,10,14,.75);}
 .foot{max-width:var(--max);margin:0 auto;padding:18px 16px;color:var(--muted);font-size:12px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;}
 @media (max-width: 900px){.brand{min-width:auto}.embed-frame{height:min(86vh,1100px)}}
+/* ===== Wix風 共通ヘッダー ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.site-header .nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.site-header .brand img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.site-header .brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.site-header .brand-text strong {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
+
+.site-header .brand-text span {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* メニュー */
+.site-header nav {
+  display: flex;
+  gap: 18px;
+}
+
+.site-header nav a {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.site-header nav a:hover {
+  color: #ffffff;
+}
+
+/* スマホでも崩さない（Wix寄り挙動） */
+@media (max-width: 768px) {
+  .site-header .nav {
+    padding: 0 14px;
+  }
+  .site-header nav {
+    gap: 10px;
+  }
+  .site-header nav a {
+    font-size: 11px;
+  }
+}
