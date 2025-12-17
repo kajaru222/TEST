@@ -1,37 +1,16 @@
-<!doctype html>
-<html lang="ja"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>カフェについて | 煌龍園</title>
-<link rel="stylesheet" href="/styles.css">
-</head><body>
-<header>
-  <div class="nav">
-    <a class="brand" href="/" aria-label="煌龍園 TOPへ">
-      <img src="https://static.wixstatic.com/media/5f9e4d_18a644bbb4d14e72a9d32cb247214c56~mv2.png/v1/fill/w_68%2Ch_68%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/5f9e4d_18a644bbb4d14e72a9d32cb247214c56~mv2.png" alt="煌龍園 ロゴ">
-      <div class="name"><strong>煌龍園</strong><span>∼KohLongEnn∼</span></div>
-    </a>
-    <nav class="menu" aria-label="メニュー"><a href="/">入口</a><a href="/concept/">はじめに</a><a href="/cafe/">カフェについて</a><a href="/cast/">龍紹介</a><a href="/access/">アクセス</a><a href="/contact/">問合せ</a></nav>
-  </div>
-</header>
-<main>
-  <div class="embed-shell">
-    <iframe class="embed-frame" id="frame" title="カフェについて" referrerpolicy="no-referrer"></iframe>
-  </div>
-</main>
-<footer>
-  <div class="foot">
-    <div>© KohLongEnn</div>
-    <div>©SQUARE ENIX / 記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。</div>
-  </div>
-</footer>
-<script id="srcdoc" type="text/plain"><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>煌龍園インフォメーション</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; }
+  /* --- 全要素のサイズ計算を統一（重要） --- */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  /* --- ベーススタイル --- */
   body {
     background-color: #6d2020;
     color: #ffffff;
@@ -39,13 +18,23 @@
     margin: 0;
     padding: 0;
     line-height: 1.8;
+    
+    /* 縦スクロールは許可しつつバーを消す */
     overflow-y: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;  /* Firefox */
+    
+    /* 横スクロールを強制的に禁止 */
     overflow-x: hidden;
     width: 100%;
   }
-  body::-webkit-scrollbar { display: none; }
+
+  /* Chrome/Safariでスクロールバーを隠す */
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* --- タブメニュー --- */
   .tab-menu {
     display: flex;
     justify-content: center;
@@ -59,6 +48,7 @@
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     width: 100%;
   }
+
   .tab-button {
     background-color: transparent;
     border: 1px solid #cc8888;
@@ -70,13 +60,40 @@
     font-size: 16px;
     transition: all 0.3s;
     outline: none;
-    white-space: nowrap;
+    white-space: nowrap; /* ボタン内の文字改行を防ぐ */
   }
-  .tab-button:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
-  .tab-button.active { background-color: #fff; color: #6d2020; border-color: #fff; font-weight: bold; }
-  .tab-content { display: none; padding: 20px; animation: fadeIn 0.5s; padding-bottom: 80px; width: 100%; }
-  .tab-content.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+
+  .tab-button:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+
+  .tab-button.active {
+    background-color: #fff;
+    color: #6d2020;
+    border-color: #fff;
+    font-weight: bold;
+  }
+
+  /* --- コンテンツエリア --- */
+  .tab-content {
+    display: none;
+    padding: 20px;
+    animation: fadeIn 0.5s;
+    padding-bottom: 80px;
+    width: 100%;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* --- 各パーツのデザイン --- */
   .container {
     max-width: 900px;
     width: 100%;
@@ -86,38 +103,137 @@
     background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
                       linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
     background-size: 20px 20px;
+    
+    /* コンテナ内での文字改行を確実に */
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
-  header { text-align: center; border-bottom: 2px solid #ffffff; margin-bottom: 30px; padding-bottom: 20px; }
-  h1 { font-size: 1.8em; margin: 0; letter-spacing: 0.05em; line-height: 1.4; }
-  .subtitle { text-align: center; font-size: 1.3em; margin-bottom: 40px; font-weight: bold; line-height: 1.5; }
-  .content-wrapper { display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; align-items: flex-start; }
-  .column { flex: 1; min-width: 300px; }
-  .description p { margin-bottom: 1.5em; text-align: center; }
+
+  header {
+    text-align: center;
+    border-bottom: 2px solid #ffffff;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+  }
+
+  h1 { 
+    font-size: 1.8em; 
+    margin: 0; 
+    letter-spacing: 0.05em; 
+    line-height: 1.4;
+  }
+  
+  .subtitle {
+    text-align: center; 
+    font-size: 1.3em; 
+    margin-bottom: 40px; 
+    font-weight: bold;
+    line-height: 1.5;
+  }
+
+  .content-wrapper {
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 40px; 
+    justify-content: space-between; 
+    align-items: flex-start;
+  }
+
+  .column { 
+    flex: 1; 
+    min-width: 300px; /* PCなど広い画面用の最小幅 */
+  }
+  
+  .description p { 
+    margin-bottom: 1.5em; 
+    text-align: center; 
+  }
+  
   .info-section { margin-bottom: 30px; }
-  h3 { font-size: 1.2em; border-left: 8px solid #cc8888; padding-left: 10px; margin-bottom: 15px; display: flex; align-items: center; }
-  p { margin-bottom: 1em; font-size: 0.95em; line-height: 1.8; }
+
+  h3 {
+    font-size: 1.2em;
+    border-left: 8px solid #cc8888;
+    padding-left: 10px;
+    margin-bottom: 15px;
+    display: flex; 
+    align-items: center;
+  }
+
+  p { 
+    margin-bottom: 1em; 
+    font-size: 0.95em; 
+    line-height: 1.8;
+  }
+
   ul.schedule-list { list-style: none; padding: 0; }
   .schedule-list li { display: flex; margin-bottom: 5px; }
   .time { width: 60px; font-weight: bold; flex-shrink: 0; }
   .separator { margin: 0 10px; }
   .location-info, .open-days { margin-left: 10px; }
-  .footer-note { text-align: center; margin-top: 40px; font-size: 0.9em; }
+
+  .footer-note {
+    text-align: center; margin-top: 40px; font-size: 0.9em;
+  }
+
+  /* --- スマホ対応（最重要修正箇所） --- */
   @media (max-width: 600px) {
-    body { padding: 0; overflow-x: hidden; }
-    .tab-content { padding: 10px; }
-    .container { padding: 15px; border-width: 1px; width: 100%; }
-    .content-wrapper { flex-direction: column; gap: 20px; }
-    .column { width: 100%; min-width: 0; flex: 0 0 100%; }
+    body {
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .tab-content {
+        padding: 10px; /* スマホでは余白を減らす */
+    }
+
+    .container { 
+        padding: 15px; 
+        border-width: 1px; /* 枠線を少し細く */
+        width: 100%;
+    }
+
+    .content-wrapper { 
+        flex-direction: column; 
+        gap: 20px;
+    }
+
+    .column { 
+        width: 100%;     /* 幅を強制的に100%に */
+        min-width: 0;    /* PC用の最小幅制限を解除 */
+        flex: 0 0 100%;
+    }
+
     h1 { font-size: 1.4em; }
     .subtitle { font-size: 1.1em; margin-bottom: 25px; }
-    .tab-button { width: 45%; font-size: 13px; padding: 8px 4px; margin: 3px; }
-    p { word-break: break-all; }
+    
+    .tab-button { 
+        width: 45%; 
+        font-size: 13px; 
+        padding: 8px 4px;
+        margin: 3px;
+    }
+    
+    /* 長いURLなどがはみ出さないように */
+    p {
+        word-break: break-all;
+    }
   }
 </style>
 </head>
 <body>
+  <header style="background:#000000aa;padding:12px 20px;">
+  <nav style="max-width:1100px;margin:0 auto;display:flex;gap:16px;align-items:center;">
+    <a href="/" style="color:#fff;text-decoration:none;">入口</a>
+    <a href="/concept/" style="color:#fff;text-decoration:none;">はじめに</a>
+    <a href="/cafe/" style="color:#fff;text-decoration:none;">カフェについて</a>
+    <a href="/cast/" style="color:#fff;text-decoration:none;">龍紹介</a>
+    <a href="/access/" style="color:#fff;text-decoration:none;">アクセス</a>
+    <a href="/contact/" style="color:#fff;text-decoration:none;">問合せ</a>
+  </nav>
+</header>
+
+
   <div class="tab-menu">
     <button class="tab-button active" onclick="openTab(event, 'content1')">煌龍園について</button>
     <button class="tab-button" onclick="openTab(event, 'content2')">特典・おねがい</button>
@@ -272,15 +388,10 @@
       }
       document.getElementById(contentId).classList.add("active");
       evt.currentTarget.classList.add("active");
+      
       window.scrollTo(0, 0);
     }
   </script>
+
 </body>
 </html>
-</script>
-<script>
-  // srcdocを属性で直書きするとエスケープ地獄になるので、text/plainから投入
-  const raw = document.getElementById('srcdoc').textContent;
-  document.getElementById('frame').srcdoc = raw;
-</script>
-</body></html>
