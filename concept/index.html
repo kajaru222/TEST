@@ -1,186 +1,226 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>煌龍園の物語</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>煌龍園の物語 | 煌龍園</title>
 
-<style>
-    /* 全体の設定 */
+  <!-- はじめにページのフォント -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== Wix風 共通ヘッダー（全ページ完全一致） ===== */
+    .site-header{
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+    .site-header .nav{
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 64px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .site-header .brand{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #ffffff;
+      text-decoration: none;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+    }
+    .site-header .brand img{
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    .site-header .brand-text{
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .site-header .brand-text strong{
+      font-size: 14px;
+      letter-spacing: 0.08em;
+    }
+    .site-header .brand-text span{
+      font-size: 11px;
+      opacity: 0.8;
+    }
+    .site-header nav{
+      display: flex;
+      gap: 18px;
+    }
+    .site-header nav a{
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.2s ease;
+      white-space: nowrap;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+    }
+    .site-header nav a:hover{ color:#fff; }
+    @media (max-width:768px){
+      .site-header .nav{ padding:0 14px; }
+      .site-header nav{ gap:10px; }
+      .site-header nav a{ font-size:11px; }
+    }
+
+    /* ===== あなたの「はじめに」CSS（ほぼそのまま） ===== */
     body {
-        margin: 0;
-        padding: 0;
-        background-color: #6D2020; /* 画像に近い深紅の背景色 */
-        color: #ffffff;
-        font-family: 'Shippori Mincho', 'Yu Mincho', 'Hiragino Mincho ProN', serif; /* 明朝体 */
-        line-height: 2.2; /* ゆったりとした行間 */
-        letter-spacing: 0.05em; /* 文字間隔 */
-        -webkit-font-smoothing: antialiased;
-        
-        /* スクロールバー非表示設定 */
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE/Edge */
-    }
-    
-    /* Chrome, Safari, Opera用のスクロールバー非表示設定 */
-    body::-webkit-scrollbar {
-        display: none;
-    }
+      margin: 0;
+      padding: 0;
+      background-color: #6D2020;
+      color: #ffffff;
+      font-family: 'Shippori Mincho', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+      line-height: 2.2;
+      letter-spacing: 0.05em;
+      -webkit-font-smoothing: antialiased;
 
-    /* コンテナ設定（レイアウト調整） */
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    body::-webkit-scrollbar { display: none; }
+
     .story-container {
-        max-width: 600px; /* 読みやすい最大幅 */
-        margin: 0 auto;
-        padding: 40px 20px;
-        text-align: center; /* 中央揃え */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    /* ヘッダーデザイン */
     .header-section {
-        margin-bottom: 40px;
-        width: 100%;
-        border-bottom: 1px solid rgba(255,255,255,0.5); /* 下線 */
-        padding-bottom: 20px;
+      margin-bottom: 40px;
+      width: 100%;
+      border-bottom: 1px solid rgba(255,255,255,0.5);
+      padding-bottom: 20px;
     }
 
     h2 {
-        font-size: 2rem;
-        font-weight: 600;
-        margin: 0;
-        padding: 0;
+      font-size: 2rem;
+      font-weight: 600;
+      margin: 0;
+      padding: 0;
     }
-    
-    /* 龍のアイコン代替（文字アイコン） */
+
     .dragon-icon {
-        font-size: 3rem;
-        display: block;
-        margin-bottom: 10px;
-        line-height: 1;
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 10px;
+      line-height: 1;
     }
 
-    /* 本文の段落設定 */
     .story-text {
-        font-size: 1rem; /* 基本サイズ */
-        margin-bottom: 3rem; /* 段落ごとの余白 */
+      font-size: 1rem;
+      margin-bottom: 3rem;
     }
 
-    /* スマホ画面向けの調整 */
     @media screen and (max-width: 480px) {
-        h2 {
-            font-size: 1.5rem;
-        }
-        .story-text {
-            font-size: 0.9rem; /* スマホでは少し小さくして改行崩れを防ぐ */
-            margin-bottom: 2.5rem;
-        }
-        .story-container {
-            padding: 30px 15px;
-        }
+      h2 { font-size: 1.5rem; }
+      .story-text { font-size: 0.9rem; margin-bottom: 2.5rem; }
+      .story-container { padding: 30px 15px 50px; }
     }
 
-    /* 最後の挨拶部分 */
-    .closing-text {
-        margin-top: 20px;
-        font-size: 1.1rem;
-    }
+    .closing-text { margin-top: 20px; font-size: 1.1rem; }
 
-    /* フッターロゴエリア（画像がないためテキストで代用） */
     .footer-logo {
-        margin-top: 40px;
-        opacity: 0.8;
-        border-top: 1px solid rgba(255,255,255,0.5); /* 上線 */
-        width: 100%;
-        padding-top: 20px;
+      margin-top: 40px;
+      opacity: 0.8;
+      border-top: 1px solid rgba(255,255,255,0.5);
+      width: 100%;
+      padding-top: 20px;
     }
-</style>
+  </style>
 </head>
+
 <body>
-<header class="site-header">
-  <div class="nav">
-    <a href="/" class="brand">
-      <img src="https://static.wixstatic.com/media/5f9e4d_18a644bbb4d14e72a9d32cb247214c56~mv2.png" alt="煌龍園">
-      <div class="brand-text">
-        <strong>煌龍園</strong>
-        <span>∼KohLongEnn∼</span>
-      </div>
-    </a>
+  <header class="site-header">
+    <div class="nav">
+      <a href="/" class="brand">
+        <img src="https://static.wixstatic.com/media/5f9e4d_18a644bbb4d14e72a9d32cb247214c56~mv2.png" alt="煌龍園">
+        <div class="brand-text">
+          <strong>煌龍園</strong>
+          <span>∼KohLongEnn∼</span>
+        </div>
+      </a>
+      <nav>
+        <a href="/">入口</a>
+        <a href="/concept/">はじめに</a>
+        <a href="/cafe/">カフェについて</a>
+        <a href="/cast/">龍紹介</a>
+        <a href="/access/">アクセス</a>
+        <a href="/contact/">問合せ</a>
+      </nav>
+    </div>
+  </header>
 
-    <nav>
-      <a href="/">入口</a>
-      <a href="/concept/">はじめに</a>
-      <a href="/cafe/">カフェについて</a>
-      <a href="/cast/">龍紹介</a>
-      <a href="/access/">アクセス</a>
-      <a href="/contact/">問合せ</a>
-    </nav>
-  </div>
-</header>
-
-
-
-<div class="story-container">
-    
+  <div class="story-container">
     <div class="header-section">
-        <span class="dragon-icon">§</span> <h2>煌龍園の物語</h2>
+      <span class="dragon-icon">§</span>
+      <h2>煌龍園の物語</h2>
     </div>
 
     <div class="content-body">
-        <p class="story-text">
-            いつかどこかに伝わる『龍』のお話。<br>
-            時には言葉からの連想で、時には垣間見た姿からの伝聞で、<br>
-            時には空を舞い、時には地を歩む、様々な伝承を残す夢まぼろし。<br>
-            そんな、御伽噺の存在に出逢える場所をご存知ですか？
-        </p>
+      <p class="story-text">
+        いつかどこかに伝わる『龍』のお話。<br>
+        時には言葉からの連想で、時には垣間見た姿からの伝聞で、<br>
+        時には空を舞い、時には地を歩む、様々な伝承を残す夢まぼろし。<br>
+        そんな、御伽噺の存在に出逢える場所をご存知ですか？
+      </p>
 
-        <p class="story-text">
-            うつし世の果て、空に揺蕩う「龍宮」には、<br>
-            鮮やかな煌きを纏う「龍」達が暮らしていて……。
-        </p>
+      <p class="story-text">
+        うつし世の果て、空に揺蕩う「龍宮」には、<br>
+        鮮やかな煌きを纏う「龍」達が暮らしていて……。
+      </p>
 
-        <p class="story-text">
-            彼女達は気まぐれに人の世を愛で、訪れ、<br>
-            そして時には人の現し身と華やかな衣を纏い、<br>
-            人の子らを、とある「園」に招いて歓待するのだとか。
-        </p>
+      <p class="story-text">
+        彼女達は気まぐれに人の世を愛で、訪れ、<br>
+        そして時には人の現し身と華やかな衣を纏い、<br>
+        人の子らを、とある「園」に招いて歓待するのだとか。
+      </p>
 
-        <p class="story-text">
-            けれど……撫でれば地を割り、踊れば空を裂く龍達が、<br>
-            小さな人の子らの器へその身をおしこめて、<br>
-            お給仕に励み、お披露目姿を演じるのはなぜでしょう。
-        </p>
+      <p class="story-text">
+        けれど……撫でれば地を割り、踊れば空を裂く龍達が、<br>
+        小さな人の子らの器へその身をおしこめて、<br>
+        お給仕に励み、お披露目姿を演じるのはなぜでしょう。
+      </p>
 
-        <p class="story-text">
-            それを問えば彼女達は少しだけ考えてから……<br>
-            ある龍は人と和やかに睦み合うことを望み、<br>
-            ある龍は人を、人の世を深く知ることを望み、<br>
-            ある龍は人の心を案じ、癒すことを望み……<br>
-            色とりどりの答えが、龍の数だけ紡がれます。
-        </p>
+      <p class="story-text">
+        それを問えば彼女達は少しだけ考えてから……<br>
+        ある龍は人と和やかに睦み合うことを望み、<br>
+        ある龍は人を、人の世を深く知ることを望み、<br>
+        ある龍は人の心を案じ、癒すことを望み……<br>
+        色とりどりの答えが、龍の数だけ紡がれます。
+      </p>
 
-        <p class="story-text">
-            そうして人の子らもまた、龍に何かを望むなら……<br>
-            ようこそ、華やぐ喫茶『煌龍園』へ。<br>
-            今宵も煌く龍たちの園で、どうか、<br>
-            貴方の世界を輝かせる色彩に出逢えますように。
-        </p>
+      <p class="story-text">
+        そうして人の子らもまた、龍に何かを望むなら……<br>
+        ようこそ、華やぐ喫茶『煌龍園』へ。<br>
+        今宵も煌く龍たちの園で、どうか、<br>
+        貴方の世界を輝かせる色彩に出逢えますように。
+      </p>
 
-        <p class="story-text closing-text">
-            心ゆくまで、ごゆっくりお過ごしくださいませ。
-        </p>
+      <p class="story-text closing-text">
+        心ゆくまで、ごゆっくりお過ごしくださいませ。
+      </p>
     </div>
 
     <div class="footer-logo">
-        <span class="dragon-icon">§</span>
-        <div>KohLongEnn</div>
+      <span class="dragon-icon">§</span>
+      <div>KohLongEnn</div>
     </div>
-
-</div>
-
+  </div>
 </body>
 </html>
