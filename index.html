@@ -1,44 +1,267 @@
 <!doctype html>
-<html lang="ja"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>煌龍園 ∼KohLongEnn∼</title>
-<link rel="stylesheet" href="/styles.css">
-</head><body>
-<header class="site-header">
-  <div class="nav">
-    <a href="/" class="brand">
-      <img src="https://static.wixstatic.com/media/5f9e4d_18a644bbb4d14e72a9d32cb247214c56~mv2.png" alt="煌龍園">
-      <div class="brand-text">
-        <strong>煌龍園</strong>
-        <span>∼KohLongEnn∼</span>
-      </div>
-    </a>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="煌龍園（KohLongEnn）- コンセプト・キャスト・アクセス・お問い合わせ" />
+  <title>煌龍園 | KohLongEnn</title>
 
-    <nav>
-      <a href="/">入口</a>
-      <a href="/concept/">はじめに</a>
-      <a href="/cafe/">カフェについて</a>
-      <a href="/cast/">龍紹介</a>
-      <a href="/access/">アクセス</a>
-      <a href="/contact/">問合せ</a>
-    </nav>
-  </div>
-</header>
+  <link rel="preload" href="./assets/img/hero.jpg" as="image" />
+  <link rel="icon" href="./assets/img/logo.png" type="image/png" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body>
+  <a class="skip" href="#main">本文へスキップ</a>
 
-<main style="padding-top:18px">
-  <h1 style="margin:10px 0">入口</h1>
-  <p style="color:var(--muted);margin:0 0 12px">このZIPは「/concept/」「/cafe/」を“埋め込みHTMLとして動作”させるための修正版です。</p>
-  <div class="embed-shell" style="padding:16px">
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <a class="menu a" href="/concept/">はじめにへ</a>
-      <a class="menu a" href="/cafe/">カフェについてへ</a>
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="煌龍園 トップへ">
+        <img src="./assets/img/logo.png" alt="煌龍園 ロゴ" width="44" height="44" />
+      </a>
+
+      <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="sr-only">メニュー</span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="グローバルナビゲーション">
+        <a href="#entrance">入口</a>
+        <a href="#intro">はじめに</a>
+        <a href="#about">カフェについて</a>
+        <a href="#concept">概紹介</a>
+        <a href="#stories">旅の小噺</a>
+        <a href="#route">旅の道程</a>
+        <a href="#access">アクセス</a>
+        <a href="#contact">問い合わせ</a>
+      </nav>
     </div>
-  </div>
-</main>
-<footer>
-  <div class="foot">
-    <div>© KohLongEnn</div>
-    <div>©SQUARE ENIX / 記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。</div>
-  </div>
-</footer>
-</body></html>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-label="ヒーロー">
+      <div class="hero-bg" role="img" aria-label="煌龍園のメインビジュアル"></div>
+      <div class="hero-overlay"></div>
+
+      <div class="container hero-content">
+        <p class="hero-lead">『煌く龍たちと、一緒に過ごせる空間はいかがですか？』</p>
+        <h1 class="hero-title">煌龍園</h1>
+        <p class="hero-sub">— KohLongEnn —</p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#concept">Enter</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="tiles">
+      <div class="container tiles-grid">
+        <a class="tile" href="#concept" aria-label="Conceptへ">
+          <div class="tile-bg" style="background-image:url('./assets/img/concept.png')"></div>
+          <div class="tile-overlay"></div>
+          <div class="tile-label">Concept</div>
+        </a>
+
+        <a class="tile" href="#cast" aria-label="Castへ">
+          <div class="tile-bg" style="background-image:url('./assets/img/cast.jpg')"></div>
+          <div class="tile-overlay"></div>
+          <div class="tile-label">Cast</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" id="entrance">
+      <div class="container">
+        <h2 class="section-title">入口</h2>
+        <p class="section-text">
+          ここは入口セクションです。Studioの内容を移植する場合は、この文章を差し替えてください。
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="intro">
+      <div class="container">
+        <h2 class="section-title">はじめに</h2>
+        <p class="section-text">
+          ここには「はじめに」の本文を配置します。更新が発生する前提なので、テキストはHTMLで直接編集できる形にしてあります。
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <h2 class="section-title">カフェについて</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>コンセプト</h3>
+            <p>世界観・雰囲気・提供体験などをここに。</p>
+          </article>
+          <article class="card">
+            <h3>システム</h3>
+            <p>営業時間、チャージ、ルールなどをここに。</p>
+          </article>
+          <article class="card">
+            <h3>メニュー</h3>
+            <p>ドリンクやフードの案内をここに。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="concept">
+      <div class="container">
+        <h2 class="section-title">概紹介</h2>
+        <div class="split">
+          <div class="split-media">
+            <img src="./assets/img/concept.png" alt="Concept ビジュアル" loading="lazy" />
+          </div>
+          <div class="split-body">
+            <p class="section-text">
+              Studioの「Concept」ページ内容をこちらに移植します。
+              文章・箇条書き・リンクなど、必要な形式に合わせて編集できます。
+            </p>
+
+            <ul class="list">
+              <li>見出しや段落はそのままHTMLに置き換え</li>
+              <li>画像は <code>assets/img</code> に配置して参照</li>
+              <li>更新はGitHub上でファイル編集 → デプロイ</li>
+            </ul>
+
+            <a class="btn btn-ghost" href="#contact">問い合わせへ</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cast">
+      <div class="container">
+        <h2 class="section-title">Cast</h2>
+        <div class="media-frame">
+          <img src="./assets/img/cast.jpg" alt="キャストビジュアル" loading="lazy" />
+        </div>
+
+        <div class="cards" style="margin-top:18px">
+          <article class="card">
+            <h3>キャスト一覧</h3>
+            <p>名前・紹介文・SNSリンクなどをここへ。</p>
+          </article>
+          <article class="card">
+            <h3>シフト</h3>
+            <p>更新が多い場合は、別ページや外部埋め込み（Googleカレンダー等）もおすすめです。</p>
+          </article>
+          <article class="card">
+            <h3>注意事項</h3>
+            <p>撮影可否、マナー、禁止事項など。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="stories">
+      <div class="container">
+        <h2 class="section-title">旅の小噺</h2>
+        <p class="section-text">
+          コラム・お知らせ・短い投稿の置き場です。更新頻度が高いなら、記事一覧を別ページ化しても良いです。
+        </p>
+        <div class="cards">
+          <article class="card">
+            <h3>投稿 01</h3>
+            <p>ここに概要。本文はリンク先へ。</p>
+          </article>
+          <article class="card">
+            <h3>投稿 02</h3>
+            <p>ここに概要。本文はリンク先へ。</p>
+          </article>
+          <article class="card">
+            <h3>投稿 03</h3>
+            <p>ここに概要。本文はリンク先へ。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="route">
+      <div class="container">
+        <h2 class="section-title">旅の道程</h2>
+        <p class="section-text">
+          ストーリー/世界観の流れ、イベント履歴などを掲載する想定です。
+        </p>
+      </div>
+    </section>
+
+    <section class="section" id="access">
+      <div class="container">
+        <h2 class="section-title">アクセス</h2>
+        <div class="split">
+          <div class="split-body">
+            <p class="section-text">
+              住所・最寄駅・地図リンクを掲載します。
+            </p>
+            <ul class="list">
+              <li><strong>住所：</strong>（ここに記載）</li>
+              <li><strong>最寄：</strong>（ここに記載）</li>
+              <li><strong>営業時間：</strong>（ここに記載）</li>
+            </ul>
+
+            <div class="actions-row">
+              <a class="btn btn-ghost" href="#" target="_blank" rel="noopener">Googleマップ</a>
+              <a class="btn btn-ghost" href="#contact">問い合わせ</a>
+            </div>
+          </div>
+
+          <div class="split-media">
+            <div class="map-placeholder" role="img" aria-label="地図プレースホルダー">
+              地図はここに埋め込み可能<br />
+              （Google Mapsのiframe等）
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <h2 class="section-title">問い合わせ</h2>
+        <p class="section-text">
+          フォームを用意する場合は、フォームサービス（Googleフォーム/フォームスパーク等）を埋め込むのが簡単です。
+          まずはメールリンクだけでもOKです。
+        </p>
+
+        <div class="cards">
+          <article class="card">
+            <h3>メール</h3>
+            <p><a href="mailto:example@example.com">example@example.com</a></p>
+            <p class="muted">※ここは差し替えてください</p>
+          </article>
+          <article class="card">
+            <h3>SNS</h3>
+            <p><a href="#" target="_blank" rel="noopener">X（Twitter）</a></p>
+            <p><a href="#" target="_blank" rel="noopener">Instagram</a></p>
+          </article>
+          <article class="card">
+            <h3>フォーム埋め込み</h3>
+            <p class="muted">フォームURLが決まったら、iframeで埋め込み可能です。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-brand">
+          <img src="./assets/img/logo.png" alt="" width="36" height="36" loading="lazy" />
+          <div>
+            <div class="footer-title">煌龍園 | KohLongEnn</div>
+            <div class="footer-note">© Your Name / Organization</div>
+          </div>
+        </div>
+
+        <a class="to-top" href="#top">▲ Top</a>
+      </div>
+    </footer>
+  </main>
+
+  <script src="./assets/js/main.js" defer></script>
+</body>
+</html>
