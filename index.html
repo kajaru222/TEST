@@ -1,22 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="煌龍園（KohLongEnn）- コンセプト・キャスト・アクセス・お問い合わせ" />
-  <title>煌龍園 | KohLongEnn</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>煌龍園へようこそ | KohLongEnn</title>
 
-  <link rel="preload" href="./assets/img/hero.jpg" as="image" />
-  <link rel="icon" href="./assets/img/logo.png" type="image/png" />
-  <link rel="stylesheet" href="./assets/css/style.css" />
+  <!-- base styles -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- fonts -->
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <!-- opening splash -->
+  <link rel="stylesheet" href="assets/css/opening.css" />
+  <!-- TOP scroll presentation -->
+  <link rel="stylesheet" href="assets/css/top.css" />
+  <!-- index page specific -->
+  <link rel="stylesheet" href="assets/css/index.css" />
 </head>
-<body>
-  <a class="skip" href="#main">本文へスキップ</a>
 
+<body class="page-top">
+  <!-- Opening Splash Screen -->
+  <div class="opening-splash" id="openingSplash" aria-hidden="true">
+    <div class="opening-content">
+      <img class="opening-logo" src="assets/img/logo.png" alt="煌龍園" />
+      <h1 class="opening-title">煌龍園</h1>
+      <p class="opening-tagline">煌く龍たちと一緒に過ごせる空間はいかがですか？</p>
+    </div>
+    <button class="opening-skip" id="openingSkip" aria-label="スキップ">Skip ▶</button>
+  </div>
+
+  <!-- Header (existing site navigation) -->
   <header class="site-header" id="top">
     <div class="container header-inner">
-      <a class="brand" href="#top" aria-label="煌龍園 トップへ">
-        <img src="./assets/img/logo.png" alt="煌龍園 ロゴ" width="44" height="44" />
+      <a class="brand" href="index.html" aria-label="煌龍園 トップへ">
+        <img src="assets/img/logo.png" alt="煌龍園 ロゴ" width="44" height="44" />
       </a>
 
       <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
@@ -27,241 +44,156 @@
       </button>
 
       <nav class="site-nav" id="site-nav" aria-label="グローバルナビゲーション">
-        <a href="#entrance">入口</a>
-        <a href="#intro">はじめに</a>
-        <a href="#about">カフェについて</a>
-        <a href="#concept">概紹介</a>
-        <a href="#stories">旅の小噺</a>
-        <a href="#route">旅の道程</a>
-        <a href="#access">アクセス</a>
-        <a href="#contact">問い合わせ</a>
+        <button class="nav-close" id="navClose" type="button" aria-label="メニューを閉じる">
+          <span class="nav-close-icon">×</span>
+        </button>
+        <a href="index.html">入口</a>
+        <a href="intro.html">はじめに</a>
+        <a href="about.html">カフェについて</a>
+        <a href="cast.html">龍紹介</a>
+        <a href="stories.html">龍の小噺</a>
+        <a href="route.html">龍の追憶</a>
+        <a href="access.html">アクセス</a>
+        <a href="https://5ne.co/0jvu" target="_blank" rel="noopener">問い合わせ</a>
       </nav>
     </div>
   </header>
 
-  <main id="main">
-    <section class="hero" aria-label="ヒーロー">
-      <div class="hero-bg" role="img" aria-label="煌龍園のメインビジュアル"></div>
-      <div class="hero-overlay"></div>
+  <!-- Section Navigation Bar -->
+  <nav class="section-nav" aria-label="セクションナビゲーション">
+    <div class="section-nav-items">
+      <a href="#hero" class="section-nav-item active" data-section="hero" aria-label="ヒーロー">
+        <span class="section-nav-label">TOP</span>
+      </a>
+      <a href="#concept" class="section-nav-item" data-section="concept" aria-label="コンセプト">
+        <span class="section-nav-label">Concept</span>
+      </a>
+      <a href="#cast" class="section-nav-item" data-section="cast" aria-label="キャスト">
+        <span class="section-nav-label">Cast</span>
+      </a>
+      <a href="#access" class="section-nav-item" data-section="access" aria-label="アクセス">
+        <span class="section-nav-label">Access</span>
+      </a>
+    </div>
+  </nav>
 
-      <div class="container hero-content">
-        <p class="hero-lead">『煌く龍たちと、一緒に過ごせる空間はいかがですか？』</p>
-        <h1 class="hero-title">煌龍園</h1>
-        <p class="hero-sub">— KohLongEnn —</p>
-
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#concept">Enter</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="tiles">
-      <div class="container tiles-grid">
-        <a class="tile" href="#concept" aria-label="Conceptへ">
-          <div class="tile-bg" style="background-image:url('./assets/img/concept.png')"></div>
-          <div class="tile-overlay"></div>
-          <div class="tile-label">Concept</div>
-        </a>
-
-        <a class="tile" href="#cast" aria-label="Castへ">
-          <div class="tile-bg" style="background-image:url('./assets/img/cast.jpg')"></div>
-          <div class="tile-overlay"></div>
-          <div class="tile-label">Cast</div>
-        </a>
-      </div>
-    </section>
-
-    <section class="section" id="entrance">
-      <div class="container">
-        <h2 class="section-title">入口</h2>
-        <p class="section-text">
-          ここは入口セクションです。Studioの内容を移植する場合は、この文章を差し替えてください。
-        </p>
-      </div>
-    </section>
-
-    <section class="section" id="intro">
-      <div class="container">
-        <h2 class="section-title">はじめに</h2>
-        <p class="section-text">
-          ここには「はじめに」の本文を配置します。更新が発生する前提なので、テキストはHTMLで直接編集できる形にしてあります。
-        </p>
-      </div>
-    </section>
-
-    <section class="section" id="about">
-      <div class="container">
-        <h2 class="section-title">カフェについて</h2>
-        <div class="cards">
-          <article class="card">
-            <h3>コンセプト</h3>
-            <p>世界観・雰囲気・提供体験などをここに。</p>
-          </article>
-          <article class="card">
-            <h3>システム</h3>
-            <p>営業時間、チャージ、ルールなどをここに。</p>
-          </article>
-          <article class="card">
-            <h3>メニュー</h3>
-            <p>ドリンクやフードの案内をここに。</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="concept">
-      <div class="container">
-        <h2 class="section-title">概紹介</h2>
-        <div class="split">
-          <div class="split-media">
-            <img src="./assets/img/concept.png" alt="Concept ビジュアル" loading="lazy" />
+  <main class="story" id="top">
+    <!-- 1. Hero -->
+    <section class="panel panel-hero" id="hero" data-panel>
+      <div class="panel-inner hero-inner">
+        <div class="hero-copy">
+          <img class="hero-mark" src="assets/img/logo.png" alt="煌龍園" />
+          <h1 class="hero-title">煌龍園</h1>
+          <p class="hero-lead">煌く龍たちと一緒に過ごせる空間はいかがですか？</p>
+          <div class="hero-cta">
+            <a class="btn primary" href="intro.html">物語を読む</a>
+            <a class="btn" href="cast.html">龍たちを見る</a>
           </div>
-          <div class="split-body">
-            <p class="section-text">
-              Studioの「Concept」ページ内容をこちらに移植します。
-              文章・箇条書き・リンクなど、必要な形式に合わせて編集できます。
+        </div>
+        <div class="hero-bg" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- 2. concept -->
+    <section class="panel panel-text panel-with-image panel-with-bg" id="concept" data-panel>
+      <div class="panel-bg-image" style="background-image: url('assets/img/concept.png');" aria-hidden="true"></div>
+      <div class="panel-bg-overlay" aria-hidden="true"></div>
+      <div class="panel-inner">
+        <div class="panel-card with-image">
+          <div class="panel-content">
+            <h2 class="panel-title">Concept</h2>
+            <p class="panel-desc">
+              うつし世の果て、空に揺蕩う「龍宮」には、<br>
+              鮮やかな煌きを纏う「龍」達が暮らしています。<br>
+              彼女達は気まぐれに人の世を愛で、訪れ、<br>
+              人の現し身と華やかな衣を纏い、人の子らを「園」に招いて歓待します。<br><br>
+              ようこそ、華やぐ喫茶『煌龍園』へ。<br>
+              今宵も煌く龍たちの園で、<br>
+              貴方の世界を輝かせる色彩に出逢えますように。
             </p>
-
-            <ul class="list">
-              <li>見出しや段落はそのままHTMLに置き換え</li>
-              <li>画像は <code>assets/img</code> に配置して参照</li>
-              <li>更新はGitHub上でファイル編集 → デプロイ</li>
-            </ul>
-
-            <a class="btn btn-ghost" href="#contact">問い合わせへ</a>
+            <a class="btn primary" href="about.html">カフェについて</a>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="cast">
-      <div class="container">
-        <h2 class="section-title">Cast</h2>
-        <div class="media-frame">
-          <img src="./assets/img/cast.jpg" alt="キャストビジュアル" loading="lazy" />
-        </div>
-
-        <div class="cards" style="margin-top:18px">
-          <article class="card">
-            <h3>キャスト一覧</h3>
-            <p>名前・紹介文・SNSリンクなどをここへ。</p>
-          </article>
-          <article class="card">
-            <h3>シフト</h3>
-            <p>更新が多い場合は、別ページや外部埋め込み（Googleカレンダー等）もおすすめです。</p>
-          </article>
-          <article class="card">
-            <h3>注意事項</h3>
-            <p>撮影可否、マナー、禁止事項など。</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="stories">
-      <div class="container">
-        <h2 class="section-title">旅の小噺</h2>
-        <p class="section-text">
-          コラム・お知らせ・短い投稿の置き場です。更新頻度が高いなら、記事一覧を別ページ化しても良いです。
-        </p>
-        <div class="cards">
-          <article class="card">
-            <h3>投稿 01</h3>
-            <p>ここに概要。本文はリンク先へ。</p>
-          </article>
-          <article class="card">
-            <h3>投稿 02</h3>
-            <p>ここに概要。本文はリンク先へ。</p>
-          </article>
-          <article class="card">
-            <h3>投稿 03</h3>
-            <p>ここに概要。本文はリンク先へ。</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="route">
-      <div class="container">
-        <h2 class="section-title">旅の道程</h2>
-        <p class="section-text">
-          ストーリー/世界観の流れ、イベント履歴などを掲載する想定です。
-        </p>
-      </div>
-    </section>
-
-    <section class="section" id="access">
-      <div class="container">
-        <h2 class="section-title">アクセス</h2>
-        <div class="split">
-          <div class="split-body">
-            <p class="section-text">
-              住所・最寄駅・地図リンクを掲載します。
+    <!-- 3. cast -->
+    <section class="panel panel-cast panel-combined panel-with-bg" id="cast" data-panel>
+      <div class="panel-bg-image" style="background-image: url('assets/img/cast.jpg');" aria-hidden="true"></div>
+      <div class="panel-bg-overlay" aria-hidden="true"></div>
+      <div class="panel-inner">
+        <div class="cast-intro">
+          <div class="cast-intro-content">
+            <h2 class="panel-title">Cast</h2>
+            <p class="panel-desc">
+              ​煌龍園で出会うことのできる龍（キャスト）の紹介となります。
             </p>
-            <ul class="list">
-              <li><strong>住所：</strong>（ここに記載）</li>
-              <li><strong>最寄：</strong>（ここに記載）</li>
-              <li><strong>営業時間：</strong>（ここに記載）</li>
-            </ul>
-
-            <div class="actions-row">
-              <a class="btn btn-ghost" href="#" target="_blank" rel="noopener">Googleマップ</a>
-              <a class="btn btn-ghost" href="#contact">問い合わせ</a>
-            </div>
+            <a class="btn primary" href="cast.html">龍紹介ページへ</a>
           </div>
+        </div>
 
-          <div class="split-media">
-            <div class="map-placeholder" role="img" aria-label="地図プレースホルダー">
-              地図はここに埋め込み可能<br />
-              （Google Mapsのiframe等）
+        <div class="cast-scroll-wrapper">
+          <div class="cast-scroll" id="castScroll" aria-label="キャスト一覧">
+            <div class="cast-track" id="castTrack">
+              <!-- injected by JS -->
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="contact">
-      <div class="container">
-        <h2 class="section-title">問い合わせ</h2>
-        <p class="section-text">
-          フォームを用意する場合は、フォームサービス（Googleフォーム/フォームスパーク等）を埋め込むのが簡単です。
-          まずはメールリンクだけでもOKです。
-        </p>
+    <!-- 5. Access / SNS -->
+    <section class="panel panel-access" id="access" data-panel>
+      <div class="panel-inner">
+        <div class="panel-card wide">
+          <h2 class="panel-title">Access / SNS</h2>
+          <p class="panel-desc">
+            来園方法と、各SNSへの導線をまとめています。
+          </p>
+          <div class="access-actions">
+            <a class="btn primary" href="access.html">アクセス</a>
+            <a class="btn" href="https://5ne.co/0jvu" target="_blank" rel="noopener">問い合わせ</a>
+          </div>
 
-        <div class="cards">
-          <article class="card">
-            <h3>メール</h3>
-            <p><a href="mailto:example@example.com">example@example.com</a></p>
-            <p class="muted">※ここは差し替えてください</p>
-          </article>
-          <article class="card">
-            <h3>SNS</h3>
-            <p><a href="#" target="_blank" rel="noopener">X（Twitter）</a></p>
-            <p><a href="#" target="_blank" rel="noopener">Instagram</a></p>
-          </article>
-          <article class="card">
-            <h3>フォーム埋め込み</h3>
-            <p class="muted">フォームURLが決まったら、iframeで埋め込み可能です。</p>
-          </article>
+          <div class="sns">
+            <a class="sns-item" href="https://x.com/ll_KohLongEnn" aria-label="X">X</a>
+          </div>
         </div>
       </div>
     </section>
-
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <div class="footer-brand">
-          <img src="./assets/img/logo.png" alt="" width="36" height="36" loading="lazy" />
-          <div>
-            <div class="footer-title">煌龍園 | KohLongEnn</div>
-            <div class="footer-note">© Your Name / Organization</div>
-          </div>
-        </div>
-
-        <a class="to-top" href="#top">▲ Top</a>
-      </div>
-    </footer>
   </main>
 
-  <script src="./assets/js/main.js" defer></script>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="assets/img/logo.png" alt="" width="36" height="36" loading="lazy" />
+        <div>
+          <div class="footer-title">煌龍園 | KohLongEnn</div>
+          <div class="footer-note">©SQUARE ENIX<br>記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。</div>
+        </div>
+      </div>
+
+      <a class="to-top" href="#top">▲ Top</a>
+    </div>
+  </footer>
+
+  <!-- Opening splash (load first) -->
+  <script src="assets/js/opening.js"></script>
+
+  <!-- GSAP (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Main navigation -->
+  <script src="assets/js/main.js" defer></script>
+  <!-- Data for cast cards -->
+  <script src="assets/js/dragons-data.js"></script>
+  <!-- TOP page animation -->
+  <script src="assets/js/top-hero.js"></script>
+  <script src="assets/js/top-cast-build.js"></script>
+  <script src="assets/js/top-cast-inertia.js"></script>
+  <!-- Scroll animations -->
+  <script src="assets/js/scroll-animations.js"></script>
 </body>
+
 </html>
