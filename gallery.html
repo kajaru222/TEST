@@ -7,7 +7,8 @@
   <meta name="description" content="煌龍園（KohLongEnn）- コンセプト・キャスト・アクセス・お問い合わせ" />
   <link rel="icon" href="assets/img/logo.png" type="image/png" />
   <link rel="stylesheet" href="assets/css/style.css" />
-  <title>アクセス | 煌龍園</title>
+  <link rel="stylesheet" href="assets/css/gallery.css" />
+  <title>龍の追憶 | 煌龍園</title>
 </head>
 <body>
 
@@ -46,35 +47,34 @@
 
     <section class="section">
       <div class="container">
-        <h1 class="section-title">アクセス</h1>
-        <div class="split">
-          <div class="split-body">
-            <p class="section-text">
-              煌龍園へのアクセス情報です。ご来園の際は以下の情報をご確認ください。
-            </p>
-            <ul class="list">
-              <li><strong>場所：</strong>エンピレアム6区52番地</li>
-              <li><strong>最寄りエーテライト：</strong>[拡張街] エンピレアム北東</li>
-              <li><strong>開園日：</strong>第2,4木曜日 22:00 ～ 23:30</li>
-            </ul>
+        <h1 class="section-title">龍の追憶</h1>
+        <p class="section-text">煌龍園での龍たちが残した記憶（チェキ）を保管する場所となります。</p>
 
-            <div class="actions-row">
-              <a class="btn btn-ghost" href="https://5ne.co/0jvu" target="_blank" rel="noopener">問い合わせ</a>
-            </div>
-          </div>
-
-          <div class="split-media">
-            <img
-              src="assets/img/access-map-placeholder.png"
-              alt="煌龍園へのアクセスマップ"
-              style="width: 100%; height: auto; border-radius: 8px; background: #e5e7eb; min-height: 300px; object-fit: cover;"
-            />
-          </div>
+        <!-- Gallery Grid -->
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- Gallery items will be dynamically inserted here -->
         </div>
       </div>
     </section>
 
   </main>
+
+  <!-- Modal Gallery Viewer -->
+  <div class="gallery-modal" id="galleryModal" aria-hidden="true">
+    <div class="gallery-modal-overlay"></div>
+    <div class="gallery-modal-content">
+      <button class="gallery-modal-close" aria-label="閉じる">&times;</button>
+
+      <div class="gallery-modal-header">
+        <h3 class="gallery-modal-title"></h3>
+        <p class="gallery-modal-counter"></p>
+      </div>
+
+      <div class="gallery-modal-images-grid" id="modalImagesGrid">
+        <!-- Images will be dynamically inserted here -->
+      </div>
+    </div>
+  </div>
 
     <footer class="site-footer">
       <div class="container footer-inner">
@@ -91,6 +91,7 @@
     </footer>
 
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/gallery.js" defer></script>
 
 </body>
 </html>
