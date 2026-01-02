@@ -457,8 +457,12 @@ body{ overflow-x:hidden; }
 @media (max-width: 768px){
   :root{ --header-h: 72px; }
   .cast-card{ width: 210px; border-radius: 16px; }
-  .panel{ padding-top: var(--header-h); }
   .site-header{ height: var(--header-h); }
+
+  /* Reset padding for non-TOP pages */
+  body:not(.page-top) {
+    padding-top: var(--header-h);
+  }
 
   /* スマホでヘッダーとフッターに隠れないように調整 */
   .page-top main {
@@ -469,13 +473,13 @@ body{ overflow-x:hidden; }
   .page-top .panel {
     min-height: 100vh;
     min-height: 100dvh;
-    height: auto;
-    padding-top: calc(var(--header-h, 72px) + 10px);
-    padding-bottom: 150px; /* フッター分の余白 */
+    height: 100vh;
+    height: 100dvh;
   }
 
   .page-top .panel-hero {
-    padding-top: calc(var(--header-h, 72px) + 20px);
+    padding-top: 0;
+    justify-content: center;
   }
 
   .hero-mark {
@@ -649,6 +653,7 @@ body{ overflow-x:hidden; }
 /* Fullscreen section snap - 一気にスクロール版 */
 .page-top html, .page-top body {
   height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -656,10 +661,19 @@ body{ overflow-x:hidden; }
 
 .page-top body {
   scroll-behavior: auto; /* JSで smooth に制御 */
+  padding-top: 0 !important; /* Reset default body padding */
+  display: block !important; /* Reset flex layout */
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .page-top main {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   overflow-y: auto;
   scroll-snap-type: y mandatory;
   scroll-behavior: auto; /* JSで制御 */
@@ -677,7 +691,9 @@ body{ overflow-x:hidden; }
   scroll-snap-align: start;
   scroll-snap-stop: always;
   min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height */
   height: 100vh;
+  height: 100dvh;
   display: flex;
   align-items: center;
   position: relative;
@@ -690,6 +706,7 @@ body{ overflow-x:hidden; }
 .page-top .panel-cast {
   height: auto;
   min-height: 100vh;
+  min-height: 100dvh;
   padding-bottom: 120px; /* フッター分の余白 */
 }
 
