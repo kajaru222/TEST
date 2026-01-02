@@ -1,4 +1,17 @@
 /* KohLongEnn static site (portable) */
+
+@font-face {
+  font-family: 'Harenosora';
+  src: url('../fonts/Harenosora.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Soukou Mincho';
+  src: url('../fonts/SoukouMincho.ttf') format('truetype');
+  font-display: swap;
+}
+
 :root{
   --header-h: 72px; /* JSで自動更新 */
   --bg: #1a0f0f;
@@ -275,8 +288,9 @@ img{ max-width:100%; height:auto; display:block; }
   margin: 0 0 12px;
   font-size: clamp(22px, 2.4vw, 30px);
   letter-spacing: .06em;
+  font-family: 'Soukou Mincho', serif;
 }
-.section-text{ margin: 0 0 14px; color: var(--muted); }
+.section-text{ margin: 0 0 14px; color: var(--muted); font-family: 'Harenosora', serif; }
 
 .cards{
   display:grid;
@@ -289,14 +303,16 @@ img{ max-width:100%; height:auto; display:block; }
   border: 1px solid rgba(255,255,255,.10);
   border-radius: var(--radius);
   padding: 16px 16px 14px;
+  font-family: 'Harenosora', serif;
 }
 .card h3{
   margin: 0 0 6px;
   font-size: 16px;
   letter-spacing:.04em;
+  font-family: 'Harenosora', serif;
 }
-.card p{ margin: 0; color: var(--muted); }
-.muted{ color: var(--muted); font-size: 13px; }
+.card p{ margin: 0; color: var(--muted); font-family: 'Harenosora', serif; }
+.muted{ color: var(--muted); font-size: 13px; font-family: 'Harenosora', serif; }
 
 .split{
   display:grid;
@@ -717,12 +733,14 @@ main{
   color: var(--text);
   line-height: 1.4;
   margin: 0;
+  font-family: 'Harenosora', serif;
 }
 
 .tumblr-date{
   font-size: 12px;
   color: rgba(255,255,255,.55);
   letter-spacing: .04em;
+  font-family: 'Harenosora', serif;
 }
 
 .tumblr-excerpt{
@@ -735,6 +753,7 @@ main{
   line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-family: 'Harenosora', serif;
 }
 
 .tumblr-empty{

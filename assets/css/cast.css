@@ -6,6 +6,12 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Soukou Mincho';
+  src: url('../fonts/SoukouMincho.ttf') format('truetype');
+  font-display: swap;
+}
+
 /* ===== cast page: 3-tier layout structure ===== */
 :root{
   --stage-max: 100%;
@@ -213,6 +219,7 @@ body.cast-page .dragons-content-area{
   line-height:1.15;
   width: 100%;
   max-width: 100%;
+  font-family: 'Harenosora', serif;
 }
 
 .panel-title .jp{
@@ -221,6 +228,7 @@ body.cast-page .dragons-content-area{
   letter-spacing:.04em;
   color:var(--panel-text, rgba(0,0,0,.92));
   animation: textSlideIn 0.8s ease-out 0.5s backwards;
+  font-family: 'Soukou Mincho', serif;
 }
 
 .panel-title .en{
@@ -232,6 +240,7 @@ body.cast-page .dragons-content-area{
   word-break: break-word;
   overflow-wrap: break-word;
   animation: textSlideIn 0.8s ease-out 0.5s backwards;
+  font-family: 'Harenosora', serif;
 }
 
 .panel-meta{
@@ -240,6 +249,7 @@ body.cast-page .dragons-content-area{
   font-size:clamp(16px, 1.4vw, 20px);
   color:var(--panel-muted, rgba(0,0,0,.82));
   animation: textSlideIn 0.8s ease-out 0.5s backwards;
+  font-family: 'Harenosora', serif;
 }
 
 .panel-list{
@@ -252,6 +262,7 @@ body.cast-page .dragons-content-area{
   width: 100%;
   max-width: 100%;
   animation: textSlideIn 0.8s ease-out 0.5s backwards;
+  font-family: 'Harenosora', serif;
 }
 
 .panel-list li{
@@ -297,6 +308,7 @@ body.cast-page .dragons-content-area{
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   animation: textSlideIn 0.8s ease-out 0.5s backwards;
+  font-family: 'Harenosora', serif;
 }
 
 .panel-detail::before {
@@ -333,7 +345,6 @@ body.cast-page .panel-content-wrapper{
   min-width: 0;
   align-self: center;
   justify-self: start;
-  font-family: 'Harenosora', 'Zen Old Mincho', 'Yu Mincho', serif !important;
 }
 
 /* Images */

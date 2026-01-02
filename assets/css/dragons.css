@@ -5,6 +5,18 @@
   - パネル内の文字色はJSで自動コントラスト調整（--panel-text / --panel-muted）
 */
 
+@font-face {
+  font-family: 'Harenosora';
+  src: url('../fonts/Harenosora.otf') format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Soukou Mincho';
+  src: url('../fonts/SoukouMincho.ttf') format('truetype');
+  font-display: swap;
+}
+
 :root{
   --page-bg: #8b3330;
 
@@ -626,6 +638,7 @@ body.modal-open{ overflow:hidden; }
   color: var(--modal-text, #fff);
   font-size: 1.2rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-family: 'Soukou Mincho', serif;
 }
 
 .modal-close{
@@ -639,6 +652,7 @@ body.modal-open{ overflow:hidden; }
   font-weight: 800;
   letter-spacing: 0.06em;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  font-family: 'Harenosora', serif;
 }
 
 .modal-close:hover{
@@ -695,6 +709,7 @@ body.modal-open{ overflow:hidden; }
   font-size: 1.15rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   position: relative;
+  font-family: 'Harenosora', serif;
 }
 
 .modal-section-title::before{
@@ -749,6 +764,7 @@ body.modal-open{ overflow:hidden; }
   font-weight: 800;
   letter-spacing: 0.06em;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  font-family: 'Harenosora', serif;
 }
 
 .modal-kv .value{
@@ -757,6 +773,7 @@ body.modal-open{ overflow:hidden; }
   line-height: 1.9;
   letter-spacing: 0.04em;
   font-weight: 700;
+  font-family: 'Harenosora', serif;
 }
 
 .modal-catch{
@@ -772,6 +789,7 @@ body.modal-open{ overflow:hidden; }
   letter-spacing: 0.05em;
   font-weight: 700;
   position: relative;
+  font-family: 'Harenosora', serif;
 }
 
 .modal-catch::before{
@@ -825,6 +843,7 @@ body.modal-open{ overflow:hidden; }
   letter-spacing: 0.05em;
   font-size: 1.08rem;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+  font-family: 'Harenosora', serif;
 }
 .modal-list .item-desc{
   display:block;
@@ -833,6 +852,7 @@ body.modal-open{ overflow:hidden; }
   line-height: 1.9;
   letter-spacing: 0.03em;
   font-weight: 600;
+  font-family: 'Harenosora', serif;
 }
 
 .modal-story{
@@ -848,6 +868,7 @@ body.modal-open{ overflow:hidden; }
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.4);
   font-weight: 600;
   position: relative;
+  font-family: 'Harenosora', serif;
 }
 
 .modal-story::before{
@@ -900,6 +921,7 @@ body.modal-open{ overflow:hidden; }
   transition: all 0.3s ease;
   letter-spacing: 0.06em;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  font-family: 'Harenosora', serif;
 }
 .modal-navbtn:hover{
   background: var(--modal-btn-hover, rgba(255,255,255,.55));
