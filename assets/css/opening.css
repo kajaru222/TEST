@@ -86,10 +86,10 @@
 
 /* Tagline */
 .opening-tagline {
-  font-family: 'Soukou Mincho', serif;
+  font-family: 'Harenosora', serif;
   font-size: 18px;
   color: rgba(255, 255, 255, 0.9);
-  margin: 0;
+  margin: 0 auto;
   letter-spacing: 0.05em;
   line-height: 1.8;
   opacity: 0;
@@ -98,6 +98,7 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   max-width: 500px;
   padding: 0 20px;
+  text-align: center;
 }
 
 @keyframes taglineAppear {

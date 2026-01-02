@@ -136,8 +136,13 @@ const setText = (el, v) => { if (el) el.textContent = (v ?? ""); };
     setText(els.colorName, d.imageColorName || "—");
 
     if (els.portrait) {
-      els.portrait.src = d.images.portrait;
-      els.portrait.alt = `${d.dragonTitle} ${d.name} 立ち絵`;
+      // Preload image to ensure proper positioning
+      const img = new Image();
+      img.onload = () => {
+        els.portrait.src = d.images.portrait;
+        els.portrait.alt = `${d.dragonTitle} ${d.name} 立ち絵`;
+      };
+      img.src = d.images.portrait;
     }
     if (els.flower) {
       if (d.images.flower) {

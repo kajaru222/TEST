@@ -1,16 +1,7 @@
 /* KohLongEnn static site (portable) */
 
-@font-face {
-  font-family: 'Harenosora';
-  src: url('../fonts/Harenosora.otf') format('opentype');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Soukou Mincho';
-  src: url('../fonts/SoukouMincho.ttf') format('truetype');
-  font-display: swap;
-}
+/* Import custom fonts */
+@import url('fonts.css');
 
 :root{
   --header-h: 72px; /* JSで自動更新 */
@@ -516,6 +507,11 @@ main{
   background: rgba(255,255,255,.05);
 }
 .to-top:hover{ background: rgba(255,255,255,.09); }
+
+/* Hide footer when nav is open */
+body.nav-open .site-footer{
+  display: none;
+}
 
 /* Responsive */
 @media (max-width: 920px){

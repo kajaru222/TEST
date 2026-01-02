@@ -11,6 +11,7 @@
       nav.classList.remove('is-open');
       setExpanded(false);
       document.body.style.overflow = '';
+      document.body.classList.remove('nav-open');
     }
   };
 
@@ -19,6 +20,7 @@
       nav.classList.add('is-open');
       setExpanded(true);
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('nav-open');
     }
   };
 
@@ -95,4 +97,16 @@
   // Observe all sections and fade-in elements
   const animatedElements = document.querySelectorAll('.section, .fade-in');
   animatedElements.forEach(el => observer.observe(el));
+
+  // --- Smooth scroll to top for .to-top links ---
+  document.addEventListener('click', (e) => {
+    const target = e.target.closest('.to-top');
+    if (!target) return;
+
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
 })();

@@ -1,16 +1,6 @@
 /* cast.html - Dragon Introduction Page Styles */
 
-@font-face {
-  font-family: 'Harenosora';
-  src: url('../fonts/Harenosora.otf') format('opentype');
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Soukou Mincho';
-  src: url('../fonts/SoukouMincho.ttf') format('truetype');
-  font-display: swap;
-}
+/* Fonts are imported via fonts.css in the main stylesheet */
 
 /* ===== cast page: 3-tier layout structure ===== */
 :root{
@@ -811,15 +801,12 @@ body.cast-page #dragonPortrait{
   }
 
   body.cast-page #dragonPortrait{
-    position: absolute;
-    right: 50%;
-    bottom: -80px;
-    transform: translateX(50%);
-    height: 400px;
+    height: 80%;
     max-width: 90vw;
     width: auto;
-    opacity: 0.3;
     pointer-events: none;
+    z-index: 1;
+    animation: none !important;
   }
 
   body.cast-page #dragonFlower{
@@ -828,11 +815,26 @@ body.cast-page #dragonPortrait{
 
   body.cast-page .dragons-panel .panel-inner{
     padding: 30px 20px 120px 20px !important;
+    position: relative;
   }
 
   body.cast-page .panel-content-wrapper{
     padding-left: 0 !important;
     position: relative;
-    z-index: 2;
+    z-index: 10;
+  }
+
+  /* スマホでlabelと内容を2段表示 */
+  body.cast-page .panel-list .label{
+    display: block;
+    margin-right: 0;
+    margin-bottom: 4px;
+  }
+}
+@media (max-width: 680px){
+  body.cast-page #dragonPortrait{
+    left: 0%;
+    transform: translateX(-50%);
+    opacity: 0.4 !important;
   }
 }

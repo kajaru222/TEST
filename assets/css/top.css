@@ -460,6 +460,24 @@ body{ overflow-x:hidden; }
   .panel{ padding-top: var(--header-h); }
   .site-header{ height: var(--header-h); }
 
+  /* スマホでヘッダーとフッターに隠れないように調整 */
+  .page-top main {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height */
+  }
+
+  .page-top .panel {
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: auto;
+    padding-top: calc(var(--header-h, 72px) + 10px);
+    padding-bottom: 150px; /* フッター分の余白 */
+  }
+
+  .page-top .panel-hero {
+    padding-top: calc(var(--header-h, 72px) + 20px);
+  }
+
   .hero-mark {
     width: 80px;
     height: 80px;
@@ -672,6 +690,7 @@ body{ overflow-x:hidden; }
 .page-top .panel-cast {
   height: auto;
   min-height: 100vh;
+  padding-bottom: 120px; /* フッター分の余白 */
 }
 
 /* Smooth transitions between panels */

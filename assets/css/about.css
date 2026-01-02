@@ -112,7 +112,7 @@ html, body {
 .tab-content {
   display: none;
   padding: 40px 20px;
-  padding-top: 150px;
+  padding-top: calc(var(--header-h, 72px) + 90px);
   animation: fadeIn 0.8s ease;
   padding-bottom: 80px;
   position: relative;
@@ -317,6 +317,8 @@ ul.schedule-list {
 @media (max-width: 600px) {
   .tab-content {
     padding: 20px 10px;
+    padding-top: calc(var(--header-h, 72px) + 120px);
+    padding-bottom: 100px;
   }
 
   .container-box {

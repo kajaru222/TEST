@@ -289,12 +289,28 @@
     if (!target) return;
 
     const href = target.getAttribute('href');
-    if (href === '#' || href === '#top') return;
+    if (href === '#') return;
+
+    e.preventDefault();
+
+    // Handle #top specifically - scroll to top of page
+    if (href === '#top') {
+      if (scrollContainer) {
+        scrollContainer.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      } else {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
+      return;
+    }
 
     const targetElement = document.querySelector(href);
     if (!targetElement) return;
-
-    e.preventDefault();
 
     const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
     const targetPosition = targetElement.offsetTop - headerHeight;
