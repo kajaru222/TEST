@@ -7,9 +7,7 @@
   <link rel="icon" href="assets/img/logo.png" type="image/png" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/about.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;600&display=swap" rel="stylesheet">
+  <title>カフェについて | 煌龍園</title>
 </head>
 <body>
 <a class="skip" href="#main">本文へスキップ</a>
@@ -43,10 +41,10 @@
   </header>
   <main id="main" class="cafe-wrap">
     <div class="tab-menu">
-      <button class="tab-button active" onclick="openTab(event, 'content1')" type="button">煌龍園について</button>
-      <button class="tab-button" onclick="openTab(event, 'content2')" type="button">特典・おねがい</button>
-      <button class="tab-button" onclick="openTab(event, 'content3')" type="button">注文・ガイド</button>
-      <button class="tab-button" onclick="openTab(event, 'content4')" type="button">チェキセット</button>
+      <button class="tab-button active" data-tab="content1" type="button">煌龍園について</button>
+      <button class="tab-button" data-tab="content2" type="button">特典・おねがい</button>
+      <button class="tab-button" data-tab="content3" type="button">注文・ガイド</button>
+      <button class="tab-button" data-tab="content4" type="button">チェキセット</button>
     </div>
     <div id="content1" class="tab-content active">
       <div class="container-box">
@@ -196,6 +194,6 @@
       </div>
     </footer>
   <script src="assets/js/main.js" defer></script>
-  <script src="assets/js/tabs.js" defer></script>
+  <script src="assets/js/tab-system.js" defer></script>
 </body>
 </html>
