@@ -1,9 +1,0 @@
-/* index.html - Top page specific styles */
-
-/* System fonts for header and footer only */
-.site-header,
-.site-header *,
-.site-footer,
-.site-footer * {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Yu Gothic", "YuGothic", "Hiragino Sans", sans-serif !important;
-}
