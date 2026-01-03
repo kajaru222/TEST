@@ -16,12 +16,12 @@
   };
 
   const pickCandidates = (id) => ([
-    `assets/img/cards/${id}_card.jpg`,
     `assets/img/cards/${id}_card.png`,
-    `assets/img/dragons/${id}_icon.jpg`,
+    `assets/img/cards/${id}_card.jpg`,
     `assets/img/dragons/${id}_icon.png`,
-    `assets/img/dragons/${id}_full.jpg`,
+    `assets/img/dragons/${id}_icon.jpg`,
     `assets/img/dragons/${id}_full.png`,
+    `assets/img/dragons/${id}_full.jpg`,
   ]);
 
   const buildCard = (d) => {
@@ -60,6 +60,7 @@
       const img = mk("img");
       img.alt = d.dragonTitle || d.name || id;
       img.loading = "lazy";
+      img.decoding = "async";
 
       const cands = pickCandidates(id);
       let idx = 0;

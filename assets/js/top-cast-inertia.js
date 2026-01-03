@@ -12,6 +12,7 @@
 
   // State
   let isDragging = false;
+  let isTouchDown = false;
   let startX = 0;
   let scrollLeft = 0;
   let velocity = 0;
@@ -108,10 +109,18 @@
     // Only handle left mouse button or touch
     if (e.type === "mousedown" && e.button !== 0) return;
 
-    isDragging = true;
-    viewport.classList.add("is-dragging");
-
     const clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+
+    // For mouse, set dragging immediately
+    // For touch, wait until movement is detected
+    if (e.type === "mousedown") {
+      isDragging = true;
+      viewport.classList.add("is-dragging");
+      e.preventDefault();
+    } else {
+      isTouchDown = true;
+    }
+
     startX = clientX;
     scrollLeft = getScrollLeft();
     velocity = 0;
@@ -119,17 +128,26 @@
     lastMoveTime = Date.now();
 
     stopAnimation();
-
-    // Prevent text selection
-    e.preventDefault();
   };
 
   // Mouse/touch move
   const onPointerMove = (e) => {
-    if (!isDragging) return;
+    if (!isDragging && !isTouchDown) return;
 
     const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
-    const deltaX = clientX - startX;
+    const deltaX = Math.abs(clientX - startX);
+
+    // For touch, only start dragging if moved more than 5px
+    if (isTouchDown && !isDragging) {
+      if (deltaX > 5) {
+        isDragging = true;
+        isTouchDown = false;
+        viewport.classList.add("is-dragging");
+      } else {
+        return; // Not enough movement yet
+      }
+    }
+
     const now = Date.now();
     const dt = now - lastMoveTime;
 
@@ -150,6 +168,26 @@
 
   // Mouse/touch up
   const onPointerUp = (e) => {
+    // If touch was down but never became a drag, trigger click
+    if (isTouchDown) {
+      isTouchDown = false;
+
+      // Find the element that was touched
+      if (e.type === "touchend" && e.changedTouches && e.changedTouches[0]) {
+        const touch = e.changedTouches[0];
+        const element = document.elementFromPoint(touch.clientX, touch.clientY);
+
+        // Find the closest .cast-card link
+        const link = element?.closest('.cast-card');
+        if (link && link.href) {
+          // Navigate to the link
+          window.location.href = link.href;
+        }
+      }
+
+      return;
+    }
+
     if (!isDragging) return;
 
     isDragging = false;
@@ -158,8 +196,11 @@
     const clientX = e.type === "touchend" ? lastMoveX : e.clientX;
     const totalDragDistance = Math.abs(clientX - startX);
 
-    // If dragged more than 5px, prevent click and start momentum
-    if (totalDragDistance > 5) {
+    // Different thresholds for touch vs mouse
+    const dragThreshold = e.type === "touchend" ? 10 : 5;
+
+    // If dragged more than threshold, prevent click and start momentum
+    if (totalDragDistance > dragThreshold) {
       // Prevent link click
       const preventClick = (e) => {
         e.preventDefault();
@@ -185,10 +226,10 @@
   viewport.addEventListener("mouseleave", onPointerUp);
 
   // Touch events
-  viewport.addEventListener("touchstart", onPointerDown, { passive: false });
+  viewport.addEventListener("touchstart", onPointerDown, { passive: true });
   viewport.addEventListener("touchmove", onPointerMove, { passive: false });
-  viewport.addEventListener("touchend", onPointerUp);
-  viewport.addEventListener("touchcancel", onPointerUp);
+  viewport.addEventListener("touchend", onPointerUp, { passive: true });
+  viewport.addEventListener("touchcancel", onPointerUp, { passive: true });
 
   // Prevent context menu on long press
   viewport.addEventListener("contextmenu", (e) => {

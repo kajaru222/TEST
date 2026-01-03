@@ -6,6 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>煌龍園へようこそ | KohLongEnn</title>
 
+  <!-- Favicon -->
+  <link rel="icon" href="assets/img/logo.png" type="image/png" />
+
+  <!-- Preload critical images -->
+  <link rel="preload" as="image" href="assets/img/logo.png" />
+  <link rel="preload" as="image" href="assets/img/concept.png" />
+
   <!-- base styles -->
   <link rel="stylesheet" href="assets/css/style.css" />
   <!-- fonts -->
@@ -22,7 +29,7 @@
   <!-- Opening Splash Screen -->
   <div class="opening-splash" id="openingSplash" aria-hidden="true">
     <div class="opening-content">
-      <img class="opening-logo" src="assets/img/logo.png" alt="煌龍園" />
+      <img class="opening-logo" src="assets/img/logo.png" alt="煌龍園" fetchpriority="high" />
       <h1 class="opening-title">煌龍園</h1>
       <p class="opening-tagline">煌く龍たちと一緒に過ごせる空間はいかがですか？</p>
     </div>
@@ -82,7 +89,7 @@
     <section class="panel panel-hero" id="hero" data-panel>
       <div class="panel-inner hero-inner">
         <div class="hero-copy">
-          <img class="hero-mark" src="assets/img/logo.png" alt="煌龍園" />
+          <img class="hero-mark" src="assets/img/logo.png" alt="煌龍園" fetchpriority="high" />
           <h1 class="hero-title">煌龍園</h1>
           <p class="hero-lead">煌く龍たちと一緒に過ごせる空間はいかがですか？</p>
           <div class="hero-cta">

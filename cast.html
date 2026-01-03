@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="煌龍園（KohLongEnn）- 龍紹介" />
   <link rel="icon" href="assets/img/logo.png" type="image/png" />
+
+  <!-- Preload first dragon images -->
+  <link rel="preload" as="image" href="assets/img/dragons/liuu_full.png" />
+  <link rel="preload" as="image" href="assets/img/dragons/liuu_icon.jpg" />
+
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/dragons.css" />
   <link rel="stylesheet" href="assets/css/cast.css" />
@@ -70,10 +75,10 @@
           <div class="dragons-panel" aria-label="龍の紹介">
             <div class="panel-inner">
               <!-- flower（idに合わせて JS が差し替える） -->
-              <img id="dragonFlower" class="panel-flower" alt="" />
+              <img id="dragonFlower" class="panel-flower" alt="" loading="eager" decoding="async" />
 
               <!-- 立ち絵（id_full を JS が差し替える） -->
-              <img id="dragonPortrait" class="panel-portrait" alt="" />
+              <img id="dragonPortrait" class="panel-portrait" alt="" loading="eager" decoding="async" />
 
               <div class="panel-content-wrapper">
                 <div class="panel-title">

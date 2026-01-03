@@ -138,15 +138,21 @@ const setText = (el, v) => { if (el) el.textContent = (v ?? ""); };
     if (els.portrait) {
       // Preload image to ensure proper positioning
       const img = new Image();
+      img.loading = "eager";
+      img.decoding = "async";
       img.onload = () => {
         els.portrait.src = d.images.portrait;
         els.portrait.alt = `${d.dragonTitle} ${d.name} 立ち絵`;
+        els.portrait.loading = "eager";
+        els.portrait.decoding = "async";
       };
       img.src = d.images.portrait;
     }
     if (els.flower) {
       if (d.images.flower) {
         els.flower.src = d.images.flower;
+        els.flower.loading = "lazy";
+        els.flower.decoding = "async";
         els.flower.classList.remove("is-hidden");
       } else {
         els.flower.classList.add("is-hidden");
@@ -204,7 +210,7 @@ const setText = (el, v) => { if (el) el.textContent = (v ?? ""); };
     `;
 
     els.modalBody.innerHTML = `
-      ${d.images?.id_card ? `<div class="modal-id-card"><img src="${esc(d.images.id_card)}" alt="${esc(d.name)} ID Card" /></div>` : ""}
+      ${d.images?.id_card ? `<div class="modal-id-card"><img src="${esc(d.images.id_card)}" alt="${esc(d.name)} ID Card" loading="lazy" decoding="async" /></div>` : ""}
 
       ${d.oneLiner && d.oneLiner.trim() ? `<div class="modal-catch">『 ${esc(d.oneLiner)} 』</div>` : ""}
 
@@ -262,6 +268,7 @@ const setText = (el, v) => { if (el) el.textContent = (v ?? ""); };
       const img = document.createElement("img");
       img.className = "thumb-img";
       img.loading = "lazy";
+      img.decoding = "async";
       img.alt = "";
       img.src = d.images.icon;
 
