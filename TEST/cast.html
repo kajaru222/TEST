@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="煌龍園（KohLongEnn）- 龍紹介" />
+  <link rel="icon" href="assets/img/logo.png" type="image/png" />
+
+  <!-- Preload first dragon images -->
+  <link rel="preload" as="image" href="assets/img/dragons/liuu_full.png" />
+  <link rel="preload" as="image" href="assets/img/dragons/liuu_icon.jpg" />
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/dragons.css" />
+  <link rel="stylesheet" href="assets/css/cast.css" />
+  <title>龍紹介 | 煌龍園</title>
+</head>
+<body class="cast-page">
+<a class="skip" href="#main">本文へスキップ</a>
+<header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="煌龍園 トップへ">
+        <img src="assets/img/logo.png" alt="煌龍園 ロゴ" width="44" height="44" />
+      </a>
+
+      <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="sr-only">メニュー</span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="グローバルナビゲーション">
+        <button class="nav-close" id="navClose" type="button" aria-label="メニューを閉じる">
+          <span class="nav-close-icon">×</span>
+        </button>
+        <a href="index.html">入口</a>
+        <a href="intro.html">はじめに</a>
+        <a href="about.html">カフェについて</a>
+        <a href="cast.html" class="active">龍紹介</a>
+        <a href="stories.html">龍の小噺</a>
+        <a href="gallery.html">龍の追憶</a>
+        <a href="access.html">アクセス</a>
+        <a href="https://5ne.co/0jvu" target="_blank" rel="noopener">問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="dragons-page">
+    <section class="dragons-shell" aria-label="龍紹介">
+      <div class="dragons-stage" id="dragonStage">
+        <!-- 左：カテゴリー列 -->
+        <div class="category-list">
+          <div class="category-item active" data-category="dragons">龍</div>
+          <div class="category-item" data-category="servants">龍の遣い</div>
+        </div>
+
+        <!-- 中央：アイコングリッド -->
+        <div class="icon-grid-wrap" aria-label="龍一覧">
+          <button class="icon-scroll-btn up" id="iconScrollUp" type="button" aria-label="上にスクロール">▲</button>
+          <div class="icon-scroll-container" id="iconScrollContainer">
+            <div class="icon-grid" id="iconGrid"></div>
+          </div>
+          <button class="icon-scroll-btn down" id="iconScrollDown" type="button" aria-label="下にスクロール">▼</button>
+        </div>
+
+        <!-- 右：バンド＋パネル全体 -->
+        <div class="dragons-content-area">
+          <!-- 上段：大きく広げた dragon_band.png（メインカラーに合わせる） -->
+          <div class="dragons-band top" id="d-band-top" aria-hidden="true"></div>
+
+          <!-- 中段：アクセント帯 + サブカラーボックス + アクセント帯 -->
+          <div class="accent-bar top" aria-hidden="true"></div>
+
+          <!-- メインパネル -->
+          <div class="dragons-panel" aria-label="龍の紹介">
+            <div class="panel-inner">
+              <!-- flower（idに合わせて JS が差し替える） -->
+              <img id="dragonFlower" class="panel-flower" alt="" loading="eager" decoding="async" />
+
+              <!-- 立ち絵（id_full を JS が差し替える） -->
+              <img id="dragonPortrait" class="panel-portrait" alt="" loading="eager" decoding="async" />
+
+              <div class="panel-content-wrapper">
+                <div class="panel-title">
+                  <div id="dragonTitle" class="jp">黒龍</div>
+                  <div id="dragonName" class="en">Liuu Qalli</div>
+                </div>
+
+                <div id="dragonTags" class="panel-meta">#冥界／ノクターン 🎼</div>
+
+                <ul class="panel-list">
+                  <li>
+                    <span class="sq" aria-hidden="true"></span>
+                    <div>
+                      <span class="label">誕生日</span>
+                      <span id="dragonBirthday">12月12日</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="sq" aria-hidden="true"></span>
+                    <div>
+                      <span class="label">紹介ワンフレーズ</span>
+                      <span id="dragonPhrase">『 満月の煌めきから目を離さないで。』</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="sq" aria-hidden="true"></span>
+                    <div>
+                      <span class="label">イメージカラー</span>
+                      <span id="dragonColorName">ジェットブラック</span>
+                    </div>
+                  </li>
+                </ul>
+
+                <a id="viewDetails" class="panel-detail" href="#details"><span class="tri" aria-hidden="true">▼</span>View Details</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="accent-bar bottom" aria-hidden="true"></div>
+
+          <!-- 下段：大きく広げた dragon_band.png（メインカラーに合わせる） -->
+          <div class="dragons-band bottom" id="d-band-bottom" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dragon-modal" id="dragonModal" aria-hidden="true">
+      <div class="modal-backdrop" data-role="backdrop"></div>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-head">
+          <div class="modal-title" id="modalTitle">Details</div>
+          <button class="modal-close" id="modalClose" type="button">閉じる</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+      </div>
+    </section>
+  </main>
+<footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-brand">
+          <img src="assets/img/logo.png" alt="" width="36" height="36" loading="lazy" />
+          <div>
+            <div class="footer-title">煌龍園 | KohLongEnn</div>
+            <div class="footer-note">©SQUARE ENIX<br>記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。</div>
+          </div>
+        </div>
+
+        <a class="to-top" href="#top">▲ Top</a>
+      </div>
+    </footer>
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/dragons-data.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="assets/js/dragons.js" defer></script>
+  <script src="assets/js/cast-category.js" defer></script>
+  <script src="assets/js/cast-scroll.js" defer></script>
+</body>
+</html>

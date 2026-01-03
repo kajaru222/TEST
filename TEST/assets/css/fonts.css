@@ -1,0 +1,64 @@
+/**
+ * Custom Fonts
+ * 煌龍園で使用するカスタムフォント
+ */
+
+/* Harenosora - 晴れのそら (見出し・タイトル用) */
+@font-face {
+  font-family: 'Harenosora';
+  src: url('../fonts/Harenosora.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Soukou Mincho - 装甲明朝 (本文・詳細テキスト用) */
+@font-face {
+  font-family: 'Soukou Mincho';
+  src: url('../fonts/SoukouMincho.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* サイト全体の基本フォント */
+body {
+  font-family: 'Soukou Mincho', 'Yu Mincho', 'YuMincho', 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', serif;
+}
+
+/* 見出し・タイトルにHarenosoraを適用 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Harenosora', 'Yu Gothic', 'YuGothic', 'Hiragino Sans', sans-serif;
+}
+
+/* ブランドロゴ・サイトタイトル */
+.brand,
+.footer-title {
+  font-family: 'Harenosora', sans-serif;
+}
+
+/* パネルタイトル */
+.panel-title,
+.hero-lead {
+  font-family: 'Harenosora', sans-serif;
+}
+
+/* Cast関連の要素 */
+.cast-card {
+  font-family: 'Soukou Mincho', serif;
+}
+
+/* 龍の名前・タイトル */
+#dragonTitle,
+#dragonName,
+.panel-title .en,
+.panel-title .jp {
+  font-family: 'Harenosora', sans-serif;
+}
+
+/* 詳細説明テキスト */
+.panel-desc,
+.panel-list,
+.modal-body {
+  font-family: 'Soukou Mincho', serif;
+}

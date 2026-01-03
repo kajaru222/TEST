@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>煌龍園へようこそ | KohLongEnn</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/img/logo.png" type="image/png" />
+
+  <!-- Preload critical images -->
+  <link rel="preload" as="image" href="assets/img/logo.png" />
+  <link rel="preload" as="image" href="assets/img/concept.png" />
+
+  <!-- base styles -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- fonts -->
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <!-- opening splash -->
+  <link rel="stylesheet" href="assets/css/opening.css" />
+  <!-- TOP scroll presentation -->
+  <link rel="stylesheet" href="assets/css/top.css" />
+  <!-- index page specific -->
+  <link rel="stylesheet" href="assets/css/index.css" />
+</head>
+
+<body class="page-top">
+  <!-- Opening Splash Screen -->
+  <div class="opening-splash" id="openingSplash" aria-hidden="true">
+    <div class="opening-content">
+      <img class="opening-logo" src="assets/img/logo.png" alt="煌龍園" fetchpriority="high" />
+      <h1 class="opening-title">煌龍園</h1>
+      <p class="opening-tagline">煌く龍たちと一緒に過ごせる空間はいかがですか？</p>
+    </div>
+    <button class="opening-skip" id="openingSkip" aria-label="スキップ">Skip ▶</button>
+  </div>
+
+  <!-- Header (existing site navigation) -->
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="煌龍園 トップへ">
+        <img src="assets/img/logo.png" alt="煌龍園 ロゴ" width="44" height="44" />
+      </a>
+
+      <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="sr-only">メニュー</span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="グローバルナビゲーション">
+        <button class="nav-close" id="navClose" type="button" aria-label="メニューを閉じる">
+          <span class="nav-close-icon">×</span>
+        </button>
+        <a href="index.html">入口</a>
+        <a href="intro.html">はじめに</a>
+        <a href="about.html">カフェについて</a>
+        <a href="cast.html">龍紹介</a>
+        <a href="stories.html">龍の小噺</a>
+        <a href="gallery.html">龍の追憶</a>
+        <a href="access.html">アクセス</a>
+        <a href="https://5ne.co/0jvu" target="_blank" rel="noopener">問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Section Navigation Bar -->
+  <nav class="section-nav" aria-label="セクションナビゲーション">
+    <div class="section-nav-items">
+      <a href="#hero" class="section-nav-item active" data-section="hero" aria-label="ヒーロー">
+        <span class="section-nav-label">TOP</span>
+      </a>
+      <a href="#concept" class="section-nav-item" data-section="concept" aria-label="コンセプト">
+        <span class="section-nav-label">Concept</span>
+      </a>
+      <a href="#cast" class="section-nav-item" data-section="cast" aria-label="キャスト">
+        <span class="section-nav-label">Cast</span>
+      </a>
+      <a href="#access" class="section-nav-item" data-section="access" aria-label="アクセス">
+        <span class="section-nav-label">Access</span>
+      </a>
+    </div>
+  </nav>
+
+  <main class="story">
+    <!-- 1. Hero -->
+    <section class="panel panel-hero" id="hero" data-panel>
+      <div class="panel-inner hero-inner">
+        <div class="hero-copy">
+          <img class="hero-mark" src="assets/img/logo.png" alt="煌龍園" fetchpriority="high" />
+          <h1 class="hero-title">煌龍園</h1>
+          <p class="hero-lead">煌く龍たちと一緒に過ごせる空間はいかがですか？</p>
+          <div class="hero-cta">
+            <a class="btn primary" href="intro.html">物語を読む</a>
+            <a class="btn" href="cast.html">龍たちを見る</a>
+          </div>
+        </div>
+        <div class="hero-bg" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- 2. concept -->
+    <section class="panel panel-text panel-with-image panel-with-bg" id="concept" data-panel>
+      <div class="panel-bg-image" style="background-image: url('assets/img/concept.png');" aria-hidden="true"></div>
+      <div class="panel-bg-overlay" aria-hidden="true"></div>
+      <div class="panel-inner">
+        <div class="panel-card with-image">
+          <div class="panel-content">
+            <h2 class="panel-title">Concept</h2>
+            <p class="panel-desc">
+              うつし世の果て、空に揺蕩う「龍宮」には、<br>
+              鮮やかな煌きを纏う「龍」達が暮らしています。<br>
+              彼女達は気まぐれに人の世を愛で、訪れ、<br>
+              人の現し身と華やかな衣を纏い、人の子らを「園」に招いて歓待します。<br><br>
+              ようこそ、華やぐ喫茶『煌龍園』へ。<br>
+              今宵も煌く龍たちの園で、<br>
+              貴方の世界を輝かせる色彩に出逢えますように。
+            </p>
+            <a class="btn primary" href="about.html">カフェについて</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. cast -->
+    <section class="panel panel-cast panel-combined panel-with-bg" id="cast" data-panel>
+      <div class="panel-bg-image" style="background-image: url('assets/img/cast.jpg');" aria-hidden="true"></div>
+      <div class="panel-bg-overlay" aria-hidden="true"></div>
+      <div class="panel-inner">
+        <div class="cast-intro">
+          <div class="cast-intro-content">
+            <h2 class="panel-title">Cast</h2>
+            <p class="panel-desc">
+              ​煌龍園で出会うことのできる龍（キャスト）の紹介となります。
+            </p>
+            <a class="btn primary" href="cast.html">龍紹介ページへ</a>
+          </div>
+        </div>
+
+        <div class="cast-scroll-wrapper">
+          <div class="cast-scroll" id="castScroll" aria-label="キャスト一覧">
+            <div class="cast-track" id="castTrack">
+              <!-- injected by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Access / SNS -->
+    <section class="panel panel-access" id="access" data-panel>
+      <div class="panel-inner">
+        <div class="panel-card wide">
+          <h2 class="panel-title">Access / SNS</h2>
+          <p class="panel-desc">
+            来園方法と、各SNSへの導線をまとめています。
+          </p>
+          <div class="access-actions">
+            <a class="btn primary" href="access.html">アクセス</a>
+            <a class="btn" href="https://5ne.co/0jvu" target="_blank" rel="noopener">問い合わせ</a>
+          </div>
+
+          <div class="sns">
+            <a class="sns-item" href="https://x.com/ll_KohLongEnn" aria-label="X">X</a>
+          </div>
+
+          <!-- Footer info for mobile -->
+          <div class="mobile-footer-info">
+            <div class="mobile-footer-brand">
+              <img src="assets/img/logo.png" alt="" width="32" height="32" loading="lazy" />
+              <div>
+                <div class="mobile-footer-title">煌龍園 | KohLongEnn</div>
+                <div class="mobile-footer-note">©SQUARE ENIX<br>記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="assets/img/logo.png" alt="" width="36" height="36" loading="lazy" />
+        <div>
+          <div class="footer-title">煌龍園 | KohLongEnn</div>
+          <div class="footer-note">©SQUARE ENIX<br>記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。</div>
+        </div>
+      </div>
+
+      <a class="to-top" href="#top">▲ Top</a>
+    </div>
+  </footer>
+
+  <!-- Opening splash (load first) -->
+  <script src="assets/js/opening.js"></script>
+
+  <!-- GSAP (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Main navigation -->
+  <script src="assets/js/main.js" defer></script>
+  <!-- Data for cast cards -->
+  <script src="assets/js/dragons-data.js"></script>
+  <!-- TOP page animation -->
+  <script src="assets/js/top-hero.js"></script>
+  <script src="assets/js/top-cast-build.js"></script>
+  <script src="assets/js/top-cast-inertia.js"></script>
+  <!-- Scroll animations -->
+  <script src="assets/js/scroll-animations.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,212 @@
+/**
+ * Opening Splash Screen
+ * 初回訪問時のオープニング演出
+ */
+
+.opening-splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #a52a2a 0%, #8b1a1a 50%, #6b0f0f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.8s ease-out;
+}
+
+/* Hidden state */
+.opening-splash.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Completely removed from DOM after animation */
+.opening-splash.is-removed {
+  display: none;
+}
+
+/* Content container */
+.opening-content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Logo */
+.opening-logo {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 24px;
+  display: block;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: logoAppear 1.2s ease-out 0.3s forwards;
+  filter: drop-shadow(0 8px 24px rgba(255, 255, 255, 0.3));
+}
+
+@keyframes logoAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Site title */
+.opening-title {
+  font-family: 'Soukou Mincho', serif;
+  font-size: 56px;
+  font-weight: bold;
+  color: #fff;
+  margin: 0 0 16px;
+  letter-spacing: 0.12em;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: titleAppear 1s ease-out 0.8s forwards;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes titleAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tagline */
+.opening-tagline {
+  font-family: 'Harenosora', serif;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 auto;
+  letter-spacing: 0.05em;
+  line-height: 1.8;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: taglineAppear 1s ease-out 1.3s forwards;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  max-width: 500px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+@keyframes taglineAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Skip button */
+.opening-skip {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 10px 20px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  z-index: 3;
+  opacity: 0;
+  animation: skipAppear 0.6s ease-out 2s forwards;
+}
+
+@keyframes skipAppear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.opening-skip:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.opening-skip:active {
+  transform: translateY(0);
+}
+
+/* Decorative particles effect */
+.opening-splash::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+  opacity: 0;
+  animation: particlesFade 2s ease-in-out 0.5s forwards;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes particlesFade {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Prevent scrolling when opening is active */
+body.opening-active {
+  overflow: hidden;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .opening-logo {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+  }
+
+  .opening-title {
+    font-size: 36px;
+  }
+
+  .opening-tagline {
+    font-size: 16px;
+    max-width: 90%;
+  }
+
+  .opening-skip {
+    bottom: 24px;
+    right: 24px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
