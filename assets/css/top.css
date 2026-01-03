@@ -453,6 +453,11 @@ body{ overflow-x:hidden; }
   padding: 0 20px;
 }
 
+/* Desktop: Hide mobile footer info by default */
+.mobile-footer-info {
+  display: none;
+}
+
 /* Mobile adjustments */
 @media (max-width: 768px){
   :root{ --header-h: 72px; }
@@ -464,22 +469,227 @@ body{ overflow-x:hidden; }
     padding-top: var(--header-h);
   }
 
-  /* スマホでヘッダーとフッターに隠れないように調整 */
+  /* TOPページのスマホ表示調整 */
   .page-top main {
-    height: 100vh;
-    height: 100dvh; /* Dynamic viewport height */
+    top: var(--header-h) !important;
+    padding-top: 0 !important;
+    height: calc(100vh - var(--header-h)) !important;
+    height: calc(100dvh - var(--header-h)) !important;
   }
 
   .page-top .panel {
-    min-height: 100vh;
-    min-height: 100dvh;
-    height: 100vh;
-    height: 100dvh;
+    min-height: calc(100vh - var(--header-h)) !important;
+    min-height: calc(100dvh - var(--header-h)) !important;
+    height: calc(100vh - var(--header-h)) !important;
+    height: calc(100dvh - var(--header-h)) !important;
+    padding: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .page-top .panel-inner {
+    padding: 30px 20px !important;
+    width: 100% !important;
+  }
+
+  /* Conceptセクションなどテキストセクションの調整 */
+  .page-top .panel-text .panel-inner,
+  .page-top .panel-with-bg .panel-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  /* Conceptセクションのカードを中央配置 */
+  .page-top .panel-with-bg .panel-card {
+    width: 90% !important;
+    max-width: 90% !important;
   }
 
   .page-top .panel-hero {
-    padding-top: 0;
-    justify-content: center;
+    overflow: hidden !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .page-top .panel-hero .panel-inner {
+    justify-content: center !important;
+  }
+
+  .page-top .panel-cast {
+    height: calc(100vh - var(--header-h)) !important;
+    height: calc(100dvh - var(--header-h)) !important;
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100dvh - var(--header-h));
+  }
+
+  .page-top .panel-cast .panel-inner {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 20px !important;
+  }
+
+  /* Castセクションの上部コンテンツ調整（枠付き） */
+  .page-top .cast-intro {
+    flex: 0 0 auto !important;
+    margin-bottom: 30px !important;
+    width: 90% !important;
+    background: linear-gradient(
+      135deg,
+      rgba(165, 42, 42, 0.3) 0%,
+      rgba(139, 69, 19, 0.35) 50%,
+      rgba(165, 42, 42, 0.3) 100%
+    ) !important;
+    border: 2px solid rgba(244, 208, 63, 0.5) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(8px) !important;
+    padding: 16px 20px !important;
+  }
+
+  .page-top .cast-intro-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+  }
+
+  /* cast-intro-contentの疑似要素を非表示 */
+  .page-top .cast-intro-content::before {
+    display: none !important;
+  }
+
+  /* Castセクションのタイトル */
+  .page-top .cast-intro-content .panel-title {
+    display: block !important;
+    font-family: 'Harenosora', sans-serif !important;
+    font-size: 42px !important;
+    font-weight: bold !important;
+    color: #f4d03f !important;
+    text-align: center !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7) !important;
+    margin: 0 !important;
+  }
+
+  /* Cast説明文を表示 */
+  .page-top .cast-intro-content .panel-desc {
+    display: block !important;
+    text-align: center !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+    padding: 0 10px !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  /* Castセクションのボタンを非表示 */
+  .page-top .cast-intro-content .btn {
+    display: none !important;
+  }
+
+  .page-top .cast-scroll-wrapper {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    overflow: visible !important;
+    width: 90% !important;
+    max-width: 90% !important;
+    max-height: 400px !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+  }
+
+  /* cast-scroll-wrapperの疑似要素を非表示 */
+  .page-top .cast-scroll-wrapper::before,
+  .page-top .cast-scroll-wrapper::after {
+    display: none !important;
+  }
+
+  .page-top .cast-scroll {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 380px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .page-top .cast-track {
+    display: flex !important;
+    gap: 16px !important;
+    padding: 10px !important;
+    height: auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .page-top .cast-card {
+    flex-shrink: 0 !important;
+    height: 340px !important;
+    width: auto !important;
+  }
+
+  /* パネル内部のコンテンツ調整 */
+  .page-top .panel-card {
+    max-width: 100% !important;
+  }
+
+  /* フッターをスマホでは非表示 */
+  .page-top .site-footer {
+    display: none !important;
+  }
+
+  /* モバイル用フッター情報（Accessセクション内） */
+  .mobile-footer-info {
+    display: block !important;
+    margin-top: 40px !important;
+    padding-top: 30px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .mobile-footer-brand {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    opacity: 0.8 !important;
+  }
+
+  .mobile-footer-brand img {
+    flex-shrink: 0 !important;
+  }
+
+  .mobile-footer-title {
+    font-family: 'Harenosora', sans-serif !important;
+    font-size: 14px !important;
+    color: #f4d03f !important;
+    margin-bottom: 8px !important;
+  }
+
+  .mobile-footer-note {
+    font-size: 11px !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    line-height: 1.5 !important;
   }
 
   .hero-mark {
@@ -543,6 +753,7 @@ body{ overflow-x:hidden; }
   }
 
   .panel-desc {
+    display: block !important;
     font-size: 16px;
     margin-bottom: 24px;
   }
@@ -622,6 +833,12 @@ body{ overflow-x:hidden; }
 
   .cast-scroll-wrapper::after {
     right: 24px;
+  }
+
+  /* Cast panel のモバイル調整 */
+  .page-top .panel-cast {
+    height: auto;
+    padding-bottom: 80px;
   }
 }
 /* TOP vertical sections */
