@@ -1,0 +1,1904 @@
+/* ========================================
+   yui540スタイル CSSアニメーション集 - 拡張版
+   ========================================
+
+   このファイルの役割:
+   - 再利用可能なCSSアニメーションクラスの提供
+   - 背景エフェクト、ホバー効果、テキストアニメーション
+   - ページ遷移、セクション間トランジション
+
+   yui540スタイルの特徴:
+   - エレガントなイージング (cubic-bezier)
+   - 段階的なディレイ (stagger)
+   - マスクリビール効果
+   - パネルトランジション
+   - 繊細なパーティクル効果
+
+   z-index構造 (panel内):
+   - panel-bg-image: auto
+   - bg-aurora/bg-stars/particle-dots::before: z-index: 1
+   - panel-bg-overlay: z-index: 1
+   - panel-inner: z-index: 2
+   ======================================== */
+
+/* ----------------------------------------
+   0. CSS変数 (yui540スタイル用)
+   ---------------------------------------- */
+:root {
+  /* イージング - より優雅に */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-luxe: cubic-bezier(0.16, 1, 0.3, 1); /* 高級感のあるイージング */
+
+  /* アニメーション用カラー - 中華高級パレット */
+  --glow-gold: rgba(212, 175, 55, 0.6);
+  --glow-gold-soft: rgba(212, 175, 55, 0.3);
+  --glow-red: rgba(139, 35, 50, 0.5);
+  --glow-red-deep: rgba(106, 27, 41, 0.6);
+}
+
+/* ----------------------------------------
+   1. 文字アニメーション
+   ---------------------------------------- */
+
+/* 1-1. 1文字ずつフェードイン */
+.text-fade-in-char {
+  display: inline-block;
+}
+
+.text-fade-in-char span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: charFadeIn 0.6s ease forwards;
+}
+
+@keyframes charFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 1-2. 文字が波打つアニメーション */
+.text-wave span {
+  display: inline-block;
+  animation: textWave 2s ease-in-out infinite;
+}
+
+@keyframes textWave {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 1-3. グラデーションが流れる文字 - 中華高級版 */
+.text-gradient-flow {
+  background: linear-gradient(
+    90deg,
+    #D4AF37 0%,
+    #8B2332 25%,
+    #D4AF37 50%,
+    #8B2332 75%,
+    #D4AF37 100%
+  ) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: gradientFlow 4s linear infinite, var(--text-extra-anim, none) !important;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* 1-4. タイプライター効果 */
+.text-typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid #f4d03f;
+  animation:
+    typewriter 3s steps(30) forwards,
+    blink 0.5s step-end infinite;
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+/* 1-5. 文字がぼやけて現れる */
+.text-blur-in span {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(10px);
+  animation: blurIn 0.8s ease forwards;
+}
+
+@keyframes blurIn {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* 1-6. 文字が回転して登場 */
+.text-rotate-in span {
+  display: inline-block;
+  opacity: 0;
+  transform: rotateY(90deg);
+  animation: rotateIn 0.6s ease forwards;
+}
+
+@keyframes rotateIn {
+  to {
+    opacity: 1;
+    transform: rotateY(0);
+  }
+}
+
+/* ----------------------------------------
+   2. 背景エフェクト
+   ---------------------------------------- */
+
+/* 2-1. グラデーション変化 */
+.bg-gradient-shift {
+  background: linear-gradient(
+    -45deg,
+    #1a0f0f,
+    #2a1515,
+    #3d1a1a,
+    #1a0f0f
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 2-2. 光のライン（シャイン効果） - パネル用に調整 */
+.bg-shine {
+  position: relative;
+}
+
+.bg-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+  animation: shine 4s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
+}
+
+/* 2-3. パルス（脈動）効果 */
+.bg-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(244, 208, 63, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(244, 208, 63, 0);
+  }
+}
+
+/* 2-4. オーロラ効果 - overflow:hidden対応 */
+/* z-index: panel-bg-overlay(1)より上、panel-inner(2)より下 */
+.bg-aurora {
+  position: relative;
+}
+
+.bg-aurora::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(165, 36, 36, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(244, 208, 63, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(139, 69, 19, 0.25) 0%, transparent 50%);
+  animation: aurora 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes aurora {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* 2-5. 星が瞬く効果 - overflow:hidden対応 */
+.bg-stars {
+  position: relative;
+}
+
+.bg-stars::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.8) 50%, transparent 50%),
+    radial-gradient(2px 2px at 30% 60%, rgba(255,255,255,0.6) 50%, transparent 50%),
+    radial-gradient(3px 3px at 50% 30%, rgba(255,255,255,0.9) 50%, transparent 50%),
+    radial-gradient(2px 2px at 70% 70%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(2px 2px at 85% 15%, rgba(255,255,255,0.7) 50%, transparent 50%),
+    radial-gradient(3px 3px at 20% 80%, rgba(255,255,255,0.6) 50%, transparent 50%),
+    radial-gradient(2px 2px at 90% 50%, rgba(255,255,255,0.8) 50%, transparent 50%);
+  animation: twinkle 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ----------------------------------------
+   3. スクロール演出
+   ---------------------------------------- */
+
+/* 3-1. 要素が弾むように登場 */
+.scroll-bounce-in {
+  opacity: 0;
+  transform: translateY(100px) scale(0.8);
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scroll-bounce-in.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* 3-2. 回転しながらフェードイン */
+.scroll-rotate-fade {
+  opacity: 0;
+  transform: rotate(-10deg) translateY(50px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-rotate-fade.is-visible {
+  opacity: 1;
+  transform: rotate(0) translateY(0);
+}
+
+/* 3-3. 左右からスライドイン */
+.scroll-slide-left {
+  opacity: 0;
+  transform: translateX(-100px);
+  transition: all 0.8s ease-out;
+}
+
+.scroll-slide-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-slide-right {
+  opacity: 0;
+  transform: translateX(100px);
+  transition: all 0.8s ease-out;
+}
+
+.scroll-slide-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 3-4. ズームイン */
+.scroll-zoom-in {
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-zoom-in.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 3-5. フリップ効果 */
+.scroll-flip {
+  opacity: 0;
+  transform: perspective(600px) rotateX(-90deg);
+  transition: all 0.8s ease-out;
+}
+
+.scroll-flip.is-visible {
+  opacity: 1;
+  transform: perspective(600px) rotateX(0);
+}
+
+/* 3-6. 3D回転 */
+.scroll-3d-rotate {
+  opacity: 0;
+  transform: perspective(1000px) rotateY(-45deg) translateZ(-100px);
+  transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-3d-rotate.is-visible {
+  opacity: 1;
+  transform: perspective(1000px) rotateY(0) translateZ(0);
+}
+
+/* ----------------------------------------
+   4. ホバーエフェクト
+   ---------------------------------------- */
+
+/* 4-1. グロー効果 - 既存のbox-shadowに追加 */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow:
+    0 4px 16px rgba(165, 36, 36, 0.4),
+    0 0 20px rgba(244, 208, 63, 0.4),
+    0 0 40px rgba(244, 208, 63, 0.2) !important;
+}
+
+/* 4-2. リップル効果 */
+.hover-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.hover-ripple:hover::after {
+  width: 300%;
+  height: 300%;
+}
+
+/* 4-3. シェイク効果 */
+.hover-shake:hover {
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* 4-4. 浮遊効果 - ボタン用に調整 */
+.hover-float {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-float:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ----------------------------------------
+   5. 特殊エフェクト
+   ---------------------------------------- */
+
+/* 5-1. マスク reveal 効果 */
+.mask-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.mask-reveal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #1a0f0f 50%, transparent 50%);
+  animation: maskReveal 1.5s ease forwards;
+  z-index: 1;
+}
+
+@keyframes maskReveal {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 5-2. グリッチ効果 */
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.glitch::before {
+  color: #ff0000;
+  animation: glitch1 0.3s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch::after {
+  color: #00ffff;
+  animation: glitch2 0.3s infinite;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch1 {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+}
+
+@keyframes glitch2 {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(2px, -2px); }
+  40% { transform: translate(-2px, 2px); }
+  60% { transform: translate(2px, -2px); }
+  80% { transform: translate(-2px, 2px); }
+}
+
+/* 5-3. ネオン効果 */
+.neon-text {
+  text-shadow:
+    0 0 5px #f4d03f,
+    0 0 10px #f4d03f,
+    0 0 20px #f4d03f,
+    0 0 40px #c9302c,
+    0 0 80px #c9302c;
+  animation: neonPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes neonPulse {
+  from {
+    text-shadow:
+      0 0 5px #f4d03f,
+      0 0 10px #f4d03f,
+      0 0 20px #f4d03f,
+      0 0 40px #c9302c,
+      0 0 80px #c9302c;
+  }
+  to {
+    text-shadow:
+      0 0 10px #f4d03f,
+      0 0 20px #f4d03f,
+      0 0 40px #f4d03f,
+      0 0 80px #c9302c,
+      0 0 120px #c9302c;
+  }
+}
+
+/* 5-4. モーフィング効果 */
+.morphing {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation: morphing 8s ease-in-out infinite;
+}
+
+@keyframes morphing {
+  0% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+  100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+}
+
+/* 5-5. パーティクルドット - overflow:hidden対応 */
+.particle-dots {
+  position: relative;
+}
+
+.particle-dots::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(6px 6px at 10% 20%, rgba(244, 208, 63, 0.5) 50%, transparent 50%),
+    radial-gradient(4px 4px at 85% 60%, rgba(201, 48, 44, 0.5) 50%, transparent 50%),
+    radial-gradient(5px 5px at 25% 75%, rgba(244, 208, 63, 0.4) 50%, transparent 50%),
+    radial-gradient(3px 3px at 70% 25%, rgba(201, 48, 44, 0.4) 50%, transparent 50%);
+  animation: floatParticle 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes floatParticle {
+  0%, 100% {
+    opacity: 0.4;
+    background-position: 0% 0%;
+  }
+  25% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.5;
+    background-position: 2% -2%;
+  }
+  75% {
+    opacity: 0.8;
+  }
+}
+
+/* ----------------------------------------
+   6. ローディング・装飾
+   ---------------------------------------- */
+
+/* 6-1. スピナー */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(244, 208, 63, 0.3);
+  border-top-color: #f4d03f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 6-2. ドットローダー */
+.dot-loader {
+  display: flex;
+  gap: 8px;
+}
+
+.dot-loader span {
+  width: 10px;
+  height: 10px;
+  background: #f4d03f;
+  border-radius: 50%;
+  animation: dotBounce 1.4s ease-in-out infinite;
+}
+
+.dot-loader span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot-loader span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 6-3. 進行バー */
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: '';
+  display: block;
+  width: 30%;
+  height: 100%;
+  background: linear-gradient(90deg, #f4d03f, #c9302c);
+  border-radius: 2px;
+  animation: progressMove 2s ease-in-out infinite;
+}
+
+@keyframes progressMove {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+/* ========================================
+   7. yui540スタイル - ページトランジション
+   ======================================== */
+
+/* 7-1. カーテンアニメーション（上下から閉じる） */
+.curtain-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+.curtain-transition::before,
+.curtain-transition::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(135deg, #1a0f0f 0%, #2a1515 100%);
+  transition: height 0.6s var(--ease-in-out-quart);
+}
+
+.curtain-transition::before {
+  top: 0;
+}
+
+.curtain-transition::after {
+  bottom: 0;
+}
+
+.curtain-transition.is-active::before,
+.curtain-transition.is-active::after {
+  height: 50%;
+}
+
+/* 7-2. スライドパネル（左右から） */
+.slide-panel-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  overflow: hidden;
+}
+
+.slide-panel-transition::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #0a0a0a 0%, #1a0f0f 100%);
+  transition: transform 0.8s var(--ease-out-expo);
+}
+
+.slide-panel-transition.is-active::before {
+  transform: translateX(100%);
+}
+
+.slide-panel-transition.is-exit::before {
+  transform: translateX(200%);
+}
+
+/* 7-3. サークルエクスパンド */
+.circle-expand {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, #2a1515 0%, #0a0a0a 100%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9998;
+  transition: width 0.8s var(--ease-out-expo), height 0.8s var(--ease-out-expo);
+}
+
+.circle-expand.is-active {
+  width: 300vmax;
+  height: 300vmax;
+}
+
+/* ========================================
+   8. yui540スタイル - マスクリビール強化版
+   ======================================== */
+
+/* 8-1. 横方向マスクリビール */
+.mask-reveal-x {
+  position: relative;
+  overflow: hidden;
+}
+
+.mask-reveal-x::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #f4d03f 0%, #c9302c 100%);
+  transform: translateX(-101%);
+  z-index: 10;
+}
+
+.mask-reveal-x.is-visible::before {
+  animation: maskRevealX 1.2s var(--ease-in-out-quart) forwards;
+}
+
+@keyframes maskRevealX {
+  0% {
+    transform: translateX(-101%);
+  }
+  45%, 55% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(101%);
+  }
+}
+
+/* 8-2. 縦方向マスクリビール */
+.mask-reveal-y {
+  position: relative;
+  overflow: hidden;
+}
+
+.mask-reveal-y::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #f4d03f 0%, #c9302c 100%);
+  transform: translateY(-101%);
+  z-index: 10;
+}
+
+.mask-reveal-y.is-visible::before {
+  animation: maskRevealY 1.2s var(--ease-in-out-quart) forwards;
+}
+
+@keyframes maskRevealY {
+  0% {
+    transform: translateY(-101%);
+  }
+  45%, 55% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(101%);
+  }
+}
+
+/* 8-3. 対角線マスクリビール */
+.mask-reveal-diagonal {
+  position: relative;
+  overflow: hidden;
+}
+
+.mask-reveal-diagonal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(135deg, #f4d03f 0%, #c9302c 50%, transparent 50%);
+  transform: translateX(-100%);
+  z-index: 10;
+}
+
+.mask-reveal-diagonal.is-visible::before {
+  animation: maskRevealDiagonal 1.5s var(--ease-out-expo) forwards;
+}
+
+@keyframes maskRevealDiagonal {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ========================================
+   9. yui540スタイル - テキストアニメーション強化
+   ======================================== */
+
+/* 9-1. 文字が分解して登場 */
+.text-split-appear span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%) rotateX(-90deg);
+  transform-origin: top center;
+  background: inherit;
+  -webkit-background-clip: inherit;
+  background-clip: inherit;
+  -webkit-text-fill-color: inherit;
+}
+
+.text-split-appear.is-visible span {
+  animation: splitAppear 0.8s var(--ease-out-expo) forwards;
+}
+
+.text-split-appear.is-visible span:nth-child(1) { animation-delay: 0s; }
+.text-split-appear.is-visible span:nth-child(2) { animation-delay: 0.05s; }
+.text-split-appear.is-visible span:nth-child(3) { animation-delay: 0.1s; }
+.text-split-appear.is-visible span:nth-child(4) { animation-delay: 0.15s; }
+.text-split-appear.is-visible span:nth-child(5) { animation-delay: 0.2s; }
+.text-split-appear.is-visible span:nth-child(6) { animation-delay: 0.25s; }
+.text-split-appear.is-visible span:nth-child(7) { animation-delay: 0.3s; }
+.text-split-appear.is-visible span:nth-child(8) { animation-delay: 0.35s; }
+.text-split-appear.is-visible span:nth-child(9) { animation-delay: 0.4s; }
+.text-split-appear.is-visible span:nth-child(10) { animation-delay: 0.45s; }
+
+@keyframes splitAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(100%) rotateX(-90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+/* 9-2. 文字がブラーから登場 */
+.text-blur-reveal {
+  opacity: 0;
+  filter: blur(20px);
+  transform: scale(1.2);
+  transition: all 1s var(--ease-out-expo);
+}
+
+.text-blur-reveal.is-visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+
+/* 9-3. 文字がスライスして登場 */
+.text-slice {
+  position: relative;
+  overflow: hidden;
+}
+
+.text-slice::before,
+.text-slice::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.text-slice::before {
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+  transform: translateX(-100%);
+}
+
+.text-slice::after {
+  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+  transform: translateX(100%);
+}
+
+.text-slice.is-visible::before,
+.text-slice.is-visible::after {
+  animation: textSliceIn 0.8s var(--ease-out-expo) forwards;
+}
+
+@keyframes textSliceIn {
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* 9-4. ネオングロウ文字（強化版） */
+.text-neon-glow {
+  position: relative;
+  color: #fff;
+  text-shadow:
+    0 0 5px #fff,
+    0 0 10px #fff,
+    0 0 20px #f4d03f,
+    0 0 40px #f4d03f,
+    0 0 80px #f4d03f;
+  animation: neonFlicker 3s ease-in-out infinite;
+}
+
+@keyframes neonFlicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow:
+      0 0 5px #fff,
+      0 0 10px #fff,
+      0 0 20px #f4d03f,
+      0 0 40px #f4d03f,
+      0 0 80px #f4d03f;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+  }
+}
+
+/* ========================================
+   10. yui540スタイル - カード・要素アニメーション
+   ======================================== */
+
+/* 10-1. カードフリップ */
+.card-flip {
+  perspective: 1000px;
+}
+
+.card-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s var(--ease-out-expo);
+  transform-style: preserve-3d;
+}
+
+.card-flip:hover .card-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.card-flip-front,
+.card-flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.card-flip-back {
+  transform: rotateY(180deg);
+}
+
+/* 10-2. カード3D傾き */
+.card-3d-tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.card-3d-tilt:hover {
+  transform: rotateY(-10deg) rotateX(10deg) scale(1.05);
+}
+
+/* 10-3. スタガードフェードイン */
+.stagger-fade-in > * {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.6s var(--ease-out-expo);
+}
+
+.stagger-fade-in.is-visible > *:nth-child(1) { transition-delay: 0s; opacity: 1; transform: translateY(0); }
+.stagger-fade-in.is-visible > *:nth-child(2) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+.stagger-fade-in.is-visible > *:nth-child(3) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+.stagger-fade-in.is-visible > *:nth-child(4) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+.stagger-fade-in.is-visible > *:nth-child(5) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+.stagger-fade-in.is-visible > *:nth-child(6) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
+
+/* 10-4. 弾むスケール */
+.bounce-scale {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.bounce-scale.is-visible {
+  animation: bounceScaleIn 0.8s var(--ease-bounce) forwards;
+}
+
+@keyframes bounceScaleIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   11. yui540スタイル - 背景エフェクト強化
+   ======================================== */
+
+/* 11-1. 流れるグラデーション背景 */
+.bg-gradient-flow {
+  background: linear-gradient(
+    -45deg,
+    #1a0f0f,
+    #2a1515,
+    #3d1a1a,
+    #2a1515,
+    #1a0f0f
+  );
+  background-size: 400% 400%;
+  animation: gradientFlowBg 15s ease infinite;
+}
+
+@keyframes gradientFlowBg {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 11-2. フローティングパーティクル */
+.floating-particles {
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-particles::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(4px 4px at 20% 30%, rgba(244, 208, 63, 0.6) 50%, transparent 50%),
+    radial-gradient(3px 3px at 40% 70%, rgba(255, 255, 255, 0.5) 50%, transparent 50%),
+    radial-gradient(4px 4px at 60% 20%, rgba(244, 208, 63, 0.4) 50%, transparent 50%),
+    radial-gradient(3px 3px at 80% 60%, rgba(255, 255, 255, 0.6) 50%, transparent 50%),
+    radial-gradient(5px 5px at 10% 80%, rgba(201, 48, 44, 0.5) 50%, transparent 50%),
+    radial-gradient(4px 4px at 90% 40%, rgba(244, 208, 63, 0.5) 50%, transparent 50%);
+  animation: floatingParticles 20s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes floatingParticles {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-100%) rotate(360deg);
+  }
+}
+
+/* 11-3. 波紋エフェクト */
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 208, 63, 0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  animation: ripple 3s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.8;
+  }
+  100% {
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+  }
+}
+
+/* 11-4. 光線が走る効果 */
+.light-streak {
+  position: relative;
+  overflow: hidden;
+}
+
+.light-streak::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  animation: lightStreak 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes lightStreak {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
+}
+
+/* ========================================
+   12. yui540スタイル - インタラクティブホバー
+   ======================================== */
+
+/* 12-1. マグネットホバー */
+.hover-magnet {
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+/* 12-2. カラーシフトホバー */
+.hover-color-shift {
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.hover-color-shift::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(244, 208, 63, 0.2) 0%, rgba(201, 48, 44, 0.2) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.hover-color-shift:hover::before {
+  opacity: 1;
+}
+
+/* 12-3. ボーダーアニメーションホバー */
+.hover-border-anim {
+  position: relative;
+  overflow: hidden;
+}
+
+/* .btnのリップル効果との競合を解消 */
+.btn.hover-border-anim::before,
+.btn.hover-border-anim::after {
+  content: '' !important;
+  position: absolute !important;
+  width: 100% !important;
+  height: 2px !important;
+  border-radius: 0 !important;
+  left: 0 !important;
+  background: linear-gradient(90deg, #f4d03f, #c9302c) !important;
+  transform: scaleX(0) !important;
+  transform-origin: left !important;
+  transition: transform 0.4s var(--ease-out-expo) !important;
+}
+
+.btn.hover-border-anim::before {
+  top: 0 !important;
+}
+
+.btn.hover-border-anim::after {
+  bottom: 0 !important;
+}
+
+.btn.hover-border-anim:hover::before,
+.btn.hover-border-anim:hover::after {
+  transform: scaleX(1) !important;
+}
+
+.hover-border-anim::before,
+.hover-border-anim::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #f4d03f, #c9302c);
+  transform: scaleX(0);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.hover-border-anim::before {
+  top: 0;
+  left: 0;
+  transform-origin: left;
+}
+
+.hover-border-anim::after {
+  bottom: 0;
+  left: 0;
+  transform-origin: left;
+}
+
+.hover-border-anim:hover::before,
+.hover-border-anim:hover::after {
+  transform: scaleX(1);
+}
+
+/* 12-4. 分裂ホバー */
+.hover-split {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-split::before,
+.hover-split::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: rgba(244, 208, 63, 0.1);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.hover-split::before {
+  left: 0;
+  transform: translateX(-100%);
+}
+
+.hover-split::after {
+  right: 0;
+  transform: translateX(100%);
+}
+
+.hover-split:hover::before {
+  transform: translateX(0);
+}
+
+.hover-split:hover::after {
+  transform: translateX(0);
+}
+
+/* ========================================
+   13. yui540スタイル - スクロール連動アニメーション
+   ======================================== */
+
+/* 13-1. パララックスレイヤー */
+.parallax-layer {
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+/* 13-2. スクロールで回転 */
+.scroll-rotate {
+  transition: transform 0.5s var(--ease-out-expo);
+}
+
+.scroll-rotate.is-visible {
+  animation: scrollRotateIn 1s var(--ease-out-expo) forwards;
+}
+
+@keyframes scrollRotateIn {
+  0% {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+/* 13-3. スクロールで展開 */
+.scroll-unfold {
+  transform: scaleY(0);
+  transform-origin: top;
+  opacity: 0;
+}
+
+.scroll-unfold.is-visible {
+  animation: unfold 0.8s var(--ease-out-expo) forwards;
+}
+
+@keyframes unfold {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* 13-4. スクロールでクリップ展開 */
+.scroll-clip-reveal {
+  clip-path: inset(0 100% 0 0);
+  opacity: 0;
+}
+
+.scroll-clip-reveal.is-visible {
+  animation: clipReveal 1s var(--ease-out-expo) forwards;
+}
+
+@keyframes clipReveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   14. yui540スタイル - ボタン・リンクアニメーション
+   ======================================== */
+
+/* 14-1. 波紋ボタン */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+}
+
+.btn-ripple:active::after {
+  animation: btnRipple 0.6s ease-out;
+}
+
+@keyframes btnRipple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(40);
+    opacity: 0;
+  }
+}
+
+/* 14-2. グラデーションボーダーボタン */
+.btn-gradient-border {
+  position: relative;
+  background: transparent;
+  z-index: 1;
+}
+
+.btn-gradient-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #f4d03f, #c9302c, #f4d03f);
+  background-size: 200% 200%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: gradientBorder 3s ease infinite;
+}
+
+.btn-gradient-border::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #1a0f0f;
+  border-radius: inherit;
+  z-index: -1;
+}
+
+@keyframes gradientBorder {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 14-3. シャインボタン */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  transition: left 0.5s ease;
+}
+
+.btn-shine:hover::before {
+  left: 100%;
+}
+
+/* ========================================
+   15. yui540スタイル - ローディング・待機アニメーション
+   ======================================== */
+
+/* 15-1. パルスローダー */
+.loader-pulse {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f4d03f, #c9302c);
+  animation: loaderPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes loaderPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.5;
+  }
+}
+
+/* 15-2. ドットウェーブローダー */
+.loader-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.loader-dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #f4d03f;
+  animation: dotWave 1.4s ease-in-out infinite;
+}
+
+.loader-dots span:nth-child(2) { animation-delay: 0.16s; }
+.loader-dots span:nth-child(3) { animation-delay: 0.32s; }
+
+@keyframes dotWave {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 15-3. スピニングリング */
+.loader-ring {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(244, 208, 63, 0.2);
+  border-top-color: #f4d03f;
+  border-radius: 50%;
+  animation: loaderSpin 1s linear infinite;
+}
+
+@keyframes loaderSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   16. 中華高級装飾 - Chinese Luxury Ornaments
+   ======================================== */
+
+/* 16-1. 金の装飾ライン（セパレーター） */
+.chinese-separator {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 40px;
+  margin: 40px 0;
+}
+
+.chinese-separator::before,
+.chinese-separator::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.6) 50%,
+    transparent 100%
+  );
+}
+
+.chinese-separator::before {
+  margin-right: 20px;
+}
+
+.chinese-separator::after {
+  margin-left: 20px;
+}
+
+/* セパレーター中央の装飾 */
+.chinese-separator-icon {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #D4AF37, #B8962E);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2L15 9H21L16 14L18 21L12 17L6 21L8 14L3 9H9L12 2Z'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2L15 9H21L16 14L18 21L12 17L6 21L8 14L3 9H9L12 2Z'/%3E%3C/svg%3E");
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  animation: separatorGlow 3s ease-in-out infinite;
+}
+
+@keyframes separatorGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.8));
+  }
+}
+
+/* 16-2. 金箔テクスチャオーバーレイ */
+.gold-foil-overlay {
+  position: relative;
+}
+
+.gold-foil-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(212, 175, 55, 0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 30% 50%, rgba(212, 175, 55, 0.3) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 50% 30%, rgba(212, 175, 55, 0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 70% 60%, rgba(212, 175, 55, 0.35) 50%, transparent 50%),
+    radial-gradient(1px 1px at 90% 40%, rgba(212, 175, 55, 0.4) 50%, transparent 50%);
+  animation: goldFoilShimmer 5s ease-in-out infinite;
+  pointer-events: none;
+  opacity: 0.6;
+  z-index: 1;
+}
+
+@keyframes goldFoilShimmer {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* 16-3. 雲文様パターン背景 */
+.cloud-pattern {
+  position: relative;
+}
+
+.cloud-pattern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='50' viewBox='0 0 100 50'%3E%3Cpath d='M25 35c-5 0-9-4-9-9s4-9 9-9c1 0 2 0 3 .5C29 12 34 8 40 8c7 0 13 5 14 12 0 0 1-.1 1-.1 5 0 9 4 9 9s-4 9-9 9H25z' fill='none' stroke='rgba(212,175,55,0.1)' stroke-width='0.5'/%3E%3C/svg%3E");
+  background-size: 200px 100px;
+  animation: cloudDrift 30s linear infinite;
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+@keyframes cloudDrift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+/* 16-4. 龍の鱗パターン */
+.dragon-scale-bg {
+  position: relative;
+}
+
+.dragon-scale-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(ellipse 30px 40px at 50% 50%,
+      transparent 45%,
+      rgba(139, 35, 50, 0.08) 50%,
+      transparent 55%
+    );
+  background-size: 60px 80px;
+  animation: scaleShimmer 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes scaleShimmer {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* 16-5. 金縁フレーム */
+.gold-frame {
+  position: relative;
+  padding: 3px;
+  background: linear-gradient(135deg,
+    #D4AF37 0%,
+    #E8C547 25%,
+    #D4AF37 50%,
+    #B8962E 75%,
+    #D4AF37 100%
+  );
+  background-size: 200% 200%;
+  animation: goldFrameShift 4s ease infinite;
+}
+
+.gold-frame::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: var(--bg, #0A0506);
+  z-index: 0;
+}
+
+.gold-frame > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes goldFrameShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* 16-6. 朱色のグラデーション光 */
+.vermillion-glow {
+  position: relative;
+}
+
+.vermillion-glow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(139, 35, 50, 0.2) 0%,
+    transparent 70%
+  );
+  animation: vermillionPulse 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes vermillionPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* 16-7. 高級感のある光沢ボーダー */
+.luxury-border {
+  position: relative;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--bg, #0A0506), var(--bg, #0A0506)) padding-box,
+    linear-gradient(135deg,
+      rgba(212, 175, 55, 0.5) 0%,
+      rgba(212, 175, 55, 0.1) 25%,
+      rgba(212, 175, 55, 0.3) 50%,
+      rgba(212, 175, 55, 0.1) 75%,
+      rgba(212, 175, 55, 0.5) 100%
+    ) border-box;
+}
+
+/* 16-8. 絹のような質感グラデーション */
+.silk-texture {
+  background:
+    linear-gradient(135deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.02) 100%
+    ),
+    linear-gradient(45deg,
+      transparent 0%,
+      rgba(212, 175, 55, 0.02) 50%,
+      transparent 100%
+    );
+  background-size: 100% 100%, 200% 200%;
+  animation: silkShimmer 8s ease-in-out infinite;
+}
+
+@keyframes silkShimmer {
+  0%, 100% {
+    background-position: 0% 0%, 0% 0%;
+  }
+  50% {
+    background-position: 0% 0%, 100% 100%;
+  }
+}
+
+/* 16-9. 漆器風の深い光沢 */
+.lacquer-shine {
+  position: relative;
+  background: linear-gradient(180deg,
+    rgba(10, 5, 6, 1) 0%,
+    rgba(18, 10, 11, 1) 50%,
+    rgba(10, 5, 6, 1) 100%
+  );
+}
+
+.lacquer-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ----------------------------------------
+   Reduced Motion対応
+   ---------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .mask-reveal-x::before,
+  .mask-reveal-y::before,
+  .mask-reveal-diagonal::before,
+  .floating-particles::before,
+  .ripple-effect::before,
+  .light-streak::before {
+    animation: none !important;
+  }
+
+  .text-blur-reveal,
+  .bounce-scale,
+  .scroll-clip-reveal,
+  .scroll-unfold,
+  .scroll-rotate {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+  }
+}

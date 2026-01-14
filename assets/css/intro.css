@@ -1,0 +1,241 @@
+/* intro.html - Introduction/Story Page Styles */
+
+@font-face {
+  font-family: 'Harenosora';
+  src: url('../fonts/Harenosora.otf') format('opentype');
+  font-display: swap;
+}
+
+.story-wrap {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg,
+      #2A0E12 0%,
+      #4A1820 25%,
+      #6A2430 50%,
+      #4A1820 75%,
+      #2A0E12 100%);
+  background-attachment: fixed;
+  color: rgba(255, 255, 255, 0.94);
+  font-family: 'Soukou Mincho', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+  line-height: 2.4;
+  letter-spacing: 0.08em;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.story-wrap::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at 20% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(139, 35, 50, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.story-container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 60px 40px 80px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.story-header {
+  margin-bottom: 50px;
+  width: 100%;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  padding-bottom: 30px;
+  position: relative;
+}
+
+.story-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.7), transparent);
+}
+
+.story-title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin: 0;
+  transition: opacity 0.3s ease;
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+}
+
+.story-icon {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 16px;
+  line-height: 1;
+  color: rgba(212, 175, 55, 0.9);
+  text-shadow: 0 0 24px rgba(212, 175, 55, 0.5);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+}
+
+.story-tabs {
+  margin-bottom: 50px;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.story-btn {
+  background: rgba(74, 24, 32, 0.7);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 12px 28px;
+  font-family: 'Harenosora', 'Soukou Mincho', serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 4px;
+  letter-spacing: 0.1em;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.story-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.15), transparent);
+  transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-btn:hover::before {
+  left: 100%;
+}
+
+.story-btn:hover {
+  background: rgba(18, 10, 11, 0.8);
+  color: #fff;
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+  transform: translateY(-2px);
+}
+
+.story-btn.active {
+  background: linear-gradient(135deg, #C93545 0%, #E04555 50%, #A52A3A 100%);
+  color: #fff;
+  border-color: rgba(212, 175, 55, 0.5);
+  font-weight: 600;
+  box-shadow: 0 4px 24px rgba(139, 35, 50, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.story-text {
+  font-size: 1.05rem;
+  margin-bottom: 3.5rem;
+  color: #f8f5f0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  line-height: 2.5;
+  letter-spacing: 0.08em;
+}
+
+.story-section {
+  display: none;
+  animation: fadeIn 1s ease;
+}
+
+.story-section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.story-footer {
+  margin-top: 60px;
+  opacity: 0.75;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  width: 100%;
+  padding-top: 30px;
+  position: relative;
+}
+
+.story-footer::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.7), transparent);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .story-title {
+    font-size: clamp(1.2rem, 5vw, 2.2rem);
+    letter-spacing: 0.08em;
+  }
+}
+
+@media (max-width: 480px) {
+  .story-title {
+    font-size: clamp(1rem, 4.5vw, 1.6rem);
+    letter-spacing: 0.06em;
+  }
+
+  .story-text {
+    font-size: 0.95rem;
+    margin-bottom: 2.8rem;
+    line-height: 2.3;
+  }
+
+  .story-container {
+    padding: 40px 20px 60px;
+  }
+
+  .story-tabs {
+    gap: 12px;
+  }
+
+  .story-btn {
+    font-size: 0.85rem;
+    padding: 10px 20px;
+  }
+
+  .story-icon {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .story-title {
+    font-size: clamp(0.85rem, 4vw, 1.2rem);
+    letter-spacing: 0.04em;
+  }
+}

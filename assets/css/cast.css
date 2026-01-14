@@ -1,0 +1,1293 @@
+/* cast.html - Dragon Introduction Page Styles */
+
+/* Fonts are imported via fonts.css in the main stylesheet */
+
+/* ===== cast page: 3-tier layout structure ===== */
+:root {
+  --stage-max: 100%;
+  --band-top-h: 140px;
+  --band-bottom-h: 110px;
+  --panel-h: 480px;
+  --accent-h: 11px;
+}
+
+/* Full viewport layout */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fixed header */
+.site-header {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 100;
+}
+
+/* Fixed footer */
+.site-footer {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 100;
+  background: var(--page-bg, #8b3330);
+}
+
+/* Page background */
+.dragons-page {
+  background: linear-gradient(135deg, #3d1f1f 0%, #6D2020 50%, #4a1616 100%);
+  background-attachment: fixed;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dragons-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 50%, rgba(139, 69, 19, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(184, 134, 11, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dragons-shell {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: clamp(16px, 2.5vh, 40px) !important;
+  margin: 0 !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dragons-stage {
+  max-width: 100% !important;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 clamp(40px, 5vw, 80px);
+  overflow: hidden;
+  display: grid !important;
+  grid-template-columns: auto clamp(100px, 8vw, 140px) 1fr !important;
+  column-gap: 0;
+  row-gap: 0;
+  align-items: center !important;
+  justify-items: center !important;
+}
+
+.dragons-stage,
+.dragons-stage * {
+  box-sizing: border-box;
+}
+
+/* Content area (right side) */
+body.cast-page .dragons-content-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  height: 100%;
+  margin: 0;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  width: 100%;
+  max-width: 2000px;
+  flex-shrink: 1;
+}
+
+/* Band elements (top/bottom) */
+.band {
+  position: relative;
+  width: 100%;
+  background: var(--main-color, #7a2f28);
+  border: 1px solid rgba(218, 165, 32, 0.3) !important;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('../img/dragon_band.png') repeat-x center / auto 100%;
+  opacity: .78;
+  filter: grayscale(1) contrast(1.05) brightness(.75);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.band::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(218, 165, 32, 0.3), transparent);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.band.flash-anim::after {
+  animation: bandFlash 1.5s ease-out;
+}
+
+.band.top {
+  height: clamp(80px, 10vh, 140px);
+  animation: slideInTop 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.band.bottom {
+  height: clamp(60px, 8vh, 110px);
+  animation: slideInBottom 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Accent bars */
+.accent-bar {
+  height: var(--accent-h);
+  background: linear-gradient(90deg, var(--accent-color, #b13b2c), rgba(218, 165, 32, 0.8), var(--accent-color, #b13b2c)) !important;
+  box-shadow: 0 2px 8px rgba(218, 165, 32, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.accent-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  pointer-events: none;
+}
+
+.accent-bar.flash-anim::before {
+  animation: accentFlash 1s ease-out;
+}
+
+/* Main panel */
+.dragons-panel {
+  position: relative;
+  overflow: visible;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dragons-panel .panel-inner {
+  position: relative;
+  flex: 1;
+  background: var(--sub-color, #c9d2d1);
+  border: 2px solid rgba(218, 165, 32, 0.4) !important;
+  outline: 2px solid rgba(218, 165, 32, 0.2) !important;
+  outline-offset: -10px;
+  overflow: visible;
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  grid-template-rows: 1fr !important;
+  align-items: center;
+  justify-items: start;
+  gap: 0;
+  padding: clamp(20px, 3vh, 50px) clamp(40px, 5vw, 70px) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: panelFadeIn 1s ease-out 0.3s backwards;
+}
+
+/* Panel content */
+.panel-title {
+  margin: 0;
+  line-height: 1.15;
+  width: 100%;
+  max-width: 100%;
+  font-family: 'Harenosora', serif;
+}
+
+.panel-title .jp {
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 800;
+  letter-spacing: .04em;
+  color: var(--panel-text, rgba(0, 0, 0, .92));
+  animation: textSlideIn 0.8s ease-out 0.5s backwards;
+  font-family: 'Soukou Mincho', serif;
+}
+
+.panel-title .en {
+  font-size: clamp(48px, 5.5vw, 80px);
+  font-weight: 900;
+  letter-spacing: .02em;
+  color: var(--accent-color, #b13b2c);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, .35);
+  word-break: break-word;
+  overflow-wrap: break-word;
+  animation: textSlideIn 0.8s ease-out 0.5s backwards;
+  font-family: 'Harenosora', serif;
+}
+
+.panel-meta {
+  margin-top: clamp(10px, 1.5vh, 16px);
+  font-weight: 700;
+  font-size: clamp(16px, 1.4vw, 20px);
+  color: var(--panel-muted, rgba(0, 0, 0, .82));
+  animation: textSlideIn 0.8s ease-out 0.5s backwards;
+  font-family: 'Harenosora', serif;
+}
+
+.panel-list {
+  margin: clamp(14px, 2vh, 20px) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: clamp(10px, 1.5vh, 16px);
+  color: var(--panel-text, rgba(0, 0, 0, .92));
+  width: 100%;
+  max-width: 100%;
+  animation: textSlideIn 0.8s ease-out 0.5s backwards;
+  font-family: 'Harenosora', serif;
+}
+
+.panel-list li {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.panel-list .sq {
+  width: 18px;
+  height: 18px;
+  background: var(--panel-text, #111);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.panel-list li>div {
+  line-height: 1.8;
+  font-size: clamp(15px, 1.3vw, 19px);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.panel-list .label {
+  font-weight: 900;
+  margin-right: .4em;
+  color: var(--panel-text, rgba(0, 0, 0, .92));
+}
+
+.panel-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: clamp(12px, 2vh, 18px);
+  font-weight: 900;
+  font-size: clamp(20px, 2vw, 30px);
+  letter-spacing: .02em;
+  color: var(--accent-color, #b13b2c);
+  text-decoration: none;
+  border-bottom: 2px solid var(--accent-color, #b13b2c) !important;
+  width: max-content;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  animation: textSlideIn 0.8s ease-out 0.5s backwards;
+  font-family: 'Harenosora', serif;
+}
+
+.panel-detail::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(218, 165, 32, 0.9), rgba(184, 134, 11, 0.9));
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.panel-detail:hover::before {
+  width: 100%;
+}
+
+.panel-detail:hover {
+  color: rgba(218, 165, 32, 0.9) !important;
+  transform: translateX(8px);
+  text-shadow: 0 2px 8px rgba(218, 165, 32, 0.4);
+}
+
+/* Content wrapper */
+body.cast-page .panel-content-wrapper {
+  position: relative;
+  z-index: 2;
+  padding: 0;
+  padding-left: clamp(20px, 3vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vh, 22px);
+  color: var(--panel-text, rgba(0, 0, 0, .92));
+  min-width: 0;
+  align-self: center;
+  justify-self: start;
+}
+
+/* Images */
+body.cast-page #dragonFlower {
+  position: absolute;
+  right: clamp(20px, 3vw, 50px);
+  top: clamp(30px, 4vh, 50px);
+  width: clamp(300px, 35vw, 500px);
+  height: auto;
+  opacity: .26;
+  z-index: 1;
+  pointer-events: none;
+  animation: flowerRotate 1.5s ease-out 0.4s backwards;
+}
+
+body.cast-page #dragonPortrait {
+  position: absolute;
+  right: clamp(10px, 2vw, 40px);
+  bottom: clamp(-100px, -8vh, -60px);
+  height: clamp(600px, 60vh, 850px);
+  width: auto;
+  max-width: clamp(400px, 45vw, 650px);
+  object-fit: contain;
+  z-index: 3;
+  filter: drop-shadow(0 16px 32px rgba(0, 0, 0, .45));
+  pointer-events: none;
+  animation: portraitFadeIn 1.2s ease-out 0.6s backwards;
+}
+
+/* Category list (left column) */
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2vh, 24px);
+  height: 100%;
+  justify-content: center;
+  padding: 0 clamp(12px, 1.5vw, 20px);
+  justify-self: center;
+}
+
+.category-item {
+  font-size: clamp(14px, 1.2vw, 18px);
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  writing-mode: vertical-rl;
+  letter-spacing: 0.1em;
+  padding: clamp(12px, 1.5vh, 20px) clamp(8px, 1vw, 12px);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category-item:hover {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+.category-item.active {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: rgba(255, 215, 0, 0.8);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+}
+
+/* Icon grid */
+.icon-grid-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  height: 100%;
+  max-height: 100%;
+  padding: 0;
+  margin: 0;
+  justify-self: center;
+}
+
+.icon-scroll-container {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: visible;
+  padding: 8px 20px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.icon-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.icon-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+}
+
+/* Scroll buttons */
+.icon-scroll-btn {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, .6), rgba(0, 0, 0, .4));
+  border: 2px solid rgba(218, 165, 32, 0.5);
+  color: rgba(218, 165, 32, 0.9);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  flex-shrink: 0;
+}
+
+.icon-scroll-btn:hover {
+  background: linear-gradient(135deg, rgba(218, 165, 32, 0.3), rgba(184, 134, 11, 0.3));
+  border-color: rgba(218, 165, 32, 0.8);
+  color: #fff;
+}
+
+.icon-scroll-btn:active {
+  transform: scale(0.98);
+}
+
+.icon-scroll-btn.up {
+  border-radius: 8px 8px 0 0;
+}
+
+.icon-scroll-btn.down {
+  border-radius: 0 0 8px 8px;
+}
+
+/* Icon buttons */
+.thumb-btn {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.8) translateY(20px);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.5s ease-out;
+}
+
+/* Hide mobile card content on desktop */
+.card-content {
+  display: none;
+}
+
+.thumb-btn.fade-in {
+  animation: iconFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.thumb-btn::before,
+.thumb-btn::after {
+  border-radius: 50%;
+}
+
+.thumb-img {
+  border-radius: 50% !important;
+}
+
+.thumb-btn.fade-in:hover:not(.is-active) {
+  transform: scale(1.1) translateY(0) !important;
+  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.4) !important;
+}
+
+.thumb-btn.is-active {
+  opacity: 1 !important;
+  transform: scale(1.15) translateY(0) !important;
+  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.6),
+    0 0 20px rgba(255, 215, 0, 0.4),
+    0 8px 16px rgba(0, 0, 0, 0.3) !important;
+  z-index: 10;
+  position: relative;
+}
+
+.thumb-btn.is-active:hover {
+  transform: scale(1.22) translateY(0) !important;
+  box-shadow: 0 0 0 5px rgba(255, 215, 0, 0.8),
+    0 0 30px rgba(255, 215, 0, 0.6),
+    0 12px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+.thumb-btn.is-active::before {
+  opacity: 0.3;
+}
+
+.thumb-btn.is-active::after {
+  border: 3px solid rgba(255, 215, 0, 0.8);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+}
+
+/* Animations */
+.dragons-stage {
+  animation: stageFadeIn 1s ease-out;
+}
+
+@keyframes stageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes iconFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes bandFlash {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes slideInTop {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInBottom {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes accentFlash {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 150%;
+  }
+}
+
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes textSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes portraitFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes flowerRotate {
+  from {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.9);
+  }
+
+  to {
+    opacity: 0.22;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1800px) {
+  body.cast-page .dragons-panel .panel-inner {
+    padding: clamp(20px, 3vh, 50px) clamp(30px, 4vw, 60px) !important;
+  }
+
+  body.cast-page #dragonPortrait {
+    right: clamp(8px, 1.8vw, 35px);
+    max-width: clamp(380px, 43vw, 630px);
+  }
+
+  body.cast-page #dragonFlower {
+    right: clamp(15px, 2.5vw, 45px);
+    width: clamp(280px, 33vw, 480px);
+  }
+}
+
+@media (max-width: 1400px) {
+  body.cast-page .dragons-panel .panel-inner {
+    padding: clamp(20px, 3vh, 50px) clamp(25px, 3.5vw, 55px) !important;
+  }
+
+  body.cast-page #dragonPortrait {
+    right: clamp(5px, 1.5vw, 30px);
+    max-width: clamp(360px, 40vw, 600px);
+  }
+
+  body.cast-page #dragonFlower {
+    right: clamp(10px, 2vw, 40px);
+    width: clamp(260px, 30vw, 450px);
+  }
+}
+
+@media (max-width: 1200px) {
+  body.cast-page .dragons-stage {
+    padding: 0 clamp(20px, 3vw, 40px);
+    grid-template-columns: auto clamp(80px, 6vw, 120px) 1fr;
+  }
+
+  body.cast-page .dragons-panel .panel-inner {
+    padding: clamp(20px, 3vh, 50px) clamp(20px, 3vw, 50px) !important;
+  }
+
+  body.cast-page #dragonPortrait {
+    right: clamp(3px, 1vw, 25px);
+    height: clamp(450px, 48vh, 650px);
+    max-width: clamp(330px, 38vw, 570px);
+  }
+
+  body.cast-page #dragonFlower {
+    right: clamp(8px, 1.5vw, 35px);
+    width: clamp(240px, 28vw, 420px);
+  }
+}
+
+@media (max-width: 1000px) {
+  body.cast-page .dragons-stage {
+    grid-template-columns: auto clamp(70px, 5vw, 100px) 1fr;
+  }
+
+  body.cast-page .dragons-panel .panel-inner {
+    padding: clamp(20px, 3vh, 50px) clamp(15px, 2.5vw, 45px) !important;
+  }
+
+  body.cast-page #dragonPortrait {
+    right: clamp(0px, 0.5vw, 20px);
+    height: clamp(400px, 45vh, 600px);
+    max-width: clamp(280px, 35vw, 520px);
+  }
+
+  body.cast-page #dragonFlower {
+    right: clamp(5px, 1vw, 30px);
+    width: clamp(210px, 26vw, 390px);
+    opacity: .2;
+  }
+}
+
+@media (max-width: 980px) {
+  /* ===== Mobile Redesign (Icon Grid Mode) ===== */
+
+  /* Reset Page/Body for full screen */
+  body,
+  html {
+    height: 100%;
+    overflow: auto;
+  }
+
+  .dragons-page {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  /* Shell & Stage: Standard flow layout */
+  .dragons-shell {
+    padding: 0 !important;
+    height: auto;
+    min-height: 100%;
+    width: 100%;
+  }
+
+  body.cast-page .dragons-stage {
+    display: flex !important;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 60px);
+    /* Account for header */
+    position: relative;
+  }
+
+  /* Hide desktop-specific elements on mobile */
+  body.cast-page .dragons-content-area,
+  .band.top,
+  .band.bottom,
+  .accent-bar,
+  body.cast-page #dragonPortrait,
+  body.cast-page #dragonFlower,
+  .dragons-panel {
+    display: none !important;
+  }
+
+  /* Category List (Top of page) */
+  .category-list {
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    flex-direction: row;
+    height: auto;
+    padding: 16px 20px;
+    gap: 10px;
+    justify-content: center;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  }
+
+  .category-item {
+    writing-mode: horizontal-tb;
+    padding: 8px 18px;
+    font-size: 14px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .category-item.active {
+    background: rgba(218, 165, 32, 0.3);
+    border-color: rgba(218, 165, 32, 0.8);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(218, 165, 32, 0.4);
+  }
+
+  .category-item:hover {
+    background: rgba(0, 0, 0, 0.7);
+    border-color: rgba(255, 215, 0, 0.4);
+  }
+
+  /* Icon Grid - Main Content Area */
+  /* Icon Grid - Main Content Area */
+  .icon-grid-wrap {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    z-index: 5;
+    background: transparent;
+    padding: 20px 16px 80px;
+    overflow: visible;
+  }
+
+  .icon-scroll-container {
+    height: auto;
+    padding: 0;
+    overflow: visible;
+    display: block;
+  }
+
+  /* 2-Column Grid for Cards */
+  .icon-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 100px;
+    /* Enforce uniform height to prevent gaps */
+    gap: 12px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0;
+    justify-items: stretch;
+    align-items: stretch;
+  }
+
+  /* Hide Scroll Buttons on Mobile */
+  .icon-scroll-btn {
+    display: none !important;
+  }
+
+  /* Card Style Buttons */
+  .thumb-btn {
+    width: 100%;
+    max-width: none;
+    aspect-ratio: auto;
+    height: 100px;
+    flex-shrink: 0;
+    opacity: 1;
+    transform: scale(1);
+    border: none !important;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, var(--btn-color, #333) 0%, #1a1a1a 100%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    outline: none !important;
+  }
+
+  .thumb-btn.fade-in {
+    animation: iconFadeInMobile 0.4s ease-out forwards;
+  }
+
+  /* Active State - NO Scaling, NO Border, only Shadow change */
+  .thumb-btn.is-active {
+    border: none !important;
+    transform: scale(1) translate(0, 0) !important;
+    /* Override desktop !important */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+    /* Override desktop gold shadow */
+    opacity: 1 !important;
+    z-index: 1 !important;
+    outline: none !important;
+  }
+
+  /* Prevent hover scale (Desktop override) - Broad selector to catch all */
+  .thumb-btn:hover,
+  .thumb-btn.fade-in:hover,
+  .thumb-btn.fade-in:hover:not(.is-active),
+  .thumb-btn.is-active:hover {
+    transform: scale(1) translate(0, 0) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+    border: none !important;
+    outline: none !important;
+  }
+
+  /* Active State - NO Scaling, NO Border, only Shadow change */
+  .thumb-btn.is-active {
+    border: none !important;
+    transform: scale(1) translate(0, 0) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+    opacity: 1 !important;
+    z-index: 1 !important;
+    outline: none !important;
+  }
+
+  /* Reset pseudo-elements for mobile (removes desktop gold ring) */
+  .thumb-btn::before,
+  .thumb-btn::after,
+  .thumb-btn.is-active::before,
+  .thumb-btn.is-active::after,
+  .thumb-btn:hover::before,
+  .thumb-btn:hover::after,
+  .thumb-btn.is-active:hover::before,
+  .thumb-btn.is-active:hover::after {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Hide desktop icon on mobile */
+  .thumb-img {
+    display: none !important;
+  }
+
+  /* Show mobile card content */
+  .card-content {
+    display: flex !important;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  /* Portrait - contained and anchored */
+  /* Portrait - contained and anchored */
+  .card-portrait {
+    position: absolute;
+    top: 0;
+    bottom: auto;
+    right: 0;
+    /* Align to right edge */
+    height: 140%;
+    /* Zoom in */
+    width: auto;
+    max-width: none;
+    object-fit: cover;
+    object-position: top center;
+    transform: translateX(10%);
+    /* Slight shift to center */
+    z-index: 1;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    /* Gentler mask to ensure visibility */
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  /* English Name (Background) */
+  .card-en-name {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-family: 'Anton', 'Impact', sans-serif;
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.15);
+    text-transform: uppercase;
+    width: 100%;
+    text-align: left;
+    z-index: 0;
+    pointer-events: none;
+    letter-spacing: 0.02em;
+  }
+
+  /* Japanese Name (Foreground) */
+  .card-jp-name {
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    z-index: 2;
+    color: #fff;
+    font-family: 'Soukou Mincho', serif;
+    text-align: left;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1.3;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: auto;
+  }
+
+  .card-jp-title {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 500;
+    background: var(--accent-color, #C93545);
+    display: inline-block;
+    width: fit-content;
+    padding: 2px 6px;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Mobile icon fade-in animation */
+  @keyframes iconFadeInMobile {
+    from {
+      opacity: 0;
+      transform: scale(0.8) translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+}
+
+@media (max-width: 980px) {
+  /* Fixes for layout issues found in verification */
+
+  .site-footer {
+    display: none !important;
+  }
+
+  /* Force Stage to simple container */
+  body.cast-page .dragons-stage,
+  .dragons-shell,
+  .dragons-page {
+    animation: none !important;
+    transform: none !important;
+    perspective: none !important;
+    overflow: hidden !important;
+  }
+
+  /* Fix Navigation bar */
+  /* Fix Navigation bar - Allow full screen flow */
+  .icon-grid-wrap {
+    bottom: auto !important;
+    top: auto !important;
+    position: relative !important;
+    z-index: 5 !important;
+    height: auto !important;
+    background: transparent !important;
+    margin-top: 20px;
+    padding-bottom: 80px;
+    /* Space for scrolling */
+  }
+
+  /* Fixed Full Screen Portrait */
+  body.cast-page #dragonPortrait {
+    position: fixed !important;
+    top: 0 !important;
+    /* Reset to 0 to prevent top cropping */
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    /* Anchor to top to show head */
+    opacity: 1 !important;
+    z-index: 0 !important;
+    /* Send to back (behind text panel) */
+    display: block !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  /* Glassmorphism / Theme Colored Panel */
+  .dragons-panel {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 10 !important;
+    /* Above portrait */
+    pointer-events: none !important;
+    /* Let clicks pass through to background/icon grid if needed, but inner needs events */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    padding: 0 !important;
+    background: transparent !important;
+    overflow: hidden !important;
+  }
+
+  .panel-inner {
+    position: absolute !important;
+    bottom: 110px !important;
+    /* Above icon bar */
+    left: 5% !important;
+    width: 90% !important;
+    height: auto !important;
+    max-height: 50vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    /* Remove background from container */
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    pointer-events: none !important;
+    /* Pass clicks through wrapper area */
+    overflow: visible !important;
+  }
+
+  /* Apply Card Style to Content Wrapper (Sibling of Portrait) */
+  .panel-content-wrapper {
+    /* Theme Colors (Browser Version Match) */
+    background: var(--sub-color, #c9d2d1) !important;
+    opacity: 0.92 !important;
+    /* Slight transparency */
+    color: var(--panel-text, #111) !important;
+
+    border-radius: 16px !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(8px) !important;
+
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    align-items: flex-start !important;
+    pointer-events: auto !important;
+    /* Enable clicks on card */
+    width: 100% !important;
+    position: relative !important;
+    z-index: 2 !important;
+    /* Above Portrait (z-index 0/1) */
+  }
+
+  /* Reset layout content spacing */
+  .panel-title {
+    width: 100% !important;
+    text-align: left !important;
+    margin-bottom: 4px !important;
+    display: block !important;
+  }
+
+  .panel-title .jp {
+    color: var(--panel-text) !important;
+  }
+
+  .panel-title .en {
+    color: var(--accent-color) !important;
+    /* Match desktop accent color */
+  }
+
+  /* Specific color fixes for meta info */
+  .panel-meta {
+    width: 100% !important;
+    text-align: left !important;
+    margin-top: 4px !important;
+    color: var(--panel-text) !important;
+    /* Unified to normal text color */
+    font-weight: 700 !important;
+  }
+
+  .panel-list li,
+  .panel-list .label,
+  .panel-list .sq {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    text-align: left !important;
+    color: var(--panel-text) !important;
+    /* Unified to normal text color */
+  }
+
+  .panel-list li {
+    font-weight: 400 !important;
+    /* Reset values to normal */
+  }
+
+  /* Bold Scope: Labels, One Liner, Tags */
+  .panel-list .label,
+  #dragonTags {
+    font-weight: 700 !important;
+  }
+
+  #dragonTags {
+    width: 100% !important;
+    text-align: left !important;
+    margin-bottom: 8px !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    color: var(--panel-text) !important;
+    /* Unified to normal text color */
+  }
+
+  .panel-list .sq {
+    background-color: var(--panel-text) !important;
+    /* Square icon color */
+    margin-top: 5px !important;
+    /* Align with text baseline */
+  }
+
+  /* Ensure details button uses theme colors usually, but keep specific style if needed */
+  .panel-detail {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-self: flex-start !important;
+    color: var(--panel-text) !important;
+    /* Unified to normal text color */
+    border-bottom: 2px solid var(--panel-text) !important;
+  }
+
+  .btn-primary {
+    /* Button usually has its own style, keep it or let it inherit */
+    margin-top: 4px !important;
+  }
+
+  /* 2. Fix Category Tab Overflow */
+  .category-list {
+    padding-top: 60px !important;
+    /* Safe area for top tags */
+  }
+
+  /* 3. Modal Scrolling Fix */
+  .modal-dialog {
+    max-height: none !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    z-index: 20000 !important;
+    /* Above everything */
+    margin-top: 0 !important;
+  }
+
+  .dragon-modal {
+    z-index: 19999 !important;
+  }
+
+  /* Fix Icon/Tag Overflow */
+  .icon-grid-wrap {
+    padding: 0 10px !important;
+    z-index: 100 !important;
+    /* Ensure icons are clickable */
+  }
+
+  .icon-grid {
+    padding-right: 20px !important;
+  }
+
+  /* Reset Text Animations */
+  .panel-title,
+  .panel-title .jp,
+  .panel-title .en,
+  .panel-meta,
+  .panel-list,
+  .panel-detail {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+    text-shadow: none !important;
+    /* Clean look on dark card */
+  }
+}

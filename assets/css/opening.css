@@ -1,0 +1,729 @@
+/**
+ * Opening Splash Screen
+ * 初回訪問時のオープニング演出
+ *
+ * yui540スタイルの華やかなアニメーションで演出強化
+ */
+
+.opening-splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  /* 中華高級グラデーション背景 - 深紅強調 */
+  background: linear-gradient(135deg,
+      #2A0E12 0%,
+      #4A1820 15%,
+      #C93545 35%,
+      #A52A3A 50%,
+      #C93545 65%,
+      #4A1820 85%,
+      #2A0E12 100%);
+  background-size: 400% 400%;
+  animation: gradientFlow 10s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ========================================
+   yui540風 トランジションパネル
+   ======================================== */
+
+.opening-panel {
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background: #0a0a0a;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.opening-panel-left {
+  left: 50%;
+  transform: translateX(-100%);
+  border-radius: 0 0 0 50px;
+}
+
+.opening-panel-right {
+  left: 50%;
+  border-radius: 0 0 50px 0;
+}
+
+/* 中央の縦ライン - 金の輝き */
+.opening-line {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 2px;
+  height: 0;
+  background: linear-gradient(to top,
+      rgba(212, 175, 55, 0) 0%,
+      rgba(212, 175, 55, 1) 50%,
+      rgba(212, 175, 55, 0) 100%);
+  transform: translateX(-50%);
+  z-index: 101;
+  opacity: 0;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+/* ========================================
+   フェードアウト（終了）アニメーション - yui540風
+   ======================================== */
+
+/* Step 1: コンテンツがフェードアウト */
+.opening-splash.is-closing .opening-logo {
+  animation: logoExit 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
+.opening-splash.is-closing .opening-title {
+  animation: titleExit 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.05s forwards !important;
+}
+
+.opening-splash.is-closing .opening-tagline {
+  animation: taglineExit 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards !important;
+}
+
+.opening-splash.is-closing .opening-skip {
+  animation: skipExit 0.3s ease-out forwards !important;
+}
+
+/* 背景エフェクトのフェードアウト */
+.opening-splash.is-closing::before,
+.opening-splash.is-closing::after {
+  animation: bgEffectExit 0.4s ease-out forwards !important;
+}
+
+.opening-splash.is-closing .opening-content::before,
+.opening-splash.is-closing .opening-content::after {
+  animation: bgEffectExit 0.3s ease-out forwards !important;
+}
+
+/* Step 2: ラインが上に伸びる */
+.opening-splash.is-closing .opening-line {
+  animation: lineUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+}
+
+/* Step 3: パネルが中央から左右に展開 */
+.opening-splash.is-closing .opening-panel-left {
+  animation: panelExpandLeft 0.7s cubic-bezier(0.77, 0, 0.175, 1) 0.5s forwards;
+}
+
+.opening-splash.is-closing .opening-panel-right {
+  animation: panelExpandRight 0.7s cubic-bezier(0.77, 0, 0.175, 1) 0.5s forwards;
+}
+
+/* Step 4: パネルが外側へ消える */
+.opening-splash.is-closing.is-hidden .opening-panel-left {
+  animation: panelExitLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.opening-splash.is-closing.is-hidden .opening-panel-right {
+  animation: panelExitRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.opening-splash.is-closing.is-hidden .opening-line {
+  animation: lineExit 0.4s ease-out forwards;
+}
+
+/* ライン上昇 */
+@keyframes lineUp {
+  0% {
+    height: 0;
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    height: 100%;
+    opacity: 1;
+  }
+}
+
+/* ライン消失 */
+@keyframes lineExit {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* パネル展開（左） */
+@keyframes panelExpandLeft {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 50%;
+  }
+}
+
+/* パネル展開（右） */
+@keyframes panelExpandRight {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 50%;
+  }
+}
+
+/* パネル退場（左） */
+@keyframes panelExitLeft {
+  0% {
+    width: 50%;
+    transform: translateX(-100%);
+    border-radius: 0 0 0 50px;
+  }
+
+  100% {
+    width: 50%;
+    transform: translateX(-200%);
+    border-radius: 0 0 0 100px;
+  }
+}
+
+/* パネル退場（右） */
+@keyframes panelExitRight {
+  0% {
+    width: 50%;
+    border-radius: 0 0 50px 0;
+  }
+
+  100% {
+    width: 50%;
+    transform: translateX(100%);
+    border-radius: 0 0 100px 0;
+  }
+}
+
+/* ロゴ - 上にフェードアウト */
+@keyframes logoExit {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.9) translateY(-30px);
+  }
+}
+
+/* タイトル - 上にフェードアウト */
+@keyframes titleExit {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* タグライン - 下にフェードアウト */
+@keyframes taglineExit {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Skipボタン - フェードアウト */
+@keyframes skipExit {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* 背景エフェクト終了 */
+@keyframes bgEffectExit {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Hidden state - パネル展開完了後 */
+.opening-splash.is-hidden {
+  pointer-events: none;
+  background: transparent;
+}
+
+/* Completely removed from DOM after animation */
+.opening-splash.is-removed {
+  display: none;
+}
+
+/* ========================================
+   背景エフェクト層
+   ======================================== */
+
+/* オーロラ効果 - 金と深紅 */
+.opening-splash::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(212, 175, 55, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(201, 53, 69, 0.3) 0%, transparent 50%);
+  animation: auroraFloat 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes auroraFloat {
+
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* 星が瞬くエフェクト - 金の粒子 */
+.opening-splash::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(2px 2px at 10% 15%, rgba(212, 175, 55, 0.9) 50%, transparent 50%),
+    radial-gradient(2px 2px at 25% 45%, rgba(255, 255, 255, 0.6) 50%, transparent 50%),
+    radial-gradient(3px 3px at 40% 20%, rgba(212, 175, 55, 0.8) 50%, transparent 50%),
+    radial-gradient(2px 2px at 55% 65%, rgba(212, 175, 55, 0.5) 50%, transparent 50%),
+    radial-gradient(2px 2px at 70% 10%, rgba(255, 255, 255, 0.7) 50%, transparent 50%),
+    radial-gradient(3px 3px at 85% 40%, rgba(212, 175, 55, 0.7) 50%, transparent 50%),
+    radial-gradient(2px 2px at 15% 80%, rgba(255, 255, 255, 0.4) 50%, transparent 50%),
+    radial-gradient(2px 2px at 90% 75%, rgba(212, 175, 55, 0.6) 50%, transparent 50%),
+    radial-gradient(3px 3px at 60% 85%, rgba(212, 175, 55, 0.6) 50%, transparent 50%),
+    radial-gradient(2px 2px at 35% 70%, rgba(255, 255, 255, 0.5) 50%, transparent 50%);
+  animation: starsTwinkle 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes starsTwinkle {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  25% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  75% {
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   コンテンツ
+   ======================================== */
+
+/* Content container */
+.opening-content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Logo - 華やかな登場アニメーション（金の輝き） */
+.opening-logo {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 28px;
+  display: block;
+  opacity: 0;
+  transform: scale(0.5) rotate(-10deg);
+  animation:
+    logoAppear 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards,
+    logoGlow 3s ease-in-out 2.1s infinite;
+  filter: drop-shadow(0 0 24px rgba(212, 175, 55, 0.5));
+}
+
+@keyframes logoAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-10deg) translateY(30px);
+    filter: drop-shadow(0 0 0 transparent);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.1) rotate(3deg) translateY(-10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0) translateY(0);
+    filter: drop-shadow(0 0 36px rgba(212, 175, 55, 0.6));
+  }
+}
+
+@keyframes logoGlow {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 24px rgba(212, 175, 55, 0.5));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 48px rgba(212, 175, 55, 0.8)) drop-shadow(0 0 72px rgba(212, 175, 55, 0.3));
+  }
+}
+
+/* ロゴの後ろの光輪エフェクト - imgタグには疑似要素が使えないため削除 */
+
+/* Site title - 金のグラデーションが流れる文字 */
+.opening-title {
+  font-family: 'Soukou Mincho', serif;
+  font-size: 64px;
+  font-weight: bold;
+  margin: 0 0 20px;
+  letter-spacing: 0.2em;
+  opacity: 0;
+  transform: translateY(30px) scale(0.9);
+  animation: titleAppear 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+  /* 金のグラデーション */
+  background: linear-gradient(90deg,
+      #D4AF37 0%,
+      #E8C547 25%,
+      #D4AF37 50%,
+      #B8962E 75%,
+      #D4AF37 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+}
+
+/* タイトル表示後にグラデーションアニメーション開始 */
+.opening-splash:not(.is-hidden) .opening-title {
+  animation:
+    titleAppear 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards,
+    titleGradient 3s linear 2s infinite;
+}
+
+@keyframes titleAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes titleGradient {
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Tagline - 1文字ずつフェードイン風の演出 */
+.opening-tagline {
+  font-family: 'Harenosora', serif;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 auto;
+  letter-spacing: 0.08em;
+  line-height: 1.9;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: taglineAppear 1.2s ease-out 1.5s forwards;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  max-width: none;
+  padding: 0 24px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@keyframes taglineAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    letter-spacing: 0.2em;
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ========================================
+   装飾要素
+   ======================================== */
+
+/* 光線エフェクト */
+.opening-content::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(244, 208, 63, 0.5) 50%, transparent 100%);
+  transform: translate(-50%, -50%) rotate(-45deg);
+  opacity: 0;
+  animation: lightRay 4s ease-in-out 1s infinite;
+  pointer-events: none;
+}
+
+.opening-content::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  transform: translate(-50%, -50%) rotate(45deg);
+  opacity: 0;
+  animation: lightRay 4s ease-in-out 1.5s infinite;
+  pointer-events: none;
+}
+
+@keyframes lightRay {
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-45deg) scaleX(0.5);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) rotate(-45deg) scaleX(1);
+  }
+}
+
+/* ========================================
+   Skip ボタン
+   ======================================== */
+
+.opening-skip {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  backdrop-filter: blur(8px);
+  z-index: 3;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: skipAppear 0.8s ease-out 2.5s forwards;
+}
+
+@keyframes skipAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.opening-skip:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.5);
+  color: #fff;
+  transform: translateY(-4px);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    0 0 24px rgba(212, 175, 55, 0.3);
+}
+
+.opening-skip:active {
+  transform: translateY(-2px);
+}
+
+/* ========================================
+   Prevent scrolling
+   ======================================== */
+
+body.opening-active {
+  overflow: hidden;
+}
+
+/* ========================================
+   Reduced Motion対応
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .opening-splash,
+  .opening-splash::before,
+  .opening-splash::after,
+  .opening-logo,
+  .opening-title,
+  .opening-tagline,
+  .opening-content::before,
+  .opening-content::after,
+  .opening-skip,
+  .opening-panel,
+  .opening-line {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .opening-title {
+    background: none;
+    -webkit-text-fill-color: #fff;
+    color: #fff;
+  }
+
+  /* 終了時もシンプルにフェードアウト */
+  .opening-splash.is-closing .opening-logo,
+  .opening-splash.is-closing .opening-title,
+  .opening-splash.is-closing .opening-tagline,
+  .opening-splash.is-closing .opening-skip,
+  .opening-splash.is-closing .opening-panel-left,
+  .opening-splash.is-closing .opening-panel-right,
+  .opening-splash.is-closing .opening-line {
+    animation: none !important;
+  }
+
+  .opening-splash.is-hidden {
+    opacity: 0 !important;
+    transition: opacity 0.5s ease !important;
+  }
+
+  .opening-splash.is-hidden .opening-panel,
+  .opening-splash.is-hidden .opening-line {
+    opacity: 0 !important;
+  }
+}
+
+/* ========================================
+   Mobile adjustments
+   ======================================== */
+
+@media (max-width: 768px) {
+  .opening-logo {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 24px;
+  }
+
+  .opening-title {
+    font-size: 42px;
+    letter-spacing: 0.1em;
+  }
+
+  .opening-tagline {
+    font-size: 14px;
+    max-width: none;
+    line-height: 1.8;
+    white-space: nowrap;
+  }
+
+  .opening-skip {
+    bottom: 28px;
+    right: 28px;
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+
+  .opening-content::before,
+  .opening-content::after {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .opening-logo {
+    width: 90px;
+    height: 90px;
+  }
+
+  .opening-title {
+    font-size: 32px;
+  }
+
+  .opening-tagline {
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+}

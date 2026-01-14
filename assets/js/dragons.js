@@ -1,0 +1,617 @@
+(() => {
+  const dragons = (window.DRAGONS || []);
+  if (!Array.isArray(dragons) || dragons.length === 0) return;
+
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+  const isMobileView = () => window.matchMedia?.("(max-width: 980px)")?.matches;
+
+  const els = {
+    stage: $("#dragonStage"),
+    panel: $(".dragons-panel"),
+    left: $(".panel-left"),
+    list: $$(".panel-list li"),
+    title: $("#dragonTitle"),
+    name: $("#dragonName"),
+    tag: $("#dragonTags") || $("#dragonTag"),
+    oneLiner: $("#dragonOneLiner"),
+    birthday: $("#dragonBirthday"),
+    colorName: $("#dragonColorName"),
+    portrait: $("#dragonPortrait"),
+    flower: $("#dragonFlower"),
+    grid: $("#iconGrid"),
+    detailsBtn: $("#viewDetails"),
+    modal: $("#dragonModal"),
+    modalClose: $("#modalClose"),
+    modalBody: $("#modalBody"),
+    modalTitle: $("#modalTitle"),
+  };
+  // --- Support query param (?cast=xxx) in addition to hash (#xxx)
+  const qs = new URLSearchParams(location.search || "");
+  const qCast = (qs.get("cast") || "").trim();
+  if (qCast && (!location.hash || location.hash === "#")) {
+    location.hash = encodeURIComponent(qCast.toLowerCase());
+  }
+
+
+  // --- detail data (for drawer)
+  // --- detail data (for drawer)
+  let detailById = new Map();
+  const loadDetailData = () => {
+    // Synchronous load from global variable (avoids CORS issues with file://)
+    const arr = window.DRAGONS_DETAIL || [];
+    detailById = new Map(arr.map(x => [x.id, x]));
+    return Promise.resolve(detailById);
+  };
+
+  const setText = (el, v) => { if (el) el.textContent = (v ?? ""); };
+
+  // calculate luminance to determine if text should be light or dark
+  const getLuminance = (hex) => {
+    if (!hex) return 0;
+    const rgb = hex.replace(/^#/, '').match(/.{2}/g);
+    if (!rgb || rgb.length !== 3) return 0;
+    const [r, g, b] = rgb.map(x => {
+      const val = parseInt(x, 16) / 255;
+      return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+
+  // theme variables (keep as-is: CSS uses these)
+  const setTheme = (colors) => {
+    if (!colors) return;
+    const root = document.documentElement;
+
+    // set color variables
+    root.style.setProperty("--main-color", colors.main);
+    root.style.setProperty("--accent-color", colors.accent);
+    root.style.setProperty("--sub-color", colors.sub);
+
+    root.style.setProperty("--d-main", colors.main);
+    root.style.setProperty("--d-accent", colors.accent);
+    root.style.setProperty("--d-sub", colors.sub);
+
+    // automatic contrast adjustment for text colors
+    // modal uses --d-main as background
+    const mainLum = getLuminance(colors.main);
+    const isDark = mainLum <= 0.5;
+    // for very light backgrounds, use darker text for better contrast
+    const mainTextColor = isDark ? '#fff' : (mainLum > 0.75 ? '#1a1a1a' : '#111');
+    const mainMutedColor = isDark ? 'rgba(255,255,255,.72)' : (mainLum > 0.75 ? 'rgba(0,0,0,.85)' : 'rgba(0,0,0,.72)');
+
+    // for dark backgrounds, use dark semi-transparent backgrounds for items
+    // for light backgrounds, use white semi-transparent backgrounds
+    // for very light backgrounds, use darker semi-transparent backgrounds
+    const modalItemBg = isDark ? 'rgba(0,0,0,.35)' : (mainLum > 0.75 ? 'rgba(255,255,255,.55)' : 'rgba(255,255,255,.4)');
+    const modalBtnBg = isDark ? 'rgba(0,0,0,.45)' : (mainLum > 0.75 ? 'rgba(255,255,255,.6)' : 'rgba(255,255,255,.45)');
+    const modalBtnHover = isDark ? 'rgba(0,0,0,.65)' : (mainLum > 0.75 ? 'rgba(255,255,255,.8)' : 'rgba(255,255,255,.65)');
+
+    // adjust accent color for label contrast
+    // if accent color is too light on light background, darken it
+    const accentLum = getLuminance(colors.accent);
+    let accentColor = colors.accent;
+    if (!isDark && accentLum > 0.7) {
+      // both main and accent are light - use dark color for labels
+      accentColor = '#2a2a2a';
+    }
+    root.style.setProperty("--d-accent-contrast", accentColor);
+
+    // panel uses --d-sub as background
+    const subLum = getLuminance(colors.sub);
+    const panelTextColor = subLum > 0.5 ? '#111' : '#fff';
+    const panelMutedColor = subLum > 0.5 ? 'rgba(0,0,0,.72)' : 'rgba(255,255,255,.72)';
+
+    root.style.setProperty("--panel-text", panelTextColor);
+    root.style.setProperty("--panel-muted", panelMutedColor);
+    root.style.setProperty("--modal-text", mainTextColor);
+    root.style.setProperty("--modal-muted", mainMutedColor);
+    root.style.setProperty("--modal-item-bg", modalItemBg);
+    root.style.setProperty("--modal-btn-bg", modalBtnBg);
+    root.style.setProperty("--modal-btn-hover", modalBtnHover);
+  };
+
+  const setDragon = (d) => {
+    setTheme(d.colors);
+
+    setText(els.title, d.dragonTitle);
+    setText(els.name, d.name);
+    setText(els.tag, d.tag);
+    setText(els.oneLiner, d.oneLiner);
+    setText(els.birthday, d.birthday);
+
+    setText(els.colorName, d.imageColorName || "—");
+
+    if (els.portrait) {
+      // Preload image to ensure proper positioning
+      const img = new Image();
+      img.loading = "eager";
+      img.decoding = "async";
+      img.onload = () => {
+        els.portrait.src = d.images.portrait;
+        els.portrait.alt = `${d.dragonTitle} ${d.name} 立ち絵`;
+        els.portrait.loading = "eager";
+        els.portrait.decoding = "async";
+      };
+      img.src = d.images.portrait;
+    }
+    if (els.flower) {
+      if (d.images.flower) {
+        els.flower.src = d.images.flower;
+        els.flower.loading = "lazy";
+        els.flower.decoding = "async";
+        els.flower.classList.remove("is-hidden");
+      } else {
+        els.flower.classList.add("is-hidden");
+      }
+    }
+
+    // keep active selection
+    $$(".thumb-btn").forEach(btn => btn.classList.toggle("is-active", btn.dataset.id === d.id));
+
+    if (els.detailsBtn) {
+      els.detailsBtn.dataset.id = d.id;
+    }
+
+    document.title = `龍紹介 | 煌龍園 | ${d.name}`;
+  };
+
+  // --- modal
+  // --- drawer (modal)
+  // --- drawer (modal)
+  const openModal = async (d) => {
+    if (!els.modal) return;
+
+    // lock body scroll
+    document.body.style.overflow = "hidden";
+
+    await loadDetailData();
+
+    const detail = detailById.get(d.id) || null;
+
+    els.modal.classList.add("is-open");
+    els.modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    els.modal.style.display = "flex";
+
+    const esc = (s) => (s ?? "").toString().replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+
+    if (els.modalTitle) els.modalTitle.textContent = `${d.dragonTitle} / ${d.name}`;
+    if (!els.modalBody) return;
+
+    const drinks = (detail?.drinks || []).map(x => `
+      <div class="modal-profile-item">
+        <span class="modal-profile-label">Drink: ${esc(x.name)}</span>
+        <div class="modal-profile-value" style="font-size:0.85rem; font-weight:500;">${esc(x.desc)}</div>
+      </div>
+    `).join("");
+
+    const prefs = (detail?.preferences || []).map(x => `
+      <div class="modal-profile-item">
+        <span class="modal-profile-label">${esc(x.label)}</span>
+        <div class="modal-profile-value">${esc(x.value)}</div>
+      </div>
+    `).join("");
+
+    // Member Grid Generation
+    const memberGrid = dragons.map(m => `
+      <button class="modal-member-btn ${m.id === d.id ? 'is-active' : ''}" type="button" data-action="jump" data-target="${m.id}" aria-label="${m.name}">
+        <img src="${m.images.icon}" alt="${m.name}" loading="lazy" />
+      </button>
+    `).join("");
+
+
+    // --- Section Content Construction ---
+
+    // 1. STORY Section
+    let storyContent = "";
+    if (detail?.personality) storyContent += `<div class="modal-body-subtext" style="white-space: pre-wrap; margin-bottom: 20px; line-height: 1.8;">${esc(detail.personality)}</div>`;
+    if (detail?.setting) storyContent += `<div class="modal-section-title">LORE</div><div class="modal-story" style="margin:0 0 20px;">${esc(detail.setting)}</div>`;
+    if (detail?.masterDragon) storyContent += `<div class="modal-section-title">MASTER</div><div class="modal-story" style="margin:0 0 20px;">${esc(detail.masterDragon)}</div>`;
+
+    // 2. DRINKS Section (Moved as requested)
+    const drinksContent = drinks ? `
+      <div class="modal-section-title">ORIGINAL DRINK</div>
+      <div class="modal-profile-grid">
+        ${drinks}
+      </div>
+    ` : "";
+
+    // 3. PROFILE Section
+    const profileGridItems = `
+      <div class="modal-profile-item">
+        <span class="modal-profile-label">Birthday</span>
+        <div class="modal-profile-value">${esc(d.birthday)}</div>
+      </div>
+      <div class="modal-profile-item item-image-color">
+        <span class="modal-profile-label">Image Color</span>
+        <div class="modal-profile-value">${esc(d.imageColorName || "—")}</div>
+      </div>
+      <div class="modal-profile-item">
+        <span class="modal-profile-label">First Person</span>
+        <div class="modal-profile-value">${esc(detail?.firstPerson || "—")}</div>
+      </div>
+      ${detail?.chekiMenu ? `
+      <div class="modal-profile-item">
+        <span class="modal-profile-label">Food (Cheki Set)</span>
+        <div class="modal-profile-value">${esc(detail.chekiMenu)}</div>
+      </div>` : ""}
+      ${prefs}
+    `;
+
+    const bgTextName = `${esc(d.name).toUpperCase()}   ${esc(d.name).toUpperCase()}   ${esc(d.name).toUpperCase()}   ${esc(d.name).toUpperCase()}`;
+
+    // Sparkles Generation
+    let sparkles = "";
+    for (let i = 0; i < 18; i++) {
+      const left = Math.random() * 100 + "%";
+      const top = Math.random() * 90 + 5 + "%";
+      const delay = Math.random() * 4 + "s";
+      const duration = (Math.random() * 3 + 3) + "s";
+      const size = (Math.random() * 5 + 2) + "px";
+      sparkles += `<div class="sparkle" style="left:${left}; top:${top}; width:${size}; height:${size}; animation-delay:${delay}; animation-duration:${duration};"></div>`;
+    }
+
+    // Construct Full HTML
+    const hero = `
+      <div class="modal-hero">
+        <div class="modal-hero-bg-text">${bgTextName} ${bgTextName}</div>
+        <div class="modal-hero-frame"></div>
+        ${sparkles}
+        ${d.oneLiner ? `<div class="modal-hero-catch-vertical">${esc(d.oneLiner)}</div>` : ""}
+        ${d.images?.portrait ? `<img src="${esc(d.images.portrait)}" alt="${esc(d.name)} portrait" loading="lazy" decoding="async" />` : ""}
+        <div class="modal-hero-text">
+          <div class="modal-hero-jp">${esc(d.dragonTitle)}${d.imageColorName ? ` / <span style="font-size:0.9em;">${esc(d.imageColorName)}</span>` : ""}</div>
+          <div class="modal-hero-name">${esc(d.name)}</div>
+          ${d.tag ? `<div class="modal-hero-tag">${esc(d.tag)}</div>` : ""}
+        </div>
+      </div>
+    `;
+
+    els.modalBody.innerHTML = `
+      ${hero}
+      
+      <div class="modal-section-wrapper">
+        
+        <div class="modal-section-title">STORY</div>
+        ${storyContent}
+
+        ${drinksContent}
+
+        <div class="modal-section-title">PROFILE</div>
+        <div class="modal-profile-grid">
+          ${profileGridItems}
+        </div>
+        ${d.images?.id_card ? `<div class="modal-id-card"><img src="${esc(d.images.id_card)}" alt="${esc(d.name)} ID Card" loading="lazy" decoding="async" /></div>` : ""}
+
+        <div class="modal-section-title">MEMBER</div>
+        <div class="modal-member-grid">
+          ${memberGrid}
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="modal-navbtn" type="button" data-action="prev">PREV</button>
+        <button class="modal-navbtn" type="button" data-action="next">NEXT</button>
+      </div>
+    `;
+
+    // reset scroll position to top
+    if (els.modalBody) els.modalBody.scrollTop = 0;
+
+    // keep current id for nav
+    els.modal.dataset.currentId = d.id;
+
+    // Show modal with animation
+    els.modal.classList.remove("is-closing");
+    els.modal.classList.add("is-open");
+    els.modal.scrollTop = 0;
+
+    // Trigger internal animations after a slight delay
+    requestAnimationFrame(() => {
+      els.modalBody.querySelector(".modal-hero")?.classList.add("is-animating");
+    });
+  };
+
+  function closeModal() {
+    if (!els.modal) return;
+
+    // Start closing animation
+    els.modal.classList.remove("is-open");
+    els.modal.classList.add("is-closing");
+
+    // Remove animation class from hero immediately
+    els.modal.querySelector('.modal-hero')?.classList.remove('is-animating');
+
+    // Wait for animation to finish
+    els.modal.addEventListener("animationend", () => {
+      els.modal.classList.remove("is-closing");
+      els.modal.style.display = "none";
+      els.modal.setAttribute("aria-hidden", "true");
+
+      const hero = els.modal.querySelector('.modal-hero');
+      if (hero) hero.classList.remove('is-animating');
+
+      document.body.classList.remove("modal-open");
+      document.body.style.overflow = "";
+    }, { once: true });
+
+    // sync URL hash
+    history.replaceState(null, "", " ");
+  }
+
+  // --- thumbnails
+  const byId = new Map(dragons.map(d => [d.id, d]));
+
+  const buildGrid = () => {
+    if (!els.grid) return;
+    els.grid.innerHTML = "";
+    dragons.forEach(d => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "thumb-btn";
+      btn.dataset.id = d.id;
+      btn.setAttribute("aria-label", `${d.dragonTitle} ${d.name}`);
+
+      // Inline style for dynamic background color on mobile
+      btn.style.setProperty("--btn-color", d.colors?.main || "#333");
+
+      // 1. Desktop Icon (existing)
+      const img = document.createElement("img");
+      img.className = "thumb-img";
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.alt = "";
+      img.src = d.images.icon;
+
+      // 2. Mobile Card Content (new)
+      const cardDiv = document.createElement("div");
+      cardDiv.className = "card-content";
+
+      // Background large English Name
+      const enName = document.createElement("div");
+      enName.className = "card-en-name";
+      enName.textContent = d.name; // e.g. "Liuu Qalli"
+
+      // Foreground Japanese Title/Name
+      const jpName = document.createElement("div");
+      jpName.className = "card-jp-name";
+      jpName.innerHTML = `<span class="card-jp-title">${d.dragonTitle}</span>${d.name}`;
+      // Note: d.name might be English, d.dragonTitle is "黒龍". 
+      // User might want English name in background, Japanese in foreground.
+      // Actually d.name is "Liuu Qalli".
+      // Let's check the reference image behavior. 
+      // The reference has Group Name. 
+      // Here we probably want Dragon Title (Kanji) + Name? or just Name?
+      // Let's put DragonTitle (Kanji) distinctively.
+
+      // Portrait Image
+      const portrait = document.createElement("img");
+      portrait.className = "card-portrait";
+      portrait.loading = "lazy";
+      portrait.decoding = "async";
+      portrait.src = d.images.portrait;
+      portrait.alt = "";
+
+      cardDiv.appendChild(enName);
+      cardDiv.appendChild(portrait);
+      cardDiv.appendChild(jpName);
+
+      btn.appendChild(img);
+      btn.appendChild(cardDiv);
+
+      btn.addEventListener("click", async () => {
+        // use hash so back/forward works
+        location.hash = encodeURIComponent(d.id);
+
+        if (isMobileView()) {
+          setDragon(d); // Update active state and theme colors
+          await openModal(d);
+        }
+      });
+
+      els.grid.appendChild(btn);
+    });
+  };
+
+  // --- GSAP animation helpers
+  const prefersReduced = () =>
+    window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+  const preloadImages = (urls, timeoutMs = 700) => {
+    const unique = [...new Set((urls || []).filter(Boolean))];
+    if (unique.length === 0) return Promise.resolve();
+
+    const loadOne = (src) => new Promise((resolve) => {
+      const img = new Image();
+      let done = false;
+      const finish = () => { if (!done) { done = true; resolve(); } };
+      img.onload = finish;
+      img.onerror = finish;
+      img.src = src;
+      window.setTimeout(finish, timeoutMs);
+    });
+
+    return Promise.all(unique.map(loadOne)).then(() => void 0);
+  };
+
+  const collectAnimTargets = () => {
+    // refresh because DOM is stable but list may be there
+    const list = $$(".panel-list li");
+    return {
+      panel: $(".dragons-panel"),
+      title: $("#dragonTitle"),
+      name: $("#dragonName"),
+      tag: $("#dragonTags") || $("#dragonTag"),
+      oneLiner: $("#dragonOneLiner"),
+      list,
+      details: $("#viewDetails"),
+      flower: $("#dragonFlower"),
+      portrait: $("#dragonPortrait"),
+    };
+  };
+
+  let isSwitching = false;
+
+  const animateSwitch = async (nextId, { instant = false } = {}) => {
+    const next = byId.get(nextId) || dragons[0];
+    if (!next) return;
+
+    // already showing
+    if (els.detailsBtn?.dataset?.id === next.id) return;
+
+    const canAnimate =
+      !instant &&
+      !prefersReduced() &&
+      typeof window.gsap !== "undefined" &&
+      typeof window.gsap.timeline === "function";
+
+    if (!canAnimate || isSwitching) {
+      setDragon(next);
+      return;
+    }
+
+    isSwitching = true;
+
+    // preload portrait + flower to reduce popping
+    await preloadImages([next.images?.portrait, next.images?.flower]);
+
+    const t = collectAnimTargets();
+    const gsap = window.gsap;
+
+    // fade out whole panel quickly
+    await new Promise((resolve) => {
+      gsap.to(t.panel, {
+        opacity: 0,
+        duration: 0.16,
+        ease: "power1.out",
+        onComplete: resolve
+      });
+    });
+
+    // swap content while invisible
+    setDragon(next);
+
+    // trigger accent bar flash animation on character switch
+    const accentBars = $$(".accent-bar");
+    accentBars.forEach(bar => {
+      bar.classList.remove("flash-anim");
+      void bar.offsetWidth; // force reflow
+      bar.classList.add("flash-anim");
+    });
+    // remove class after animation completes to allow re-triggering
+    setTimeout(() => {
+      accentBars.forEach(bar => bar.classList.remove("flash-anim"));
+    }, 1000);
+
+    // trigger band flash animation on character switch
+    const bands = $$(".band");
+    bands.forEach(band => {
+      band.classList.remove("flash-anim");
+      void band.offsetWidth; // force reflow
+      band.classList.add("flash-anim");
+    });
+    // remove class after animation completes to allow re-triggering
+    setTimeout(() => {
+      bands.forEach(band => band.classList.remove("flash-anim"));
+    }, 1500);
+
+    // re-collect because img src changed
+    const u = collectAnimTargets();
+
+    // set initial state for staged fade-in
+    gsap.set(u.panel, { opacity: 1 });
+    gsap.set([u.title, u.name, u.tag, u.oneLiner, ...u.list, u.details].filter(Boolean), { opacity: 0, y: 10 });
+    if (u.flower && !u.flower.classList.contains("is-hidden")) {
+      gsap.set(u.flower, { opacity: 0, scale: 0.98 });
+    }
+    if (u.portrait) {
+      gsap.set(u.portrait, { opacity: 0, x: 18 });
+    }
+
+    // timeline: text first, then flower, then portrait
+    const tl = gsap.timeline({
+      defaults: { ease: "power2.out" },
+      onComplete: () => { isSwitching = false; }
+    });
+
+    tl.to([u.title, u.name].filter(Boolean), { opacity: 1, y: 0, duration: 0.22, stagger: 0.04 }, 0)
+      .to([u.tag, u.oneLiner].filter(Boolean), { opacity: 1, y: 0, duration: 0.18, stagger: 0.04 }, 0.08)
+      .to(u.list || [], { opacity: 1, y: 0, duration: 0.18, stagger: 0.04 }, 0.12)
+      .to([u.details].filter(Boolean), { opacity: 1, y: 0, duration: 0.18 }, 0.22);
+
+    if (u.flower && !u.flower.classList.contains("is-hidden")) {
+      tl.to(u.flower, { opacity: 0.38, scale: 1, duration: 0.26 }, 0.10);
+    }
+    if (u.portrait) {
+      tl.to(u.portrait, { opacity: 1, x: 0, duration: 0.28 }, 0.10);
+    }
+  };
+
+  const byHash = () => {
+    const raw = (location.hash || "").replace("#", "");
+    const id = raw ? decodeURIComponent(raw) : dragons[0].id;
+    animateSwitch(id);
+  };
+
+  // init
+  buildGrid();
+  // set initial instantly (no animation)
+  const raw = (location.hash || "").replace("#", "");
+  const initId = raw ? decodeURIComponent(raw) : dragons[0].id;
+  animateSwitch(initId, { instant: true });
+
+  window.addEventListener("hashchange", byHash);
+
+  // modal events
+  if (els.detailsBtn) {
+    els.detailsBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const id = els.detailsBtn.dataset.id;
+      const d = byId.get(id) || dragons[0];
+      openModal(d);
+    });
+  }
+  if (els.modalClose) els.modalClose.addEventListener("click", closeModal);
+  if (els.modal) {
+    els.modal.addEventListener("click", async (e) => {
+      const target = e.target;
+      if (!(target instanceof HTMLElement)) return;
+
+      // backdrop click closes
+      if (target.dataset.role === "backdrop") return closeModal();
+
+      // check for action button (handles clicks on child img elements)
+      const t = target.closest("[data-action]");
+      if (!t) return;
+
+      // drawer nav
+      if (t.dataset.action === "prev" || t.dataset.action === "next" || t.dataset.action === "jump") {
+        const curId = els.modal.dataset.currentId || dragons[0].id;
+
+        let next;
+        if (t.dataset.action === "jump") {
+          const targetId = t.dataset.target;
+          next = byId.get(targetId) || dragons[0];
+        } else {
+          const curIdx = dragons.findIndex(x => x.id === curId);
+          const idx = curIdx >= 0 ? curIdx : 0;
+          const nextIdx = t.dataset.action === "prev"
+            ? (idx - 1 + dragons.length) % dragons.length
+            : (idx + 1) % dragons.length;
+          next = dragons[nextIdx];
+        }
+
+        // keep URL in sync (so refresh/back works)
+        location.hash = encodeURIComponent(next.id);
+
+        await animateSwitch(next.id);
+        await openModal(next);
+      }
+    });
+  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+  });
+})();

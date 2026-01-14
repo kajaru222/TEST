@@ -1,0 +1,141 @@
+/**
+ * Custom Fonts - 煌龍園
+ * 中華高級テイストのフォント設定
+ */
+
+/* === ローカルフォント === */
+
+/* Harenosora - 晴れのそら (見出し・タイトル用) */
+@font-face {
+  font-family: 'Harenosora';
+  src: url('../fonts/Harenosora.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Soukou Mincho - 装甲明朝 (本文・詳細テキスト用) */
+@font-face {
+  font-family: 'Soukou Mincho';
+  src: url('../fonts/SoukouMincho.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* YDWaosagi - YD青鷺 (追加) */
+@font-face {
+  font-family: 'YDWaosagi';
+  src: url('../fonts/YDWaosagi.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* === フォント変数定義 === */
+:root {
+  /* 日本語フォント */
+  --font-display-jp: 'Harenosora', 'Yu Gothic', 'YuGothic', 'Hiragino Sans', sans-serif;
+  --font-body-jp: 'Soukou Mincho', 'Yu Mincho', 'YuMincho', 'Hiragino Mincho ProN', serif;
+
+  /* 英文フォント - 高級感 */
+  --font-display-en: 'Cinzel', 'Cormorant Garamond', serif;
+  --font-body-en: 'Cormorant Garamond', 'Georgia', serif;
+
+  /* タイポグラフィ設定 */
+  --letter-spacing-tight: 0.02em;
+  --letter-spacing-normal: 0.08em;
+  --letter-spacing-wide: 0.15em;
+  --letter-spacing-ultra: 0.25em;
+
+  --line-height-tight: 1.5;
+  --line-height-normal: 2.0;
+  --line-height-relaxed: 2.4;
+}
+
+/* === 基本設定 === */
+
+/* サイト全体の基本フォント */
+body {
+  font-family: var(--font-body-jp);
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--line-height-normal);
+}
+
+/* 見出し・タイトル */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display-jp);
+  letter-spacing: var(--letter-spacing-wide);
+  line-height: var(--line-height-tight);
+}
+
+/* === 英文要素 === */
+
+/* 英語タイトル・見出し */
+.en-title,
+.section-nav-label,
+[lang="en"] {
+  font-family: var(--font-display-en);
+  letter-spacing: var(--letter-spacing-ultra);
+  text-transform: uppercase;
+}
+
+/* パネルタイトルの英語部分 */
+.panel-title {
+  font-family: var(--font-display-en);
+  letter-spacing: var(--letter-spacing-ultra);
+}
+
+/* === 日本語要素 === */
+
+/* ブランドロゴ・サイトタイトル */
+.brand,
+.footer-title,
+.hero-title {
+  font-family: var(--font-display-jp);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* パネルタイトル日本語 */
+.hero-lead {
+  font-family: var(--font-display-jp);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+/* Cast関連の要素 */
+.cast-card {
+  font-family: var(--font-body-jp);
+}
+
+/* 龍の名前・タイトル */
+#dragonTitle,
+#dragonName,
+.panel-title .jp {
+  font-family: var(--font-display-jp);
+}
+
+/* 詳細説明テキスト */
+.panel-desc,
+.panel-list,
+.modal-body {
+  font-family: var(--font-body-jp);
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ボタンテキスト */
+.btn {
+  font-family: var(--font-display-jp);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* ナビゲーション */
+.site-nav a {
+  font-family: var(--font-body-jp);
+  letter-spacing: var(--letter-spacing-normal);
+}

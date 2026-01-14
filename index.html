@@ -1,44 +1,238 @@
-<!doctype html>
-<html lang="ja"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>煌龍園 ∼KohLongEnn∼</title>
-<link rel="stylesheet" href="/styles.css">
-</head><body>
-<header class="site-header">
-  <div class="nav">
-    <a href="/" class="brand">
-      <img src="https://static.wixstatic.com/media/5f9e4d_18a644bbb4d14e72a9d32cb247214c56~mv2.png" alt="煌龍園">
-      <div class="brand-text">
-        <strong>煌龍園</strong>
-        <span>∼KohLongEnn∼</span>
-      </div>
-    </a>
+<!DOCTYPE html>
+<html lang="ja">
 
-    <nav>
-      <a href="/">入口</a>
-      <a href="/concept/">はじめに</a>
-      <a href="/cafe/">カフェについて</a>
-      <a href="/cast/">龍紹介</a>
-      <a href="/access/">アクセス</a>
-      <a href="/contact/">問合せ</a>
-    </nav>
-  </div>
-</header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>煌龍園へようこそ | KohLongEnn</title>
 
-<main style="padding-top:18px">
-  <h1 style="margin:10px 0">入口</h1>
-  <p style="color:var(--muted);margin:0 0 12px">このZIPは「/concept/」「/cafe/」を“埋め込みHTMLとして動作”させるための修正版です。</p>
-  <div class="embed-shell" style="padding:16px">
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <a class="menu a" href="/concept/">はじめにへ</a>
-      <a class="menu a" href="/cafe/">カフェについてへ</a>
+  <!-- Favicon -->
+  <link rel="icon" href="assets/img/logo.png" type="image/png" />
+
+  <!-- Google Fonts - 高級感のある英文フォント -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Preload critical images -->
+  <link rel="preload" as="image" href="assets/img/logo.png" />
+  <link rel="preload" as="image" href="assets/img/concept.png" />
+
+  <!-- base styles -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <!-- fonts -->
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <!-- opening splash -->
+  <link rel="stylesheet" href="assets/css/opening.css" />
+  <!-- TOP scroll presentation -->
+  <link rel="stylesheet" href="assets/css/top.css" />
+  <!-- index page specific -->
+  <link rel="stylesheet" href="assets/css/index.css" />
+  <!-- yui540スタイル アニメーション -->
+  <link rel="stylesheet" href="assets/css/animations.css" />
+</head>
+
+<body class="page-top">
+  <!-- Opening Splash Screen -->
+  <div class="opening-splash" id="openingSplash" aria-hidden="true">
+    <!-- トランジションパネル（yui540風） -->
+    <div class="opening-panel opening-panel-left"></div>
+    <div class="opening-panel opening-panel-right"></div>
+    <div class="opening-line"></div>
+    <!-- コンテンツ -->
+    <div class="opening-content">
+      <img class="opening-logo" src="assets/img/logo.png" alt="煌龍園" fetchpriority="high" />
+      <h1 class="opening-title">煌龍園</h1>
+      <p class="opening-tagline">煌く龍たちと一緒に過ごせる空間はいかがですか？</p>
     </div>
+    <button class="opening-skip" id="openingSkip" aria-label="スキップ">Skip ▶</button>
   </div>
-</main>
-<footer>
-  <div class="foot">
-    <div>© KohLongEnn</div>
-    <div>©SQUARE ENIX / 記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。</div>
-  </div>
-</footer>
-</body></html>
+
+  <!-- Header (existing site navigation) -->
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="煌龍園 トップへ">
+        <img src="assets/img/logo.png" alt="煌龍園 ロゴ" width="44" height="44" />
+      </a>
+
+      <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="sr-only">メニュー</span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="グローバルナビゲーション">
+        <button class="nav-close" id="navClose" type="button" aria-label="メニューを閉じる">
+          <span class="nav-close-icon">×</span>
+        </button>
+        <a href="index.html">入口</a>
+        <a href="intro.html">はじめに</a>
+        <a href="about.html">カフェについて</a>
+        <a href="cast.html">龍紹介</a>
+        <a href="stories.html">龍の小噺</a>
+        <a href="gallery.html">龍の追憶</a>
+        <a href="access.html">アクセス</a>
+        <a href="https://5ne.co/0jvu" target="_blank" rel="noopener">問い合わせ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Section Navigation Bar -->
+  <nav class="section-nav" aria-label="セクションナビゲーション">
+    <div class="section-nav-items">
+      <a href="#hero" class="section-nav-item active" data-section="hero" aria-label="ヒーロー">
+        <span class="section-nav-label">TOP</span>
+      </a>
+      <a href="#concept" class="section-nav-item" data-section="concept" aria-label="コンセプト">
+        <span class="section-nav-label">Concept</span>
+      </a>
+      <a href="#cast" class="section-nav-item" data-section="cast" aria-label="キャスト">
+        <span class="section-nav-label">Cast</span>
+      </a>
+      <a href="#access" class="section-nav-item" data-section="access" aria-label="アクセス">
+        <span class="section-nav-label">Access</span>
+      </a>
+    </div>
+  </nav>
+
+  <main class="story">
+    <!-- 1. Hero -->
+    <section class="panel panel-hero particle-dots floating-particles" id="hero" data-panel>
+      <div class="panel-inner hero-inner">
+        <div class="hero-copy stagger-fade-in">
+          <img class="hero-mark" src="assets/img/logo.png" alt="煌龍園" fetchpriority="high" />
+          <h1 class="hero-title text-gradient-flow text-blur-reveal">煌龍園</h1>
+          <p class="hero-lead scroll-clip-reveal">煌く龍たちと一緒に過ごせる空間はいかがですか？</p>
+          <div class="hero-cta">
+            <a class="btn primary hover-glow btn-ripple btn-shine" href="intro.html">物語を読む</a>
+            <a class="btn hover-float btn-ripple" href="cast.html">龍たちを見る</a>
+          </div>
+        </div>
+        <div class="hero-bg" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- 2. concept -->
+    <section class="panel panel-text panel-with-image panel-with-bg bg-aurora ripple-effect" id="concept" data-panel>
+      <div class="panel-bg-image bg-shine light-streak" style="background-image: url('assets/img/concept.png');"
+        aria-hidden="true"></div>
+      <div class="panel-bg-overlay" aria-hidden="true"></div>
+      <div class="panel-inner">
+        <div class="panel-card with-image hover-color-shift scroll-unfold">
+          <div class="panel-content stagger-fade-in">
+            <h2 class="panel-title text-gradient-flow mask-reveal-x text-split-appear">Concept</h2>
+            <p class="panel-desc scroll-clip-reveal">
+              うつし世の果て、空に揺蕩う「龍宮」には、<br>
+              鮮やかな煌きを纏う「龍」達が暮らしています。<br>
+              彼女達は気まぐれに人の世を愛で、訪れ、<br>
+              人の現し身と華やかな衣を纏い、人の子らを「園」に招いて歓待します。<br><br>
+              ようこそ、華やぐ喫茶『煌龍園』へ。<br>
+              今宵も煌く龍たちの園で、<br>
+              貴方の世界を輝かせる色彩に出逢えますように。
+            </p>
+            <a class="btn primary btn-shine btn-ripple hover-glow" href="about.html">カフェについて</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. cast -->
+    <section class="panel panel-cast panel-combined panel-with-bg bg-stars floating-particles" id="cast" data-panel>
+      <div class="panel-bg-image bg-shine light-streak" style="background-image: url('assets/img/cast.jpg');"
+        aria-hidden="true"></div>
+      <div class="panel-bg-overlay" aria-hidden="true"></div>
+      <div class="panel-inner">
+        <div class="cast-intro">
+          <div class="cast-intro-content hover-color-shift bounce-scale">
+            <h2 class="panel-title text-gradient-flow mask-reveal-x text-split-appear">Cast</h2>
+            <p class="panel-desc scroll-clip-reveal">
+              ​煌龍園で出会うことのできる龍（キャスト）の紹介となります。
+            </p>
+            <a class="btn primary btn-shine btn-ripple hover-glow" href="cast.html">龍紹介ページへ</a>
+          </div>
+        </div>
+
+        <div class="cast-scroll-wrapper scroll-unfold">
+          <div class="cast-scroll" id="castScroll" aria-label="キャスト一覧">
+            <div class="cast-track" id="castTrack">
+              <!-- injected by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Access / SNS -->
+    <section class="panel panel-access bg-gradient-flow" id="access" data-panel>
+      <div class="panel-inner">
+        <div class="panel-card wide hover-glow hover-color-shift scroll-unfold">
+          <h2 class="panel-title text-gradient-flow mask-reveal-x text-split-appear">Access / SNS</h2>
+          <p class="panel-desc scroll-clip-reveal">
+            来園方法と、各SNSへの導線をまとめています。
+          </p>
+          <div class="access-actions stagger-fade-in">
+            <a class="btn primary btn-shine btn-ripple hover-glow" href="access.html">アクセス</a>
+            <a class="btn btn-shine btn-ripple hover-glow" href="https://5ne.co/0jvu" target="_blank"
+              rel="noopener">問い合わせ</a>
+          </div>
+
+          <div class="sns">
+            <a class="sns-item hover-glow bg-pulse bounce-scale" href="https://x.com/ll_KohLongEnn" target="_blank"
+              rel="noopener" aria-label="X">X</a>
+          </div>
+
+          <!-- Footer info for mobile -->
+          <div class="mobile-footer-info">
+            <div class="mobile-footer-brand">
+              <img src="assets/img/logo.png" alt="" width="32" height="32" loading="lazy" />
+              <div>
+                <div class="mobile-footer-title">煌龍園 | KohLongEnn</div>
+                <div class="mobile-footer-note">©SQUARE ENIX<br>記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desktop Footer -->
+          <footer class="site-footer">
+            <div class="container footer-inner">
+              <div class="footer-brand">
+                <img src="assets/img/logo.png" alt="" width="36" height="36" loading="lazy" />
+                <div>
+                  <div class="footer-title">煌龍園 | KohLongEnn</div>
+                  <div class="footer-note">©SQUARE ENIX<br>記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。</div>
+                </div>
+              </div>
+
+              <a class="to-top" href="#top">▲ Top</a>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Opening splash (load first) -->
+  <script src="assets/js/opening.js"></script>
+
+  <!-- GSAP (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Main navigation -->
+  <script src="assets/js/main.js" defer></script>
+  <!-- Data for cast cards -->
+  <script src="assets/js/dragons-data.js"></script>
+  <!-- TOP page animation -->
+  <script src="assets/js/top-hero.js"></script>
+  <script src="assets/js/top-cast-build.js"></script>
+  <script src="assets/js/top-cast-inertia.js"></script>
+  <!-- Scroll animations -->
+  <script src="assets/js/scroll-animations.js"></script>
+  <!-- Page transition (yui540 style) -->
+  <script src="assets/js/page-transition.js"></script>
+</body>
+
+</html>
