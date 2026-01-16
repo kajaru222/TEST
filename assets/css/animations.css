@@ -87,12 +87,12 @@
     #D4AF37 50%,
     #8B2332 75%,
     #D4AF37 100%
-  ) !important;
-  background-size: 200% auto !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  animation: gradientFlow 4s linear infinite, var(--text-extra-anim, none) !important;
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientFlow 4s linear infinite, var(--text-extra-anim, none);
 }
 
 @keyframes gradientFlow {
@@ -399,7 +399,7 @@
   box-shadow:
     0 4px 16px rgba(165, 36, 36, 0.4),
     0 0 20px rgba(244, 208, 63, 0.4),
-    0 0 40px rgba(244, 208, 63, 0.2) !important;
+    0 0 40px rgba(244, 208, 63, 0.2);
 }
 
 /* 4-2. リップル効果 */
@@ -445,8 +445,8 @@
 }
 
 .hover-float:hover {
-  transform: translateY(-6px) !important;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3) !important;
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* ----------------------------------------
@@ -1248,32 +1248,32 @@
   overflow: hidden;
 }
 
-/* .btnのリップル効果との競合を解消 */
+/* .btnのリップル効果との競合を解消 - 詳細度で対応 */
 .btn.hover-border-anim::before,
 .btn.hover-border-anim::after {
-  content: '' !important;
-  position: absolute !important;
-  width: 100% !important;
-  height: 2px !important;
-  border-radius: 0 !important;
-  left: 0 !important;
-  background: linear-gradient(90deg, #f4d03f, #c9302c) !important;
-  transform: scaleX(0) !important;
-  transform-origin: left !important;
-  transition: transform 0.4s var(--ease-out-expo) !important;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  border-radius: 0;
+  left: 0;
+  background: linear-gradient(90deg, #f4d03f, #c9302c);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out-expo);
 }
 
 .btn.hover-border-anim::before {
-  top: 0 !important;
+  top: 0;
 }
 
 .btn.hover-border-anim::after {
-  bottom: 0 !important;
+  bottom: 0;
 }
 
 .btn.hover-border-anim:hover::before,
 .btn.hover-border-anim:hover::after {
-  transform: scaleX(1) !important;
+  transform: scaleX(1);
 }
 
 .hover-border-anim::before,

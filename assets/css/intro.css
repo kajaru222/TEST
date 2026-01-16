@@ -146,12 +146,18 @@
 }
 
 .story-text {
+  font-family: 'Harenosora', serif;
   font-size: 1.05rem;
   margin-bottom: 3.5rem;
   color: #f8f5f0;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   line-height: 2.5;
   letter-spacing: 0.08em;
+}
+
+.story-text-emphasize {
+  margin-top: 20px;
+  font-size: 1.1rem;
 }
 
 .story-section {

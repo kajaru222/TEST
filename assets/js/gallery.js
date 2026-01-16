@@ -1,32 +1,20 @@
 // Cloudinary Gallery Implementation
-// 使用前に CLOUDINARY_CLOUD_NAME を設定してください
+// 画像リストは assets/data/gallery-images.json で管理されています
 
 const CLOUDINARY_CONFIG = {
-  cloudName: 'dlgfs051q', // ← ここに Cloudinary の Cloud Name を入力
-  baseFolder: '', // ← 必要に応じてベースフォルダを指定（例: 'events'）
+  cloudName: 'dlgfs051q',
+  baseFolder: '',
+  imagesDataPath: 'assets/data/gallery-images.json'
 };
 
-// ギャラリーデータ（フォルダ名と表示日付を定義）
-const GALLERY_EVENTS = [
-  {
-    folder: '2025-12-11',  // Cloudinary のフォルダ名
-    date: '2025.12.11',    // 表示用の日付
-    title: '12月11日チェキ',    // タイトル（オプション）
-  },
-  {
-    folder: '2024-02-20',
-    date: '2024.02.20',
-    title: 'イベント名',
-  },
-  // 必要に応じてイベントを追加
-];
-
 class CloudinaryGallery {
-  constructor(config, events) {
+  constructor(config) {
     this.config = config;
-    this.events = events;
+    this.events = [];
     this.currentEvent = null;
     this.currentImages = [];
+    this.lastActiveElement = null;
+    this.focusCleanup = null;
 
     this.modal = document.getElementById('galleryModal');
     this.modalTitle = this.modal.querySelector('.gallery-modal-title');
@@ -37,9 +25,32 @@ class CloudinaryGallery {
     this.init();
   }
 
-  init() {
+  createEl(tag, className, text) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text !== undefined && text !== null) el.textContent = text;
+    return el;
+  }
+
+  async init() {
+    await this.loadGalleryData();
     this.renderGrid();
     this.bindModalEvents();
+  }
+
+  // JSONファイルから画像データを読み込む
+  async loadGalleryData() {
+    try {
+      const response = await fetch(this.config.imagesDataPath);
+      if (!response.ok) {
+        throw new Error('Failed to load gallery data');
+      }
+      const data = await response.json();
+      this.events = data.events || [];
+    } catch (error) {
+      console.error('Error loading gallery data:', error);
+      this.events = [];
+    }
   }
 
   // Cloudinary URL を生成
@@ -64,72 +75,24 @@ class CloudinaryGallery {
     return `https://res.cloudinary.com/${cloudName}/image/upload/${transformStr}${finalPublicId}`;
   }
 
-  // フォルダ内の画像リストを取得（Cloudinary Admin API使用）
+  // フォルダ内の画像リストを取得（JSONから読み込み）
   async fetchFolderImages(folderName) {
-    const { cloudName, baseFolder } = this.config;
-    const fullPath = baseFolder ? `${baseFolder}/${folderName}` : folderName;
-
     try {
-      // Cloudinary の Admin API を使用する場合（要認証）
-      // ここでは、画像が public_id のパターンに従っていると仮定
-      // 例: events/2024-01-15/image1.jpg, events/2024-01-15/image2.jpg
+      // JSONデータから該当するイベントを検索
+      const event = this.events.find(e => e.folder === folderName);
 
-      // 代替案: 画像のpublic_idを直接配列で定義する方法
-      // より確実な方法として、画像リストをJSONファイルで管理することも推奨
+      if (!event || !event.images) {
+        console.warn(`No images found for folder: ${folderName}`);
+        return [];
+      }
 
-      // デモ用: 仮の画像リストを返す（実際にはAPI呼び出しまたはJSONから取得）
-      const imageList = await this.getImageList(fullPath);
-      return imageList;
-
+      return event.images;
     } catch (error) {
       console.error('Failed to fetch images:', error);
       return [];
     }
   }
 
-  // 画像リストを取得（カスタマイズ可能）
-  async getImageList(folderPath) {
-    // 方法1: Cloudinary Search API を使用（要API Key）
-    // 方法2: 画像リストを JSON ファイルで管理
-    // 方法3: 固定の命名規則で画像をループ（例: image_1.jpg, image_2.jpg...）
-
-    const maxImages = 30; // 試行する最大枚数
-
-    // 並列で画像の存在をチェック（高速化）
-    const checkPromises = [];
-    for (let i = 1; i <= maxImages; i++) {
-      const imageId = `${folderPath}/${i}`;
-      checkPromises.push(
-        this.checkImageExists(imageId).then(exists => ({ index: i, imageId, exists }))
-      );
-    }
-
-    // すべてのチェックを並列実行
-    const results = await Promise.all(checkPromises);
-
-    // 存在する画像のみをフィルタリング
-    const images = results
-      .filter(r => r.exists)
-      .sort((a, b) => a.index - b.index)
-      .map(r => r.imageId);
-
-    return images;
-  }
-
-  // 画像が存在するかチェック
-  async checkImageExists(imageId) {
-    const testUrl = this.getCloudinaryUrl(imageId, {
-      width: 10,
-      height: 10,
-    });
-
-    try {
-      const response = await fetch(testUrl, { method: 'HEAD' });
-      return response.ok;
-    } catch (error) {
-      return false;
-    }
-  }
 
   // グリッドをレンダリング
   async renderGrid() {
@@ -143,11 +106,15 @@ class CloudinaryGallery {
 
   // グリッドアイテムを作成
   createGridItem(event) {
-    const { cloudName, baseFolder } = this.config;
-    const fullPath = baseFolder ? `${baseFolder}/${event.folder}` : event.folder;
-
     // 代表画像（1枚目）のサムネイル
-    const thumbnailUrl = this.getCloudinaryUrl(`${fullPath}/1`, {
+    const firstImage = event.images && event.images.length > 0 ? event.images[0] : null;
+
+    if (!firstImage) {
+      console.warn(`No images for event: ${event.folder}`);
+      return document.createElement('div'); // 空要素を返す
+    }
+
+    const thumbnailUrl = this.getCloudinaryUrl(firstImage, {
       width: 600,
       height: 450,
       crop: 'fill',
@@ -155,19 +122,21 @@ class CloudinaryGallery {
       format: 'auto',
     });
 
-    console.log('Thumbnail URL:', thumbnailUrl); // デバッグ用
+    const item = this.createEl('div', 'gallery-item');
+    const img = this.createEl('img', 'gallery-item-image');
+    img.src = thumbnailUrl;
+    img.alt = event.date || 'ギャラリー画像';
 
-    const item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.innerHTML = `
-      <img class="gallery-item-image" src="${thumbnailUrl}" alt="${event.date}" />
-      <div class="gallery-item-overlay">
-        <p class="gallery-item-date">${event.date}</p>
-        ${event.title ? `<p class="gallery-item-count">${event.title}</p>` : ''}
-      </div>
-    `;
+    const overlay = this.createEl('div', 'gallery-item-overlay');
+    const dateEl = this.createEl('p', 'gallery-item-date', event.date || '');
+    overlay.appendChild(dateEl);
+    if (event.title) {
+      const titleEl = this.createEl('p', 'gallery-item-count', event.title);
+      overlay.appendChild(titleEl);
+    }
 
-    const img = item.querySelector('.gallery-item-image');
+    item.appendChild(img);
+    item.appendChild(overlay);
 
     // 画像読み込み成功時
     img.addEventListener('load', () => {
@@ -213,8 +182,15 @@ class CloudinaryGallery {
 
   // モーダルを表示
   showModal() {
+    this.lastActiveElement = document.activeElement;
     this.modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    if (this.focusCleanup) this.focusCleanup();
+    this.focusCleanup = this.trapFocus(this.modal);
+    const focusTarget = this.modal.querySelector('.gallery-modal-close') || this.modal.querySelector('.gallery-modal-content');
+    if (focusTarget && typeof focusTarget.focus === 'function') {
+      focusTarget.focus();
+    }
   }
 
   // モーダルを非表示
@@ -222,6 +198,41 @@ class CloudinaryGallery {
     this.modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     this.modalImagesGrid.innerHTML = '';
+    if (this.focusCleanup) {
+      this.focusCleanup();
+      this.focusCleanup = null;
+    }
+    if (this.lastActiveElement && typeof this.lastActiveElement.focus === 'function') {
+      this.lastActiveElement.focus();
+    }
+  }
+
+  // フォーカストラップ
+  trapFocus(container) {
+    const focusableSelector = [
+      'a[href]',
+      'button:not([disabled])',
+      'textarea:not([disabled])',
+      'input:not([disabled])',
+      'select:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])'
+    ].join(',');
+    const focusable = Array.from(container.querySelectorAll(focusableSelector));
+    if (!focusable.length) return () => {};
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const onKeydown = (e) => {
+      if (e.key !== 'Tab') return;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    container.addEventListener('keydown', onKeydown);
+    return () => container.removeEventListener('keydown', onKeydown);
   }
 
   // モーダル内に画像グリッドを表示
@@ -247,14 +258,16 @@ class CloudinaryGallery {
       format: 'auto',
     });
 
-    const item = document.createElement('div');
-    item.className = 'gallery-modal-grid-item';
-    item.innerHTML = `
-      <img class="gallery-modal-grid-image" src="${imageUrl}" alt="写真 ${index + 1}" loading="lazy" />
-      <div class="gallery-modal-grid-loader"></div>
-    `;
+    const item = this.createEl('div', 'gallery-modal-grid-item');
+    const img = this.createEl('img', 'gallery-modal-grid-image');
+    img.src = imageUrl;
+    img.alt = `写真 ${index + 1}`;
+    img.loading = 'lazy';
 
-    const img = item.querySelector('.gallery-modal-grid-image');
+    const loader = this.createEl('div', 'gallery-modal-grid-loader');
+
+    item.appendChild(img);
+    item.appendChild(loader);
 
     // 画像読み込みエラー時は非表示
     img.addEventListener('error', () => {
@@ -282,19 +295,40 @@ class CloudinaryGallery {
     });
 
     // フルスクリーンビューアーを作成
-    const fullscreen = document.createElement('div');
-    fullscreen.className = 'gallery-fullscreen active';
-    fullscreen.innerHTML = `
-      <img class="gallery-fullscreen-image" src="${fullImageUrl}" alt="拡大画像" />
-      <button class="gallery-fullscreen-close" aria-label="閉じる">&times;</button>
-      <button class="gallery-fullscreen-prev" aria-label="前へ">&#8249;</button>
-      <button class="gallery-fullscreen-next" aria-label="次へ">&#8250;</button>
-      <div class="gallery-fullscreen-counter">${currentIndex + 1} / ${this.currentImages.length}</div>
-    `;
+    const fullscreen = this.createEl('div', 'gallery-fullscreen active');
+    fullscreen.tabIndex = -1;
+
+    const image = this.createEl('img', 'gallery-fullscreen-image');
+    image.src = fullImageUrl;
+    image.alt = '拡大画像';
+
+    const closeBtn = this.createEl('button', 'gallery-fullscreen-close', '×');
+    closeBtn.setAttribute('aria-label', '閉じる');
+
+    const prevBtn = this.createEl('button', 'gallery-fullscreen-prev', '‹');
+    prevBtn.setAttribute('aria-label', '前へ');
+
+    const nextBtn = this.createEl('button', 'gallery-fullscreen-next', '›');
+    nextBtn.setAttribute('aria-label', '次へ');
+
+    const counter = this.createEl(
+      'div',
+      'gallery-fullscreen-counter',
+      `${currentIndex + 1} / ${this.currentImages.length}`
+    );
+
+    fullscreen.appendChild(image);
+    fullscreen.appendChild(closeBtn);
+    fullscreen.appendChild(prevBtn);
+    fullscreen.appendChild(nextBtn);
+    fullscreen.appendChild(counter);
 
     document.body.appendChild(fullscreen);
 
     let currentFullscreenIndex = currentIndex;
+    const lastActive = document.activeElement;
+    if (closeBtn) closeBtn.focus();
+    const fullscreenFocusCleanup = this.trapFocus(fullscreen);
 
     const updateFullscreenImage = (index) => {
       const newImageId = this.currentImages[index];
@@ -304,10 +338,7 @@ class CloudinaryGallery {
         format: 'auto',
       });
 
-      const img = fullscreen.querySelector('.gallery-fullscreen-image');
-      const counter = fullscreen.querySelector('.gallery-fullscreen-counter');
-
-      img.src = newImageUrl;
+      image.src = newImageUrl;
       counter.textContent = `${index + 1} / ${this.currentImages.length}`;
       currentFullscreenIndex = index;
     };
@@ -327,17 +358,13 @@ class CloudinaryGallery {
       setTimeout(() => fullscreen.remove(), 300);
     };
 
-    fullscreen.querySelector('.gallery-fullscreen-close').addEventListener('click', closeFullscreen);
-    fullscreen.querySelector('.gallery-fullscreen-prev').addEventListener('click', showPrevImage);
-    fullscreen.querySelector('.gallery-fullscreen-next').addEventListener('click', showNextImage);
-
-    fullscreen.addEventListener('click', (e) => {
-      if (e.target === fullscreen) closeFullscreen();
-    });
+    prevBtn.addEventListener('click', showPrevImage);
+    nextBtn.addEventListener('click', showNextImage);
 
     // キーボード操作
+    let closeWithCleanup = () => {};
     const handleKeydown = (e) => {
-      if (e.key === 'Escape') closeFullscreen();
+      if (e.key === 'Escape') closeWithCleanup();
       if (e.key === 'ArrowLeft') showPrevImage();
       if (e.key === 'ArrowRight') showNextImage();
     };
@@ -346,16 +373,16 @@ class CloudinaryGallery {
 
     // クリーンアップ時にイベントリスナーを削除
     const originalClose = closeFullscreen;
-    const closeWithCleanup = () => {
+    closeWithCleanup = () => {
       document.removeEventListener('keydown', handleKeydown);
+      fullscreenFocusCleanup();
       originalClose();
+      if (lastActive && typeof lastActive.focus === 'function') {
+        lastActive.focus();
+      }
     };
 
-    fullscreen.querySelector('.gallery-fullscreen-close').removeEventListener('click', closeFullscreen);
-    fullscreen.querySelector('.gallery-fullscreen-close').addEventListener('click', closeWithCleanup);
-    fullscreen.removeEventListener('click', (e) => {
-      if (e.target === fullscreen) closeFullscreen();
-    });
+    closeBtn.addEventListener('click', closeWithCleanup);
     fullscreen.addEventListener('click', (e) => {
       if (e.target === fullscreen) closeWithCleanup();
     });
@@ -381,8 +408,8 @@ class CloudinaryGallery {
 // 初期化
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    new CloudinaryGallery(CLOUDINARY_CONFIG, GALLERY_EVENTS);
+    new CloudinaryGallery(CLOUDINARY_CONFIG);
   });
 } else {
-  new CloudinaryGallery(CLOUDINARY_CONFIG, GALLERY_EVENTS);
+  new CloudinaryGallery(CLOUDINARY_CONFIG);
 }

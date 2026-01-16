@@ -7,3 +7,9 @@
 .site-footer * {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Yu Gothic", "YuGothic", "Hiragino Sans", sans-serif !important;
 }
+
+/* Cast background image */
+.panel-cast-bg {
+  background-image: url('../img/cast-1920w.webp') !important;
+  opacity: 1 !important;
+}

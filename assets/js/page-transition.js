@@ -1,145 +1,312 @@
 /**
- * Page Transition Animation - Simple & Elegant
- *
- * シンプルなフェードトランジション
- * - 内部リンククリック時に発動
- * - ふわっとフェードアウト→フェードインの演出
+ * Global Loading Screen & Page Transition
+ * 
+ * ページ遷移時および読み込み時にロード画面（プログレスバー付き）を表示します。
+ * 初回訪問時（index.html）のオープニングスプラッシュとは別で動作しますが、
+ * オープニングがある場合は競合しないように制御します。
  */
 
-(function() {
+(function () {
   'use strict';
 
-  // Create transition element
-  function createTransitionElement() {
-    // Check if already exists
-    if (document.querySelector('.page-transition')) return;
+  // --- Configuration ---
+  const LOADER_ID = 'global-loader';
+  const STYLE_ID = 'global-loader-style';
 
-    const transition = document.createElement('div');
-    transition.className = 'page-transition';
-    document.body.appendChild(transition);
+  // Theme Colors
+  const COLOR_BG = '#2A0E12'; // Dark Red like Opening
+  const COLOR_BAR = '#D4AF37'; // Gold
+  const COLOR_BAR_BG = 'rgba(212, 175, 55, 0.2)';
+
+  // --- HTML Generation ---
+  function createLoader() {
+    if (document.getElementById(LOADER_ID)) return;
+
+    const loader = document.createElement('div');
+    loader.id = LOADER_ID;
+    loader.setAttribute('aria-hidden', 'true');
+
+    // Add initial load class by default to prevent flicker
+    loader.classList.add('is-initial-load');
+
+    loader.innerHTML = `
+      <div class="loader-content">
+        <div class="loader-logo-wrap">
+          <!-- Logo matching the site header/splash -->
+          <img src="assets/img/logo-88w.webp" alt="" class="loader-logo" width="44" height="44">
+        </div>
+        <div class="loader-text">Loading...</div>
+        <div class="loader-progress-wrap">
+          <div class="loader-bar" id="${LOADER_ID}-bar"></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(loader);
   }
 
-  // Add CSS for page transition
-  function addTransitionStyles() {
-    if (document.querySelector('#page-transition-styles')) return;
+  function injectStyles() {
+    if (document.getElementById(STYLE_ID)) return;
 
-    const style = document.createElement('style');
-    style.id = 'page-transition-styles';
-    style.textContent = `
-      .page-transition {
+    const css = `
+      /* Loader Container */
+      #${LOADER_ID} {
         position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background-color: ${COLOR_BG};
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Cinzel', serif;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+      }
+
+      /* Active State (Visible) */
+      #${LOADER_ID}.is-active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* Initial Load State - Prevent Flicker */
+      #${LOADER_ID}.is-initial-load {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transition: none !important;
+      }
+
+      /* Content Layout */
+      #${LOADER_ID} .loader-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        width: 240px;
+        transform: translateY(10px);
+        transition: transform 0.5s ease;
+      }
+      #${LOADER_ID}.is-active .loader-content,
+      #${LOADER_ID}.is-initial-load .loader-content {
+        transform: translateY(0);
+      }
+
+      /* Logo */
+      #${LOADER_ID} .loader-logo {
+        width: 48px;
+        height: 48px;
+        opacity: 0.9;
+        animation: rotateLogo 3s infinite linear;
+      }
+
+      /* Text */
+      #${LOADER_ID} .loader-text {
+        font-size: 14px;
+        letter-spacing: 0.1em;
+        color: ${COLOR_BAR};
+        text-transform: uppercase;
+        opacity: 0.8;
+      }
+
+      /* Progress Bar */
+      #${LOADER_ID} .loader-progress-wrap {
+        width: 100%;
+        height: 2px;
+        background: ${COLOR_BAR_BG};
+        border-radius: 2px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      #${LOADER_ID} .loader-bar {
+        position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
         height: 100%;
-        background: #0a0a0a;
-        pointer-events: none;
-        z-index: 10000;
-        opacity: 0;
-        transition: opacity 0.4s ease;
+        width: 0%;
+        background-color: ${COLOR_BAR};
+        box-shadow: 0 0 8px ${COLOR_BAR};
+        transition: width 0.2s ease-out;
       }
 
-      /* Active state - fade out */
-      .page-transition.is-active {
-        opacity: 1;
-      }
-
-      /* Exit state - fade in */
-      .page-transition.is-exit {
-        opacity: 0;
+      @keyframes rotateLogo {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
       }
     `;
+
+    const style = document.createElement('style');
+    style.id = STYLE_ID;
+    style.textContent = css;
     document.head.appendChild(style);
   }
 
-  // Execute page transition
-  function executeTransition(href) {
-    const transition = document.querySelector('.page-transition');
-    if (!transition) return;
+  // --- Logic ---
 
-    // Start fade out animation
-    transition.classList.add('is-active');
-
-    // Navigate after animation completes
-    setTimeout(() => {
-      window.location.href = href;
-    }, 400);
+  // Helper: Set bar percentage
+  function setProgress(percent) {
+    const bar = document.getElementById(`${LOADER_ID}-bar`);
+    if (bar) {
+      bar.style.width = `${percent}%`;
+    }
   }
 
-  // Handle link clicks
-  function handleLinkClick(e) {
-    const link = e.target.closest('a');
-    if (!link) return;
+  // Helper: Toggle visibility
+  function toggleLoader(show) {
+    const loader = document.getElementById(LOADER_ID);
+    if (!loader) return;
 
-    const href = link.getAttribute('href');
+    if (show) {
+      loader.classList.add('is-active');
+      loader.setAttribute('aria-hidden', 'false');
+    } else {
+      loader.classList.remove('is-active');
+      loader.setAttribute('aria-hidden', 'true');
+    }
+  }
 
-    // Skip if:
-    // - No href
-    // - Hash link (#)
-    // - External link (different domain)
-    // - Target="_blank"
-    // - mailto: or tel: links
-    if (!href ||
+  // Setup Link Interception (Exit Transition)
+  function setupLinkInterception() {
+    document.body.addEventListener('click', (e) => { // Use body delegation
+      const link = e.target.closest('a');
+      if (!link) return;
+
+      const href = link.getAttribute('href');
+      const target = link.getAttribute('target');
+
+      // Ignore conditions
+      if (!href ||
         href.startsWith('#') ||
         href.startsWith('mailto:') ||
         href.startsWith('tel:') ||
-        link.target === '_blank' ||
-        link.hostname !== window.location.hostname) {
-      return;
-    }
+        target === '_blank') {
+        return;
+      }
 
-    // Skip if same page
-    if (href === window.location.pathname || href === window.location.href) {
-      return;
-    }
+      let url;
+      try {
+        url = new URL(href, window.location.href);
+      } catch (error) {
+        // Invalid URL format - ignore and let browser handle it
+        console.debug('Invalid URL format, skipping transition:', href, error);
+        return;
+      }
 
-    e.preventDefault();
-    executeTransition(href);
-  }
+      if (url.origin !== window.location.origin) return;
 
-  // Page load entry animation
-  function playEntryAnimation() {
-    const transition = document.querySelector('.page-transition');
-    if (!transition) return;
+      // Ignore same page (including same page with hash navigation)
+      const normalizePath = (p) => p.replace(/\/index\.html$/, '/');
+      const currentPath = normalizePath(window.location.pathname);
+      const nextPath = normalizePath(url.pathname);
 
-    // Start with overlay visible
-    transition.classList.add('is-active');
+      if (nextPath === currentPath && url.search === window.location.search) {
+        return;
+      }
 
-    // Fade out the overlay
-    requestAnimationFrame(() => {
-      transition.classList.remove('is-active');
-      transition.classList.add('is-exit');
+      // Modifier keys
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
 
-      // Clean up after animation
+      e.preventDefault();
+
+      // Remove is-initial-load just in case
+      const loader = document.getElementById(LOADER_ID);
+      if (loader) loader.classList.remove('is-initial-load');
+
+      // Start Exit Animation
+      toggleLoader(true);
+
+      // Fake progress for exit
+      let progress = 0;
+      setProgress(0);
+
+      const interval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress > 90) progress = 90;
+        setProgress(progress);
+      }, 50);
+
+      // Navigate after short delay
       setTimeout(() => {
-        transition.classList.remove('is-exit');
-      }, 400);
+        clearInterval(interval);
+        window.location.href = href;
+      }, 600); // 0.6s delay
     });
   }
 
-  // Initialize
-  document.addEventListener('DOMContentLoaded', () => {
-    addTransitionStyles();
-    createTransitionElement();
+  // Entry Animation (Page Load)
+  function playEntryAnimation() {
+    const loader = document.getElementById(LOADER_ID);
 
-    // Only play entry animation if not from opening splash
-    const hasOpeningSplash = document.querySelector('.opening-splash:not(.is-removed)');
-    if (!hasOpeningSplash) {
-      playEntryAnimation();
+    // Check if Opening Splash is present
+    const openingSplash = document.querySelector('.opening-splash');
+    // Check if opening needs to be shown (not removed AND session not seen)
+    const isOpeningActive = openingSplash && !openingSplash.classList.contains('is-removed') && sessionStorage.getItem('hasSeenOpening') !== 'true';
+
+    if (isOpeningActive) {
+      // Opening overrides global loader
+      if (loader) {
+        loader.classList.remove('is-initial-load');
+        loader.classList.remove('is-active');
+      }
+      return;
     }
 
-    // Add click handler for all links
-    document.addEventListener('click', handleLinkClick);
-  });
+    // Default Entry Animation logic
+    // We start with is-initial-load class (opacity:1, transition:none)
+    // We add is-active to keep it visible after we remove is-initial-load
+    toggleLoader(true);
 
-  // Handle browser back/forward
+    setProgress(0);
+
+    // Animate Bar
+    setTimeout(() => {
+      setProgress(60);
+    }, 100);
+
+    // Function to finish loading
+    const finish = () => {
+      setProgress(100);
+      setTimeout(() => {
+        // Prepare for fade out
+        if (loader) {
+          // Remove the 'force visible' style so calling toggleLoader(false) will trigger transition
+          loader.classList.remove('is-initial-load');
+          // Force reflow/repaint to ensure browser acknowledges transition property enabled
+          void loader.offsetWidth;
+        }
+        toggleLoader(false);
+      }, 500); // visual wait
+    };
+
+    if (document.readyState === 'complete') {
+      finish();
+    } else {
+      window.addEventListener('load', finish);
+      setTimeout(finish, 3000);
+    }
+  }
+
+  // --- Init ---
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      injectStyles();
+      createLoader();
+      setupLinkInterception();
+      playEntryAnimation();
+    });
+  } else {
+    injectStyles();
+    createLoader();
+    setupLinkInterception();
+    playEntryAnimation();
+  }
+
+  // Handle Back/Forward Cache
   window.addEventListener('pageshow', (e) => {
-    // If page is loaded from cache (back button)
     if (e.persisted) {
-      const transition = document.querySelector('.page-transition');
-      if (transition) {
-        transition.classList.remove('is-active', 'is-exit', 'is-loading');
-        playEntryAnimation();
+      const loader = document.getElementById(LOADER_ID);
+      if (loader) {
+        loader.classList.remove('is-active', 'is-initial-load');
       }
     }
   });

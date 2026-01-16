@@ -1147,7 +1147,8 @@ body {
 }
 
 .page-top .panel-cast .panel-bg-image {
-  display: none;
+  display: block;
+  background-image: url('../img/cast-1920w.webp');
 }
 
 .page-top .panel-cast .panel-bg-overlay {
@@ -1858,26 +1859,28 @@ body {
     opacity: 1 !important;
     transform: none !important;
   }
-}/* Footer Fix for TOP Page Override */
+}
+
+/* Footer Fix for TOP Page Override */
 .page-top .panel-access .site-footer {
-    background: transparent;
-    backdrop-filter: none;
-    border-top: none;
-    padding: 0;
-    margin-top: 40px;
-    width: 100%;
+  background: transparent;
+  backdrop-filter: none;
+  border-top: none;
+  padding: 0;
+  margin-top: 40px;
+  width: 100%;
 }
 
 .page-top .panel-access .footer-inner {
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    padding-top: 24px;
-    margin-top: 24px;
-    width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 24px;
+  margin-top: 24px;
+  width: 100%;
 }
 
 /* モバイル表示時は専用フッターがあるのでデスクトップフッターを非表示にする調整 */
 @media (max-width: 768px) {
-    .page-top .panel-access .site-footer {
-        display: none;
-    }
+  .page-top .panel-access .site-footer {
+    display: none;
+  }
 }

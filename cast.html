@@ -6,6 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="煌龍園（KohLongEnn）- 龍紹介" />
   <link rel="icon" href="assets/img/logo.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/img/logo.png" />
+
+  <!-- OGP / SNS Sharing -->
+  <!-- TODO: Replace 'your-domain.com' with your actual Netlify domain (e.g., kohlongenn.netlify.app) -->
+  <meta property="og:title" content="龍紹介 | 煌龍園" />
+  <meta property="og:description" content="煌龍園の個性豊かなキャスト（龍）たちをご紹介します。" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://your-domain.com/cast.html" />
+  <meta property="og:image" content="https://your-domain.com/assets/img/hero-1024w.webp" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Google Fonts - 高級感のある英文フォント -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,39 +41,8 @@
 <body class="cast-page">
 
   <a class="skip" href="#main">本文へスキップ</a>
-  <header class="site-header" id="top">
-    <div class="container header-inner">
-      <a class="brand" href="index.html" aria-label="煌龍園 トップへ">
-        <img
-          srcset="assets/img/logo-88w.webp 1x, assets/img/logo-180w.webp 2x"
-          src="assets/img/logo-88w.webp"
-          alt="煌龍園 ロゴ"
-          width="44"
-          height="44" />
-      </a>
-
-      <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
-        <span class="nav-toggle-bar"></span>
-        <span class="nav-toggle-bar"></span>
-        <span class="nav-toggle-bar"></span>
-        <span class="sr-only">メニュー</span>
-      </button>
-
-      <nav class="site-nav" id="site-nav" aria-label="グローバルナビゲーション">
-        <button class="nav-close" id="navClose" type="button" aria-label="メニューを閉じる">
-          <span class="nav-close-icon">×</span>
-        </button>
-        <a href="index.html">入口</a>
-        <a href="intro.html">はじめに</a>
-        <a href="about.html">カフェについて</a>
-        <a href="cast.html" class="active">龍紹介</a>
-        <a href="stories.html">龍の小噺</a>
-        <a href="gallery.html">龍の追憶</a>
-        <a href="access.html">アクセス</a>
-        <a href="https://5ne.co/0jvu" target="_blank" rel="noopener">問い合わせ</a>
-      </nav>
-    </div>
-  </header>
+  <!-- Header (common-parts.js) -->
+  <header class="site-header" id="top" data-auto-header></header>
   <main id="main" class="dragons-page">
     <section class="dragons-shell" aria-label="龍紹介">
       <div class="dragons-stage" id="dragonStage">
@@ -105,7 +84,7 @@
                   <div id="dragonName" class="en">Liuu Qalli</div>
                 </div>
 
-                <div id="dragonTags" class="panel-meta">#冥界／ノクターン 🎼</div>
+                <div id="dragonTags" class="panel-meta">#冥界／ノクターン</div>
 
                 <div id="dragonOneLiner" class="panel-oneliner"></div>
 
@@ -143,31 +122,23 @@
 
     <section class="dragon-modal" id="dragonModal" aria-hidden="true">
       <div class="modal-backdrop" data-role="backdrop"></div>
-      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
         <div class="modal-head">
           <div class="modal-title" id="modalTitle">CAST PROFILE</div>
-          <button class="modal-close" id="modalClose">✕</button>
+          <button class="modal-close" id="modalClose" aria-label="閉じる">✕</button>
         </div>
         <div class="modal-body" id="modalBody"></div>
       </div>
     </section>
   </main>
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <img src="assets/img/logo.png" alt="" width="36" height="36" loading="lazy" />
-        <div>
-          <div class="footer-title">煌龍園 | KohLongEnn</div>
-          <div class="footer-note">©SQUARE ENIX<br>記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。</div>
-        </div>
-      </div>
+  <footer class="site-footer" data-auto-footer></footer>
+  <script src="assets/js/common-parts.js"></script>
 
-      <a class="to-top" href="#top">▲ Top</a>
-    </div>
-  </footer>
   <script src="assets/js/main.js" defer></script>
   <script src="assets/js/dragons-data.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"
+    integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt"
+    crossorigin="anonymous" defer></script>
   <script src="assets/js/dragons-detail-data.js" defer></script>
   <script src="assets/js/dragons.js" defer></script>
   <script src="assets/js/cast-category.js" defer></script>

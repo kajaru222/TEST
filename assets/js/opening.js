@@ -8,11 +8,26 @@
 
   if (!splash) return;
 
+  const backgroundNodes = Array.from(document.body.children).filter((node) => node !== splash);
+
+  const setBackgroundInert = (isInert) => {
+    backgroundNodes.forEach((node) => {
+      if (isInert) {
+        node.setAttribute('inert', '');
+        node.setAttribute('aria-hidden', 'true');
+      } else {
+        node.removeAttribute('inert');
+        node.removeAttribute('aria-hidden');
+      }
+    });
+  };
+
   // セッションストレージを確認（ブラウザを閉じるまで有効）
   const hasSeenOpening = sessionStorage.getItem('hasSeenOpening');
 
   // 既に見たことがある場合は即座に非表示
   if (hasSeenOpening === 'true') {
+    setBackgroundInert(false);
     splash.classList.add('is-removed');
     return;
   }
@@ -20,6 +35,7 @@
   // オープニング表示フラグを立てる
   document.body.classList.add('opening-active');
   splash.setAttribute('aria-hidden', 'false');
+  setBackgroundInert(true);
 
   // オープニングを終了する関数（yui540風パネルトランジション）
   const closeOpening = () => {
@@ -33,6 +49,7 @@
     setTimeout(() => {
       splash.classList.add('is-hidden');
       document.body.classList.remove('opening-active');
+      setBackgroundInert(false);
     }, 1200); // 0.5s delay + 0.7s duration
 
     // Step 3: パネル退場完了後に削除

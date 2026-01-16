@@ -7,6 +7,19 @@
  */
 
 const DEFAULT_RSS_URL = 'https://kohlongenn.tumblr.com/rss';
+const ALLOWED_DOMAINS = ['kohlongenn.tumblr.com', 'tumblr.com'];
+
+function isAllowedUrl(urlString) {
+  try {
+    const url = new URL(urlString);
+    // Check if hostname ends with allowed domains
+    return ALLOWED_DOMAINS.some(domain =>
+      url.hostname === domain || url.hostname.endsWith('.' + domain)
+    );
+  } catch {
+    return false;
+  }
+}
 
 function decodeHtmlEntities(str = '') {
   // Minimal decode for RSS fields.
@@ -75,6 +88,18 @@ exports.handler = async (event) => {
     const limit = Math.max(1, Math.min(20, parseInt(params.limit || '6', 10) || 6));
     const rssUrl = params.url || DEFAULT_RSS_URL;
 
+    // Validate URL against whitelist
+    if (!isAllowedUrl(rssUrl)) {
+      return {
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Cache-Control': 'no-store',
+        },
+        body: JSON.stringify({ error: 'Invalid URL' }),
+      };
+    }
+
     const res = await fetch(rssUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Netlify Function; kohlongenn)',
@@ -109,13 +134,15 @@ exports.handler = async (event) => {
       }),
     };
   } catch (e) {
+    // Log error for debugging but don't expose details to client
+    console.error('Tumblr function error:', e);
     return {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'no-store',
       },
-      body: JSON.stringify({ error: 'Unexpected error', detail: String(e) }),
+      body: JSON.stringify({ error: 'Internal server error' }),
     };
   }
 };

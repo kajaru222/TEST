@@ -7,13 +7,8 @@
   if (!root) return;
 
   const TUMBLR_BLOG = 'kohlongenn'; // Your Tumblr blog name
+  const FEED_ENDPOINT = '/.netlify/functions/tumblr';
   const POSTS_LIMIT = 12;
-
-  const escapeHtml = (str) => {
-    const div = document.createElement('div');
-    div.textContent = str ?? '';
-    return div.innerHTML;
-  };
 
   const formatDate = (pubDate) => {
     try {
@@ -52,62 +47,122 @@
     return text.substring(0, maxLength).trim() + '...';
   };
 
+  const safeUrl = (raw, { allowSubdomains = [], allowedProtocols = ['https:', 'http:'] } = {}) => {
+    if (!raw) return '';
+    try {
+      const url = new URL(raw, window.location.href);
+      if (!allowedProtocols.includes(url.protocol)) return '';
+      if (allowSubdomains.length) {
+        const host = url.hostname.toLowerCase();
+        const ok = allowSubdomains.some((d) => host === d || host.endsWith(`.${d}`));
+        if (!ok) return '';
+      }
+      return url.toString();
+    } catch {
+      return '';
+    }
+  };
+
+  const clearRoot = () => {
+    while (root.firstChild) root.removeChild(root.firstChild);
+  };
+
   const render = (items) => {
+    clearRoot();
+
     if (!items || items.length === 0) {
-      root.innerHTML = '<div class="tumblr-empty">投稿が見つかりませんでした。</div>';
+      const empty = document.createElement('div');
+      empty.className = 'tumblr-empty';
+      empty.textContent = '投稿が見つかりませんでした。';
+      root.appendChild(empty);
       return;
     }
 
-    const cards = items
-      .map((it) => {
-        const date = formatDate(it.pubDate);
-        const img = it.image
-          ? `<div class="tumblr-thumb" style="background-image:url('${it.image}')"></div>`
-          : `<div class="tumblr-thumb tumblr-thumb--empty"></div>`;
-        return `
-          <a class="tumblr-card" href="${escapeHtml(it.link)}" target="_blank" rel="noopener noreferrer">
-            ${img}
-            <div class="tumblr-body">
-              <h3 class="tumblr-title">${escapeHtml(it.title)}</h3>
-              ${date ? `<div class="tumblr-date">${escapeHtml(date)}</div>` : ''}
-              ${it.excerpt ? `<div class="tumblr-excerpt">${escapeHtml(it.excerpt)}</div>` : ''}
-            </div>
-          </a>
-        `;
-      })
-      .join('');
+    const frag = document.createDocumentFragment();
+    const allowedImageDomains = ['tumblr.com'];
+    const allowedLinkDomains = [`${TUMBLR_BLOG}.tumblr.com`, 'tumblr.com'];
 
-    root.innerHTML = cards;
+    items.forEach((it) => {
+      const date = formatDate(it.pubDate);
+      const linkUrl = safeUrl(it.link, { allowSubdomains: allowedLinkDomains });
+      const imageUrl = safeUrl(it.image, { allowSubdomains: allowedImageDomains });
+
+      const card = document.createElement('a');
+      card.className = 'tumblr-card';
+      card.href = linkUrl || '#';
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+
+      const thumb = document.createElement('div');
+      thumb.className = 'tumblr-thumb';
+      if (imageUrl) {
+        thumb.style.backgroundImage = `url("${imageUrl}")`;
+      } else {
+        thumb.classList.add('tumblr-thumb--empty');
+      }
+      card.appendChild(thumb);
+
+      const body = document.createElement('div');
+      body.className = 'tumblr-body';
+
+      const title = document.createElement('h3');
+      title.className = 'tumblr-title';
+      title.textContent = it.title || 'Untitled';
+      body.appendChild(title);
+
+      if (date) {
+        const dateEl = document.createElement('div');
+        dateEl.className = 'tumblr-date';
+        dateEl.textContent = date;
+        body.appendChild(dateEl);
+      }
+
+      if (it.excerpt) {
+        const excerpt = document.createElement('div');
+        excerpt.className = 'tumblr-excerpt';
+        excerpt.textContent = it.excerpt;
+        body.appendChild(excerpt);
+      }
+
+      card.appendChild(body);
+      frag.appendChild(card);
+    });
+
+    root.appendChild(frag);
   };
 
   const showLoading = () => {
-    root.innerHTML = '<div class="tumblr-loading">読み込み中...</div>';
+    clearRoot();
+    const loading = document.createElement('div');
+    loading.className = 'tumblr-loading';
+    loading.textContent = '読み込み中...';
+    root.appendChild(loading);
   };
 
   const showError = (message) => {
-    root.innerHTML = `<div class="tumblr-error">${escapeHtml(message)}</div>`;
+    clearRoot();
+    const error = document.createElement('div');
+    error.className = 'tumblr-error';
+    error.textContent = message || '読み込みに失敗しました。';
+    root.appendChild(error);
   };
 
   const load = async () => {
     try {
       showLoading();
 
-      // Use RSS2JSON service to convert RSS to JSON and bypass CORS
-      const rssUrl = `https://api.rss2json.com/v1/api.json?rss_url=https://${TUMBLR_BLOG}.tumblr.com/rss`;
-
-      const res = await fetch(rssUrl);
+      const res = await fetch(`${FEED_ENDPOINT}?limit=${POSTS_LIMIT}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       const data = await res.json();
 
-      if (data.status === 'ok' && data.items) {
-        // Convert RSS2JSON format to our format
-        const posts = data.items.slice(0, POSTS_LIMIT).map(item => ({
+      if (data.items) {
+        const posts = data.items.slice(0, POSTS_LIMIT).map((item) => ({
           title: item.title || 'Untitled',
           link: item.link || '#',
           pubDate: item.pubDate || '',
-          image: item.thumbnail || extractImageFromContent(item.description),
-          excerpt: createExcerpt(item.description || item.content)
+          image: item.image || extractImageFromContent(item.content || item.description),
+          excerpt: createExcerpt(item.excerpt || item.content || item.description)
         }));
 
         render(posts);

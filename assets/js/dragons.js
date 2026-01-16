@@ -22,6 +22,7 @@
     grid: $("#iconGrid"),
     detailsBtn: $("#viewDetails"),
     modal: $("#dragonModal"),
+    dialog: $(".modal-dialog"),
     modalClose: $("#modalClose"),
     modalBody: $("#modalBody"),
     modalTitle: $("#modalTitle"),
@@ -45,6 +46,41 @@
   };
 
   const setText = (el, v) => { if (el) el.textContent = (v ?? ""); };
+  const createEl = (tag, className, text) => {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text !== undefined && text !== null) el.textContent = text;
+    return el;
+  };
+  let lastModalActive = null;
+  let modalFocusCleanup = null;
+  const trapFocus = (container) => {
+    if (!container) return () => {};
+    const focusableSelector = [
+      'a[href]',
+      'button:not([disabled])',
+      'textarea:not([disabled])',
+      'input:not([disabled])',
+      'select:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])'
+    ].join(',');
+    const focusable = Array.from(container.querySelectorAll(focusableSelector));
+    if (!focusable.length) return () => {};
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const onKeydown = (e) => {
+      if (e.key !== "Tab") return;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    container.addEventListener("keydown", onKeydown);
+    return () => container.removeEventListener("keydown", onKeydown);
+  };
 
   // calculate luminance to determine if text should be light or dark
   const getLuminance = (hex) => {
@@ -170,6 +206,7 @@
 
     // lock body scroll
     document.body.style.overflow = "hidden";
+    lastModalActive = document.activeElement;
 
     await loadDetailData();
 
@@ -179,130 +216,176 @@
     els.modal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
     els.modal.style.display = "flex";
+    if (els.dialog) {
+      if (modalFocusCleanup) modalFocusCleanup();
+      modalFocusCleanup = trapFocus(els.dialog);
+      els.dialog.focus();
+    }
 
-    const esc = (s) => (s ?? "").toString().replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
     if (els.modalTitle) els.modalTitle.textContent = `${d.dragonTitle} / ${d.name}`;
     if (!els.modalBody) return;
 
-    const drinks = (detail?.drinks || []).map(x => `
-      <div class="modal-profile-item">
-        <span class="modal-profile-label">Drink: ${esc(x.name)}</span>
-        <div class="modal-profile-value" style="font-size:0.85rem; font-weight:500;">${esc(x.desc)}</div>
-      </div>
-    `).join("");
+    const body = els.modalBody;
+    body.innerHTML = "";
 
-    const prefs = (detail?.preferences || []).map(x => `
-      <div class="modal-profile-item">
-        <span class="modal-profile-label">${esc(x.label)}</span>
-        <div class="modal-profile-value">${esc(x.value)}</div>
-      </div>
-    `).join("");
+    const frag = document.createDocumentFragment();
+    const nameUpper = (d.name || "").toUpperCase();
+    const bgTextName = `${nameUpper}   ${nameUpper}   ${nameUpper}   ${nameUpper}`;
 
-    // Member Grid Generation
-    const memberGrid = dragons.map(m => `
-      <button class="modal-member-btn ${m.id === d.id ? 'is-active' : ''}" type="button" data-action="jump" data-target="${m.id}" aria-label="${m.name}">
-        <img srcset="${m.images.icon}-160w.webp 1x, ${m.images.icon}-240w.webp 2x" src="${m.images.icon}-160w.webp" alt="${m.name}" loading="lazy" />
-      </button>
-    `).join("");
+    const hero = createEl("div", "modal-hero");
+    hero.appendChild(createEl("div", "modal-hero-bg-text", `${bgTextName} ${bgTextName}`));
+    hero.appendChild(createEl("div", "modal-hero-frame"));
 
-
-    // --- Section Content Construction ---
-
-    // 1. STORY Section
-    let storyContent = "";
-    if (detail?.personality) storyContent += `<div class="modal-body-subtext" style="white-space: pre-wrap; margin-bottom: 20px; line-height: 1.8;">${esc(detail.personality)}</div>`;
-    if (detail?.setting) storyContent += `<div class="modal-section-title">LORE</div><div class="modal-story" style="margin:0 0 20px;">${esc(detail.setting)}</div>`;
-    if (detail?.masterDragon) storyContent += `<div class="modal-section-title">MASTER</div><div class="modal-story" style="margin:0 0 20px;">${esc(detail.masterDragon)}</div>`;
-
-    // 2. DRINKS Section (Moved as requested)
-    const drinksContent = drinks ? `
-      <div class="modal-section-title">ORIGINAL DRINK</div>
-      <div class="modal-profile-grid">
-        ${drinks}
-      </div>
-    ` : "";
-
-    // 3. PROFILE Section
-    const profileGridItems = `
-      <div class="modal-profile-item">
-        <span class="modal-profile-label">Birthday</span>
-        <div class="modal-profile-value">${esc(d.birthday)}</div>
-      </div>
-      <div class="modal-profile-item item-image-color">
-        <span class="modal-profile-label">Image Color</span>
-        <div class="modal-profile-value">${esc(d.imageColorName || "—")}</div>
-      </div>
-      <div class="modal-profile-item">
-        <span class="modal-profile-label">First Person</span>
-        <div class="modal-profile-value">${esc(detail?.firstPerson || "—")}</div>
-      </div>
-      ${detail?.chekiMenu ? `
-      <div class="modal-profile-item">
-        <span class="modal-profile-label">Food (Cheki Set)</span>
-        <div class="modal-profile-value">${esc(detail.chekiMenu)}</div>
-      </div>` : ""}
-      ${prefs}
-    `;
-
-    const bgTextName = `${esc(d.name).toUpperCase()}   ${esc(d.name).toUpperCase()}   ${esc(d.name).toUpperCase()}   ${esc(d.name).toUpperCase()}`;
-
-    // Sparkles Generation
-    let sparkles = "";
     for (let i = 0; i < 18; i++) {
-      const left = Math.random() * 100 + "%";
-      const top = Math.random() * 90 + 5 + "%";
-      const delay = Math.random() * 4 + "s";
-      const duration = (Math.random() * 3 + 3) + "s";
-      const size = (Math.random() * 5 + 2) + "px";
-      sparkles += `<div class="sparkle" style="left:${left}; top:${top}; width:${size}; height:${size}; animation-delay:${delay}; animation-duration:${duration};"></div>`;
+      const sparkle = createEl("div", "sparkle");
+      sparkle.style.left = `${Math.random() * 100}%`;
+      sparkle.style.top = `${Math.random() * 90 + 5}%`;
+      sparkle.style.width = `${Math.random() * 5 + 2}px`;
+      sparkle.style.height = sparkle.style.width;
+      sparkle.style.animationDelay = `${Math.random() * 4}s`;
+      sparkle.style.animationDuration = `${Math.random() * 3 + 3}s`;
+      hero.appendChild(sparkle);
     }
 
-    // Construct Full HTML
-    const hero = `
-      <div class="modal-hero">
-        <div class="modal-hero-bg-text">${bgTextName} ${bgTextName}</div>
-        <div class="modal-hero-frame"></div>
-        ${sparkles}
-        ${d.oneLiner ? `<div class="modal-hero-catch-vertical">${esc(d.oneLiner)}</div>` : ""}
-        ${d.images?.portrait ? `<img srcset="${esc(d.images.portrait)}-480w.webp 480w, ${esc(d.images.portrait)}-800w.webp 800w" sizes="(max-width: 768px) 480px, 800px" src="${esc(d.images.portrait)}-800w.webp" alt="${esc(d.name)} portrait" loading="lazy" decoding="async" />` : ""}
-        <div class="modal-hero-text">
-          <div class="modal-hero-jp">${esc(d.dragonTitle)}${d.imageColorName ? ` / <span style="font-size:0.9em;">${esc(d.imageColorName)}</span>` : ""}</div>
-          <div class="modal-hero-name">${esc(d.name)}</div>
-          ${d.tag ? `<div class="modal-hero-tag">${esc(d.tag)}</div>` : ""}
-        </div>
-      </div>
-    `;
+    if (d.oneLiner) {
+      hero.appendChild(createEl("div", "modal-hero-catch-vertical", d.oneLiner));
+    }
 
-    els.modalBody.innerHTML = `
-      ${hero}
-      
-      <div class="modal-section-wrapper">
-        
-        <div class="modal-section-title">STORY</div>
-        ${storyContent}
+    if (d.images?.portrait) {
+      const portrait = createEl("img");
+      portrait.srcset = `${d.images.portrait}-480w.webp 480w, ${d.images.portrait}-800w.webp 800w`;
+      portrait.sizes = "(max-width: 768px) 480px, 800px";
+      portrait.src = `${d.images.portrait}-800w.webp`;
+      portrait.alt = `${d.name || ""} portrait`;
+      portrait.loading = "lazy";
+      portrait.decoding = "async";
+      hero.appendChild(portrait);
+    }
 
-        ${drinksContent}
+    const heroText = createEl("div", "modal-hero-text");
+    const heroJp = createEl("div", "modal-hero-jp");
+    if (d.dragonTitle) heroJp.appendChild(document.createTextNode(d.dragonTitle));
+    if (d.imageColorName) {
+      heroJp.appendChild(document.createTextNode(" / "));
+      const color = createEl("span", null, d.imageColorName);
+      color.style.fontSize = "0.9em";
+      heroJp.appendChild(color);
+    }
+    heroText.appendChild(heroJp);
+    heroText.appendChild(createEl("div", "modal-hero-name", d.name || ""));
+    if (d.tag) {
+      heroText.appendChild(createEl("div", "modal-hero-tag", d.tag));
+    }
+    hero.appendChild(heroText);
 
-        <div class="modal-section-title">PROFILE</div>
-        <div class="modal-profile-grid">
-          ${profileGridItems}
-        </div>
-        ${d.images?.id_card ? `<div class="modal-id-card"><img srcset="${esc(d.images.id_card)}-400w.webp 400w, ${esc(d.images.id_card)}-600w.webp 600w" sizes="(max-width: 768px) 400px, 600px" src="${esc(d.images.id_card)}-600w.webp" alt="${esc(d.name)} ID Card" loading="lazy" decoding="async" /></div>` : ""}
+    frag.appendChild(hero);
 
-        <div class="modal-section-title">MEMBER</div>
-        <div class="modal-member-grid">
-          ${memberGrid}
-        </div>
+    const wrapper = createEl("div", "modal-section-wrapper");
+    wrapper.appendChild(createEl("div", "modal-section-title", "STORY"));
 
-      </div>
+    if (detail?.personality) {
+      const subtext = createEl("div", "modal-body-subtext", detail.personality);
+      subtext.style.whiteSpace = "pre-wrap";
+      subtext.style.marginBottom = "20px";
+      subtext.style.lineHeight = "1.8";
+      wrapper.appendChild(subtext);
+    }
+    if (detail?.setting) {
+      wrapper.appendChild(createEl("div", "modal-section-title", "LORE"));
+      const lore = createEl("div", "modal-story", detail.setting);
+      lore.style.margin = "0 0 20px";
+      wrapper.appendChild(lore);
+    }
+    if (detail?.masterDragon) {
+      wrapper.appendChild(createEl("div", "modal-section-title", "MASTER"));
+      const master = createEl("div", "modal-story", detail.masterDragon);
+      master.style.margin = "0 0 20px";
+      wrapper.appendChild(master);
+    }
 
-      <div class="modal-footer">
-        <button class="modal-navbtn" type="button" data-action="prev">PREV</button>
-        <button class="modal-navbtn" type="button" data-action="next">NEXT</button>
-      </div>
-    `;
+    const drinks = detail?.drinks || [];
+    if (drinks.length) {
+      wrapper.appendChild(createEl("div", "modal-section-title", "ORIGINAL DRINK"));
+      const drinksGrid = createEl("div", "modal-profile-grid");
+      drinks.forEach((x) => {
+        const item = createEl("div", "modal-profile-item");
+        const label = createEl("span", "modal-profile-label", `Drink: ${x.name || ""}`);
+        const value = createEl("div", "modal-profile-value", x.desc || "");
+        value.style.fontSize = "0.85rem";
+        value.style.fontWeight = "500";
+        item.append(label, value);
+        drinksGrid.appendChild(item);
+      });
+      wrapper.appendChild(drinksGrid);
+    }
 
+    wrapper.appendChild(createEl("div", "modal-section-title", "PROFILE"));
+    const profileGrid = createEl("div", "modal-profile-grid");
+    const addProfileItem = (label, value, extraClass) => {
+      const item = createEl("div", `modal-profile-item${extraClass ? ` ${extraClass}` : ""}`);
+      item.appendChild(createEl("span", "modal-profile-label", label));
+      item.appendChild(createEl("div", "modal-profile-value", value));
+      profileGrid.appendChild(item);
+    };
+    addProfileItem("Birthday", d.birthday || "");
+    addProfileItem("Image Color", d.imageColorName || "?", "item-image-color");
+    addProfileItem("First Person", detail?.firstPerson || "?");
+    if (detail?.chekiMenu) {
+      addProfileItem("Food (Cheki Set)", detail.chekiMenu);
+    }
+    (detail?.preferences || []).forEach((x) => {
+      addProfileItem(x.label || "", x.value || "");
+    });
+    wrapper.appendChild(profileGrid);
+
+    if (d.images?.id_card) {
+      const idCard = createEl("div", "modal-id-card");
+      const idImg = createEl("img");
+      idImg.srcset = `${d.images.id_card}-400w.webp 400w, ${d.images.id_card}-600w.webp 600w`;
+      idImg.sizes = "(max-width: 768px) 400px, 600px";
+      idImg.src = `${d.images.id_card}-600w.webp`;
+      idImg.alt = `${d.name || ""} ID Card`;
+      idImg.loading = "lazy";
+      idImg.decoding = "async";
+      idCard.appendChild(idImg);
+      wrapper.appendChild(idCard);
+    }
+
+    wrapper.appendChild(createEl("div", "modal-section-title", "MEMBER"));
+    const memberGrid = createEl("div", "modal-member-grid");
+    dragons.forEach((m) => {
+      const btn = createEl(
+        "button",
+        `modal-member-btn${m.id === d.id ? " is-active" : ""}`
+      );
+      btn.type = "button";
+      btn.dataset.action = "jump";
+      btn.dataset.target = m.id;
+      if (m.name) btn.setAttribute("aria-label", m.name);
+      const img = createEl("img");
+      img.srcset = `${m.images.icon}-160w.webp 1x, ${m.images.icon}-240w.webp 2x`;
+      img.src = `${m.images.icon}-160w.webp`;
+      img.alt = m.name || "";
+      img.loading = "lazy";
+      btn.appendChild(img);
+      memberGrid.appendChild(btn);
+    });
+    wrapper.appendChild(memberGrid);
+
+    frag.appendChild(wrapper);
+
+    const footer = createEl("div", "modal-footer");
+    const prevBtn = createEl("button", "modal-navbtn", "PREV");
+    prevBtn.type = "button";
+    prevBtn.dataset.action = "prev";
+    const nextBtn = createEl("button", "modal-navbtn", "NEXT");
+    nextBtn.type = "button";
+    nextBtn.dataset.action = "next";
+    footer.append(prevBtn, nextBtn);
+    frag.appendChild(footer);
+
+    body.appendChild(frag);
     // reset scroll position to top
     if (els.modalBody) els.modalBody.scrollTop = 0;
 
@@ -341,10 +424,18 @@
 
       document.body.classList.remove("modal-open");
       document.body.style.overflow = "";
+
+      if (modalFocusCleanup) {
+        modalFocusCleanup();
+        modalFocusCleanup = null;
+      }
+      if (lastModalActive && typeof lastModalActive.focus === "function") {
+        lastModalActive.focus();
+      }
     }, { once: true });
 
     // sync URL hash
-    history.replaceState(null, "", " ");
+    history.replaceState(null, "", `${location.pathname}${location.search}`);
   }
 
   // --- thumbnails
@@ -385,7 +476,9 @@
       // Foreground Japanese Title/Name
       const jpName = document.createElement("div");
       jpName.className = "card-jp-name";
-      jpName.innerHTML = `<span class="card-jp-title">${d.dragonTitle}</span>${d.name}`;
+      const jpTitle = createEl("span", "card-jp-title", d.dragonTitle || "");
+      jpName.appendChild(jpTitle);
+      jpName.appendChild(document.createTextNode(d.name || ""));
       // Note: d.name might be English, d.dragonTitle is "黒龍". 
       // User might want English name in background, Japanese in foreground.
       // Actually d.name is "Liuu Qalli".

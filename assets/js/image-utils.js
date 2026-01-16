@@ -74,6 +74,16 @@ window.ImageUtils = {
 
     // Set fallback src
     img.src = this.toWebP(cleanBase, defaultSize || sizes[sizes.length - 1]);
+
+    // Add error handler for image load failures
+    if (!img.onerror) {
+      img.onerror = function() {
+        console.warn('Failed to load image:', this.src);
+        // Optionally set a placeholder or hide the image
+        this.style.opacity = '0.3';
+        this.alt = this.alt || '画像の読み込みに失敗しました';
+      };
+    }
   },
 
   /**
@@ -83,16 +93,24 @@ window.ImageUtils = {
    * @param {string} [media] - Optional media query for responsive preload
    */
   preloadImage(basePath, size, media) {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = this.toWebP(basePath, size);
+    try {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = this.toWebP(basePath, size);
 
-    if (media) {
-      link.media = media;
+      if (media) {
+        link.media = media;
+      }
+
+      link.onerror = () => {
+        console.warn('Failed to preload image:', link.href);
+      };
+
+      document.head.appendChild(link);
+    } catch (error) {
+      console.warn('Error setting up image preload:', error);
     }
-
-    document.head.appendChild(link);
   },
 
   /**

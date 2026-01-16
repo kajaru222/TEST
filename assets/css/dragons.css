@@ -1141,6 +1141,7 @@ body.modal-open {
   border: none;
   color: #fff;
   padding: 14px 18px;
+  min-height: 44px;
   border-radius: 8px;
   font-weight: 700;
   font-size: 0.85rem;

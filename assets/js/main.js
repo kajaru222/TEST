@@ -72,8 +72,13 @@
   window.addEventListener('load', () => setHeaderHeightVar(), { passive: true });
 
   if ('ResizeObserver' in window && header) {
-    const ro = new ResizeObserver(() => setHeaderHeightVar());
-    ro.observe(header);
+    try {
+      const ro = new ResizeObserver(() => setHeaderHeightVar());
+      ro.observe(header);
+    } catch (error) {
+      // ResizeObserver failed, relying on resize/orientationchange events
+      console.warn('ResizeObserver initialization failed:', error);
+    }
   }
 
   window.addEventListener('resize', () => setHeaderHeightVar(), { passive: true });
