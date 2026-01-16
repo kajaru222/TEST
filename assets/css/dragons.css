@@ -1462,3 +1462,42 @@ body.modal-open {
     padding: 7px 12px;
   }
 }
+
+/* Fix for overlapping text on mobile */
+@media (max-width: 768px) {
+  .modal-hero-name {
+    font-size: 2rem;
+  }
+
+  .modal-hero-text {
+    bottom: 20px;
+    right: 16px;
+  }
+
+  /* Ensure vertical text doesn't overlap */
+  .modal-hero-catch-vertical {
+    top: 10%;
+    left: 16px;
+    font-size: 1.1rem;
+    padding: 16px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-hero-name {
+    font-size: 1.75rem;
+    /* Smaller for very small screens */
+  }
+
+  .modal-hero-jp {
+    font-size: 0.85rem;
+  }
+
+  .modal-hero-catch-vertical {
+    top: 8%;
+    left: 12px;
+    font-size: 1rem;
+    padding: 12px 6px;
+    letter-spacing: 0.1em;
+  }
+}

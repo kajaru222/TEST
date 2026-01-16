@@ -148,7 +148,7 @@ img {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 50;
+  z-index: 1000;
   background: linear-gradient(90deg,
       rgba(42, 14, 18, .96) 0%,
       rgba(201, 53, 69, .92) 50%,
