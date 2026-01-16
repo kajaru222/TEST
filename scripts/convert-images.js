@@ -15,6 +15,14 @@ const config = {
   },
   backgrounds: [
     {
+      input: 'assets/img/hero.jpg',
+      outputs: [
+        { width: 480, quality: 85 },
+        { width: 1024, quality: 85 },
+        { width: 1920, quality: 85 }
+      ]
+    },
+    {
       input: 'assets/img/concept.png',
       outputs: [
         { width: 480, quality: 85 },
