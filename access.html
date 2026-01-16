@@ -12,6 +12,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- image utilities -->
+  <script src="assets/js/image-utils.js"></script>
+
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/animations.css" />
   <title>アクセス | 煌龍園</title>
@@ -23,7 +26,12 @@
   <header class="site-header" id="top">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="煌龍園 トップへ">
-        <img src="assets/img/logo.png" alt="煌龍園 ロゴ" width="44" height="44" />
+        <img
+          srcset="assets/img/logo-88w.webp 1x, assets/img/logo-180w.webp 2x"
+          src="assets/img/logo-88w.webp"
+          alt="煌龍園 ロゴ"
+          width="44"
+          height="44" />
       </a>
 
       <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false">
@@ -71,14 +79,18 @@
           </div>
 
           <div class="split-media">
-            <img
-              src="assets/img/access-map-placeholder.jpg"
-              alt="煌龍園へのアクセスマップ"
-              loading="lazy"
-              decoding="async"
-              fetchpriority="low"
-              style="width: 100%; height: auto; border-radius: 8px; background: #e5e7eb; min-height: 300px; object-fit: cover; content-visibility: auto;"
-            />
+            <picture>
+              <source media="(max-width: 768px)" srcset="assets/img/access-map-placeholder-480w.webp" />
+              <source media="(min-width: 769px)" srcset="assets/img/access-map-placeholder-1024w.webp" />
+              <img
+                src="assets/img/access-map-placeholder-1024w.webp"
+                alt="煌龍園へのアクセスマップ"
+                loading="lazy"
+                decoding="async"
+                fetchpriority="low"
+                style="width: 100%; height: auto; border-radius: 8px; background: #e5e7eb; min-height: 300px; object-fit: cover; content-visibility: auto;"
+              />
+            </picture>
           </div>
         </div>
       </div>

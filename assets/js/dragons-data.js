@@ -13,10 +13,10 @@ window.DRAGONS = [
       "sub": "#BAC8C6"
     },
     "images": {
-      "portrait": "assets/img/dragons/liuu_full.png",
-      "icon": "assets/img/dragons/liuu_icon.jpg",
-      "flower": "assets/img/flowers/liuu_flower.png",
-      "id_card": "assets/img/cards/liuu_card.png"
+      "portrait": "assets/img/dragons/liuu_full",
+      "icon": "assets/img/dragons/liuu_icon",
+      "flower": "assets/img/flowers/liuu_flower",
+      "id_card": "assets/img/cards/liuu_card"
     }
   },
   {
@@ -33,10 +33,10 @@ window.DRAGONS = [
       "sub": "#CED7DC"
     },
     "images": {
-      "portrait": "assets/img/dragons/lyco_full.png",
-      "icon": "assets/img/dragons/lyco_icon.jpg",
-      "flower": "assets/img/flowers/lyco_flower.png",
-      "id_card": "assets/img/cards/lyco_card.png"
+      "portrait": "assets/img/dragons/lyco_full",
+      "icon": "assets/img/dragons/lyco_icon",
+      "flower": "assets/img/flowers/lyco_flower",
+      "id_card": "assets/img/cards/lyco_card"
     }
   },
   {
@@ -53,10 +53,10 @@ window.DRAGONS = [
       "sub": "#005E55"
     },
     "images": {
-      "portrait": "assets/img/dragons/hicolili_full.png",
-      "icon": "assets/img/dragons/hicolili_icon.jpg",
-      "flower": "assets/img/flowers/hicolili_flower.png",
-      "id_card": "assets/img/cards/hicolili_card.png"
+      "portrait": "assets/img/dragons/hicolili_full",
+      "icon": "assets/img/dragons/hicolili_icon",
+      "flower": "assets/img/flowers/hicolili_flower",
+      "id_card": "assets/img/cards/hicolili_card"
     }
   },
   {
@@ -73,10 +73,10 @@ window.DRAGONS = [
       "sub": "#BE977C"
     },
     "images": {
-      "portrait": "assets/img/dragons/lis_full.png",
-      "icon": "assets/img/dragons/lis_icon.jpg",
-      "flower": "assets/img/flowers/lis_flower.png",
-      "id_card": "assets/img/cards/lis_card.jpg"
+      "portrait": "assets/img/dragons/lis_full",
+      "icon": "assets/img/dragons/lis_icon",
+      "flower": "assets/img/flowers/lis_flower",
+      "id_card": "assets/img/cards/lis_card"
     }
   },
   {
@@ -93,10 +93,10 @@ window.DRAGONS = [
       "sub": "#6E6192"
     },
     "images": {
-      "portrait": "assets/img/dragons/sulia_full.png",
-      "icon": "assets/img/dragons/sulia_icon.jpg",
-      "flower": "assets/img/flowers/sulia_flower.png",
-      "id_card": "assets/img/cards/sulia_card.jpg"
+      "portrait": "assets/img/dragons/sulia_full",
+      "icon": "assets/img/dragons/sulia_icon",
+      "flower": "assets/img/flowers/sulia_flower",
+      "id_card": "assets/img/cards/sulia_card"
     }
   },
   {
@@ -113,10 +113,10 @@ window.DRAGONS = [
       "sub": "#F5FBEF"
     },
     "images": {
-      "portrait": "assets/img/dragons/xuemei_full.png",
-      "icon": "assets/img/dragons/xuemei_icon.jpg",
-      "flower": "assets/img/flowers/xuemei_flower.png",
-      "id_card": "assets/img/cards/xuemei_card.jpg"
+      "portrait": "assets/img/dragons/xuemei_full",
+      "icon": "assets/img/dragons/xuemei_icon",
+      "flower": "assets/img/flowers/xuemei_flower",
+      "id_card": "assets/img/cards/xuemei_card"
     }
   },
   {
@@ -133,10 +133,10 @@ window.DRAGONS = [
       "sub": "#f2eeec"
     },
     "images": {
-      "portrait": "assets/img/dragons/native_full.png",
-      "icon": "assets/img/dragons/native_icon.png",
-      "flower": "assets/img/flowers/native_flower.png",
-      "id_card": "assets/img/cards/native_card.png"
+      "portrait": "assets/img/dragons/native_full",
+      "icon": "assets/img/dragons/native_icon",
+      "flower": "assets/img/flowers/native_flower",
+      "id_card": "assets/img/cards/native_card"
     }
   },
   {
@@ -153,10 +153,10 @@ window.DRAGONS = [
       "sub": "#70ACCE"
     },
     "images": {
-      "portrait": "assets/img/dragons/blu-ronron_full.png",
-      "icon": "assets/img/dragons/blu-ronron_icon.png",
-      "flower": "assets/img/flowers/blu-ronron_flower.png",
-      "id_card": "assets/img/cards/blu-ronron_card.png"
+      "portrait": "assets/img/dragons/blu-ronron_full",
+      "icon": "assets/img/dragons/blu-ronron_icon",
+      "flower": "assets/img/flowers/blu-ronron_flower",
+      "id_card": "assets/img/cards/blu-ronron_card"
     }
   },
   {
@@ -173,10 +173,10 @@ window.DRAGONS = [
       "sub": "#EE869A"
     },
     "images": {
-      "portrait": "assets/img/dragons/pnk-ronron_full.png",
-      "icon": "assets/img/dragons/pnk-ronron_icon.png",
-      "flower": "assets/img/flowers/pnk-ronron_flower.png",
-      "id_card": "assets/img/cards/pnk-ronron_card.png"
+      "portrait": "assets/img/dragons/pnk-ronron_full",
+      "icon": "assets/img/dragons/pnk-ronron_icon",
+      "flower": "assets/img/flowers/pnk-ronron_flower",
+      "id_card": "assets/img/cards/pnk-ronron_card"
     }
   },
   {
@@ -193,10 +193,10 @@ window.DRAGONS = [
       "sub": "#e9dabf"
     },
     "images": {
-      "portrait": "assets/img/dragons/red-ronron_full.png",
-      "icon": "assets/img/dragons/red-ronron_icon.png",
-      "flower": "assets/img/flowers/red-ronron_flower.png",
-      "id_card": "assets/img/cards/red-ronron_card.png"
+      "portrait": "assets/img/dragons/red-ronron_full",
+      "icon": "assets/img/dragons/red-ronron_icon",
+      "flower": "assets/img/flowers/red-ronron_flower",
+      "id_card": "assets/img/cards/red-ronron_card"
     }
   }
 ];

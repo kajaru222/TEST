@@ -16,12 +16,9 @@
   };
 
   const pickCandidates = (id) => ([
-    `assets/img/cards/${id}_card.png`,
-    `assets/img/cards/${id}_card.jpg`,
-    `assets/img/dragons/${id}_icon.png`,
-    `assets/img/dragons/${id}_icon.jpg`,
-    `assets/img/dragons/${id}_full.png`,
-    `assets/img/dragons/${id}_full.jpg`,
+    `assets/img/cards/${id}_card-400w.webp`,
+    `assets/img/dragons/${id}_icon-160w.webp`,
+    `assets/img/dragons/${id}_full-480w.webp`,
   ]);
 
   const buildCard = (d) => {
@@ -61,6 +58,10 @@
       img.alt = d.dragonTitle || d.name || id;
       img.loading = "lazy";
       img.decoding = "async";
+
+      // Set responsive images with srcset
+      img.srcset = `assets/img/cards/${id}_card-400w.webp 400w, assets/img/cards/${id}_card-600w.webp 600w`;
+      img.sizes = "(max-width: 768px) 400px, 600px";
 
       const cands = pickCandidates(id);
       let idx = 0;

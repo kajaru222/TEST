@@ -14,9 +14,12 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <!-- Preload first dragon images -->
-  <link rel="preload" as="image" href="assets/img/dragons/liuu_full.png" />
-  <link rel="preload" as="image" href="assets/img/dragons/liuu_icon.jpg" />
+  <!-- Preload first dragon images (WebP) -->
+  <link rel="preload" as="image" href="assets/img/dragons/liuu_full-800w.webp" />
+  <link rel="preload" as="image" href="assets/img/dragons/liuu_icon-160w.webp" />
+
+  <!-- image utilities -->
+  <script src="assets/js/image-utils.js"></script>
 
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/dragons.css" />
@@ -31,7 +34,12 @@
   <header class="site-header" id="top">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="煌龍園 トップへ">
-        <img src="assets/img/logo.png" alt="煌龍園 ロゴ" width="44" height="44" />
+        <img
+          srcset="assets/img/logo-88w.webp 1x, assets/img/logo-180w.webp 2x"
+          src="assets/img/logo-88w.webp"
+          alt="煌龍園 ロゴ"
+          width="44"
+          height="44" />
       </a>
 
       <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false">

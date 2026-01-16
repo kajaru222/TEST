@@ -128,16 +128,22 @@
       img.loading = "eager";
       img.decoding = "async";
       img.onload = () => {
-        els.portrait.src = d.images.portrait;
+        // Set responsive WebP images with srcset
+        els.portrait.srcset = `${d.images.portrait}-480w.webp 480w, ${d.images.portrait}-800w.webp 800w`;
+        els.portrait.sizes = '(max-width: 768px) 480px, 800px';
+        els.portrait.src = `${d.images.portrait}-800w.webp`;
         els.portrait.alt = `${d.dragonTitle} ${d.name} 立ち絵`;
         els.portrait.loading = "eager";
         els.portrait.decoding = "async";
       };
-      img.src = d.images.portrait;
+      img.src = `${d.images.portrait}-800w.webp`;
     }
     if (els.flower) {
       if (d.images.flower) {
-        els.flower.src = d.images.flower;
+        // Set responsive WebP images with srcset
+        els.flower.srcset = `${d.images.flower}-320w.webp 320w, ${d.images.flower}-640w.webp 640w`;
+        els.flower.sizes = '(max-width: 768px) 320px, 640px';
+        els.flower.src = `${d.images.flower}-640w.webp`;
         els.flower.loading = "lazy";
         els.flower.decoding = "async";
         els.flower.classList.remove("is-hidden");
@@ -196,7 +202,7 @@
     // Member Grid Generation
     const memberGrid = dragons.map(m => `
       <button class="modal-member-btn ${m.id === d.id ? 'is-active' : ''}" type="button" data-action="jump" data-target="${m.id}" aria-label="${m.name}">
-        <img src="${m.images.icon}" alt="${m.name}" loading="lazy" />
+        <img srcset="${m.images.icon}-160w.webp 1x, ${m.images.icon}-240w.webp 2x" src="${m.images.icon}-160w.webp" alt="${m.name}" loading="lazy" />
       </button>
     `).join("");
 
@@ -259,7 +265,7 @@
         <div class="modal-hero-frame"></div>
         ${sparkles}
         ${d.oneLiner ? `<div class="modal-hero-catch-vertical">${esc(d.oneLiner)}</div>` : ""}
-        ${d.images?.portrait ? `<img src="${esc(d.images.portrait)}" alt="${esc(d.name)} portrait" loading="lazy" decoding="async" />` : ""}
+        ${d.images?.portrait ? `<img srcset="${esc(d.images.portrait)}-480w.webp 480w, ${esc(d.images.portrait)}-800w.webp 800w" sizes="(max-width: 768px) 480px, 800px" src="${esc(d.images.portrait)}-800w.webp" alt="${esc(d.name)} portrait" loading="lazy" decoding="async" />` : ""}
         <div class="modal-hero-text">
           <div class="modal-hero-jp">${esc(d.dragonTitle)}${d.imageColorName ? ` / <span style="font-size:0.9em;">${esc(d.imageColorName)}</span>` : ""}</div>
           <div class="modal-hero-name">${esc(d.name)}</div>
@@ -282,7 +288,7 @@
         <div class="modal-profile-grid">
           ${profileGridItems}
         </div>
-        ${d.images?.id_card ? `<div class="modal-id-card"><img src="${esc(d.images.id_card)}" alt="${esc(d.name)} ID Card" loading="lazy" decoding="async" /></div>` : ""}
+        ${d.images?.id_card ? `<div class="modal-id-card"><img srcset="${esc(d.images.id_card)}-400w.webp 400w, ${esc(d.images.id_card)}-600w.webp 600w" sizes="(max-width: 768px) 400px, 600px" src="${esc(d.images.id_card)}-600w.webp" alt="${esc(d.name)} ID Card" loading="lazy" decoding="async" /></div>` : ""}
 
         <div class="modal-section-title">MEMBER</div>
         <div class="modal-member-grid">
@@ -363,7 +369,9 @@
       img.loading = "lazy";
       img.decoding = "async";
       img.alt = "";
-      img.src = d.images.icon;
+      // Set responsive WebP images with srcset
+      img.srcset = `${d.images.icon}-160w.webp 1x, ${d.images.icon}-240w.webp 2x`;
+      img.src = `${d.images.icon}-160w.webp`;
 
       // 2. Mobile Card Content (new)
       const cardDiv = document.createElement("div");
@@ -391,7 +399,9 @@
       portrait.className = "card-portrait";
       portrait.loading = "lazy";
       portrait.decoding = "async";
-      portrait.src = d.images.portrait;
+      // Set responsive WebP images
+      portrait.srcset = `${d.images.portrait}-480w.webp`;
+      portrait.src = `${d.images.portrait}-480w.webp`;
       portrait.alt = "";
 
       cardDiv.appendChild(enName);

@@ -1388,17 +1388,59 @@ body {
       rgba(26, 15, 15, 0.7) 100%);
 }
 
-/* Cast panel: force background image + overlay gradient */
+/* Concept panel: responsive WebP background images */
+#concept .panel-bg-image {
+  background-image: url('../img/concept-480w.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 769px) {
+  #concept .panel-bg-image {
+    background-image: url('../img/concept-1024w.webp');
+  }
+}
+
+@media (min-width: 1441px) {
+  #concept .panel-bg-image {
+    background-image: url('../img/concept-1920w.webp');
+  }
+}
+
+/* Cast panel: responsive WebP background images + overlay gradient */
 .page-top .panel-cast.panel-combined {
   background-image:
     linear-gradient(180deg,
       rgba(11, 11, 13, 0.45) 0%,
       rgba(26, 15, 15, 0.5) 55%,
       rgba(11, 11, 13, 0.45) 100%),
-    url("../img/cast.jpg");
+    url("../img/cast-480w.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+@media (min-width: 769px) {
+  .page-top .panel-cast.panel-combined {
+    background-image:
+      linear-gradient(180deg,
+        rgba(11, 11, 13, 0.45) 0%,
+        rgba(26, 15, 15, 0.5) 55%,
+        rgba(11, 11, 13, 0.45) 100%),
+      url("../img/cast-1024w.webp");
+  }
+}
+
+@media (min-width: 1441px) {
+  .page-top .panel-cast.panel-combined {
+    background-image:
+      linear-gradient(180deg,
+        rgba(11, 11, 13, 0.45) 0%,
+        rgba(26, 15, 15, 0.5) 55%,
+        rgba(11, 11, 13, 0.45) 100%),
+      url("../img/cast-1920w.webp");
+  }
 }
 
 /* Cast intro - 完全中央配置 */

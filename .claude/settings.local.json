@@ -5,7 +5,13 @@
       "Bash(python:*)",
       "Bash(grep:*)",
       "Bash(ls:*)",
-      "Bash(where:*)"
+      "Bash(where:*)",
+      "Bash(find:*)",
+      "Bash(du:*)",
+      "Bash(npm --version:*)",
+      "Bash(test:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   },
   "spinnerTipsEnabled": false
