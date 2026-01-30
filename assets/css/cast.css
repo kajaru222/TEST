@@ -11,30 +11,34 @@
   --accent-h: 11px;
 }
 
-/* Full viewport layout */
+/* Full viewport layout - MODIFIED for standard scroll */
 body,
 html {
   margin: 0;
   padding: 0;
-  height: 100vh;
-  overflow: hidden;
+  height: auto;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
 }
 
-/* Fixed header */
+/* Fixed header - Keep fixed? Or standard? keeping relative for flow */
 .site-header {
   flex-shrink: 0;
   position: relative;
   z-index: 1000;
 }
 
-/* Fixed footer */
+/* Fixed footer - REMOVED FIXED POSITIONING in logic (standard flow) */
 .site-footer {
   flex-shrink: 0;
   position: relative;
   z-index: 100;
   background: var(--page-bg, #8b3330);
+  margin-top: auto;
+  /* Pushes footer to bottom if content is short */
 }
 
 /* Page background */
@@ -43,9 +47,12 @@ html {
   background-attachment: fixed;
   flex: 1;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  /* Changed from hidden */
   display: flex;
   flex-direction: column;
+  height: auto;
+  min-height: 100%;
 }
 
 .dragons-page::before {
@@ -69,7 +76,9 @@ html {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
+  /* Changed from hidden */
+  height: auto;
 }
 
 .dragons-stage {
