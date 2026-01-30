@@ -55,7 +55,7 @@
   let lastModalActive = null;
   let modalFocusCleanup = null;
   const trapFocus = (container) => {
-    if (!container) return () => {};
+    if (!container) return () => { };
     const focusableSelector = [
       'a[href]',
       'button:not([disabled])',
@@ -65,7 +65,7 @@
       '[tabindex]:not([tabindex="-1"])'
     ].join(',');
     const focusable = Array.from(container.querySelectorAll(focusableSelector));
-    if (!focusable.length) return () => {};
+    if (!focusable.length) return () => { };
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
     const onKeydown = (e) => {
@@ -153,7 +153,10 @@
     setText(els.title, d.dragonTitle);
     setText(els.name, d.name);
     setText(els.tag, d.tag);
-    setText(els.oneLiner, d.oneLiner);
+    if (els.oneLiner) {
+      setText(els.oneLiner, d.oneLiner);
+      els.oneLiner.style.display = d.oneLiner ? "" : "none";
+    }
     setText(els.birthday, d.birthday);
 
     setText(els.colorName, d.imageColorName || "—");
@@ -665,6 +668,15 @@
   const initId = raw ? decodeURIComponent(raw) : dragons[0].id;
   animateSwitch(initId, { instant: true });
 
+  // スマホで、かつURLハッシュがある場合はモーダルも自動で開く
+  if (isMobileView() && raw) {
+    const initDragon = byId.get(initId);
+    if (initDragon) {
+      // 描画安定後に開くため少しだけ待つ
+      setTimeout(() => openModal(initDragon), 150);
+    }
+  }
+
   window.addEventListener("hashchange", byHash);
 
   // modal events
@@ -717,4 +729,31 @@
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeModal();
   });
+
+  // --- Background Preloading ---
+  // ページ読み込み完了後に、残りのキャラクター画像（立ち絵・花）を裏側で読み込んでおく処理
+  // これにより、キャラクター切り替え時の待ち時間を短縮します
+  const runBackgroundPreload = () => {
+    const urls = [];
+    dragons.forEach(d => {
+      // パネルで使用する高解像度画像をプリロード
+      if (d.images?.portrait) urls.push(`${d.images.portrait}-800w.webp`);
+      if (d.images?.flower) urls.push(`${d.images.flower}-640w.webp`);
+    });
+
+    // 現在表示しているキャラは既にロードされているはずなので、
+    // まだキャッシュされていないものを拾う形になりますが、
+    // 重複していてもブラウザが処理してくれるため単純に投げます。
+    // 負荷分散のため、timeoutは長めに設定。
+    preloadImages(urls, 5000);
+    console.log("Background preloading started for", urls.length, "images.");
+  };
+
+  // メインの処理を邪魔しないよう、初期ロード完了から少し遅らせて実行
+  if (document.readyState === 'complete') {
+    setTimeout(runBackgroundPreload, 3000);
+  } else {
+    window.addEventListener('load', () => setTimeout(runBackgroundPreload, 3000));
+  }
+
 })();

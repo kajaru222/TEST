@@ -18,7 +18,7 @@
  *       基本的にクラス付与のみ行い、実際のアニメーションはCSSで定義する
  */
 
-(function() {
+(function () {
   'use strict';
 
   // Section Navigation State Management
@@ -36,7 +36,17 @@
   function updateActiveSection() {
     const panels = getPanels();
     const navItems = document.querySelectorAll('.section-nav-item');
-    const scrollPosition = scrollContainer ? scrollContainer.scrollTop : window.pageYOffset;
+
+    // On mobile (<= 768px), we unwrapped the scroll container, so we use window scroll
+    // On desktop, we might still be using main as scroll container if snap is active
+    let scrollPosition = 0;
+
+    if (window.innerWidth <= 768) {
+      scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    } else {
+      scrollPosition = scrollContainer ? scrollContainer.scrollTop : window.pageYOffset;
+    }
+
     const viewportCenter = scrollPosition + window.innerHeight / 2;
 
     let activePanel = null;
@@ -112,7 +122,10 @@
   }
 
   // Handle wheel scroll - 一気にスクロール
+  // Handle wheel scroll - 一気にスクロール
   function handleWheelScroll(e) {
+    if (window.innerWidth <= 768) return;
+
     if (isScrolling) {
       e.preventDefault();
       return;
@@ -135,11 +148,12 @@
 
   // Handle keyboard navigation
   function handleKeyDown(e) {
+    if (window.innerWidth <= 768) return;
     if (isScrolling) return;
 
     const panels = getPanels();
 
-    switch(e.key) {
+    switch (e.key) {
       case 'ArrowDown':
       case 'PageDown':
         if (currentSectionIndex < panels.length - 1) {
@@ -272,6 +286,7 @@
     }, { passive: true });
 
     function handleTouchScroll() {
+      if (window.innerWidth <= 768) return;
       if (isScrolling) return;
 
       const panels = getPanels();
@@ -321,31 +336,33 @@
   }
 
   // Smooth scroll behavior with section navigation update
+  // Smooth scroll behavior with section navigation update
   const scrollTarget = scrollContainer || window;
 
-  if (scrollContainer) {
-    scrollContainer.addEventListener('scroll', () => {
-      requestParallaxUpdate();
+  // On mobile, scrollContainer (main) is not scrolling, window is.
+  // So we should always listen to window scroll on mobile, or check which one is actually scrolling.
+  // For safety, let's listen to both or switch based on width.
 
-      // Update active section with debounce
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        if (!isScrolling) {
-          updateActiveSection();
-        }
-      }, 150);
-    }, { passive: true });
-  } else {
+  const actualScrollTarget = (window.innerWidth <= 768) ? window : (scrollContainer || window);
+
+  actualScrollTarget.addEventListener('scroll', () => {
+    requestParallaxUpdate();
+
+    // Update active section with debounce
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      // Only update if not currently auto-scrolling
+      if (!isScrolling) {
+        updateActiveSection();
+      }
+    }, 150);
+  }, { passive: true });
+
+  // Also listen to window scroll just in case, for mobile fallback
+  if (actualScrollTarget !== window) {
     window.addEventListener('scroll', () => {
       requestParallaxUpdate();
-
-      // Update active section with debounce
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        if (!isScrolling) {
-          updateActiveSection();
-        }
-      }, 150);
+      if (!isScrolling) updateActiveSection();
     }, { passive: true });
   }
 

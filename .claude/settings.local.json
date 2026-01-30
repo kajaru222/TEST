@@ -11,7 +11,8 @@
       "Bash(npm --version:*)",
       "Bash(test:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(node scripts/convert-images.js:*)"
     ]
   },
   "spinnerTipsEnabled": false

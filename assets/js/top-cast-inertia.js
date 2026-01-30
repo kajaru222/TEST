@@ -14,6 +14,7 @@
   let isDragging = false;
   let isTouchDown = false;
   let startX = 0;
+  let startY = 0;
   let scrollLeft = 0;
   let velocity = 0;
   let animationId = null;
@@ -110,6 +111,7 @@
     if (e.type === "mousedown" && e.button !== 0) return;
 
     const clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type === "touchstart" ? e.touches[0].clientY : e.clientY;
 
     // For mouse, set dragging immediately
     // For touch, wait until movement is detected
@@ -122,6 +124,7 @@
     }
 
     startX = clientX;
+    startY = clientY;
     scrollLeft = getScrollLeft();
     velocity = 0;
     lastMoveX = clientX;
@@ -135,10 +138,19 @@
     if (!isDragging && !isTouchDown) return;
 
     const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
     const deltaX = Math.abs(clientX - startX);
+    const deltaY = Math.abs(clientY - startY);
 
-    // For touch, only start dragging if moved more than 5px
+    // For touch, only start dragging if moved more than 5px AND moved horizontally more than vertically
     if (isTouchDown && !isDragging) {
+      // Determine direction
+      if (deltaY > deltaX && deltaY > 5) {
+        // Vertical scroll intent - let it bubble up
+        isTouchDown = false;
+        return;
+      }
+
       if (deltaX > 5) {
         isDragging = true;
         isTouchDown = false;
