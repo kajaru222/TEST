@@ -1,6 +1,6 @@
 /**
  * Cast card drag scroll - Rebuilt for reliability
- * Features: Drag scroll, infinite loop, click-through to cast.html
+ * Features: Drag scroll, infinite loop, click-through to cast.html, auto-scroll
  */
 (() => {
   // Only run on top page
@@ -20,6 +20,10 @@
   let animationId = null;
   let lastMoveX = 0;
   let lastMoveTime = 0;
+
+  // Auto-scroll settings
+  const autoScrollSpeed = 0.5; // pixels per frame (approx 30px/sec at 60fps)
+  let isPaused = false;
 
   // Get loop width (width of one set of cards)
   const getLoopWidth = () => {
@@ -68,25 +72,33 @@
     return scroll;
   };
 
-  // Animation loop for momentum
+  // Animation loop
   const animate = () => {
+    animationId = requestAnimationFrame(animate);
+
     if (isDragging) {
-      animationId = requestAnimationFrame(animate);
+      // While dragging, we update purely on events, no auto-movement
       return;
     }
 
-    // Apply velocity
-    if (Math.abs(velocity) > 0.1) {
-      scrollLeft += velocity;
-      scrollLeft = wrapScroll(scrollLeft);
-      setScrollLeft(scrollLeft);
+    let move = 0;
 
-      // Decay velocity
-      velocity *= 0.95;
-      animationId = requestAnimationFrame(animate);
+    // Apply velocity (momentum)
+    if (Math.abs(velocity) > 0.1) {
+      move = velocity;
+      velocity *= 0.95; // Decay
     } else {
       velocity = 0;
-      animationId = null;
+      // Apply auto-scroll if not paused and no significant velocity
+      if (!isPaused) {
+        move = -autoScrollSpeed;
+      }
+    }
+
+    if (Math.abs(move) > 0.01) {
+      scrollLeft += move;
+      scrollLeft = wrapScroll(scrollLeft);
+      setScrollLeft(scrollLeft);
     }
   };
 
@@ -94,14 +106,6 @@
   const startAnimation = () => {
     if (!animationId) {
       animationId = requestAnimationFrame(animate);
-    }
-  };
-
-  // Stop animation loop
-  const stopAnimation = () => {
-    if (animationId) {
-      cancelAnimationFrame(animationId);
-      animationId = null;
     }
   };
 
@@ -130,7 +134,8 @@
     lastMoveX = clientX;
     lastMoveTime = Date.now();
 
-    stopAnimation();
+    // Pause auto-scroll on interaction
+    isPaused = true;
   };
 
   // Mouse/touch move
@@ -148,6 +153,7 @@
       if (deltaY > deltaX && deltaY > 5) {
         // Vertical scroll intent - let it bubble up
         isTouchDown = false;
+        isPaused = false; // Resume auto-scroll if not dragging
         return;
       }
 
@@ -155,6 +161,7 @@
         isDragging = true;
         isTouchDown = false;
         viewport.classList.add("is-dragging");
+        isPaused = true; // Ensure paused
       } else {
         return; // Not enough movement yet
       }
@@ -183,6 +190,7 @@
     // If touch was down but never became a drag, trigger click
     if (isTouchDown) {
       isTouchDown = false;
+      isPaused = false; // Resume auto-scroll
 
       // Find the element that was touched
       if (e.type === "touchend" && e.changedTouches && e.changedTouches[0]) {
@@ -200,7 +208,11 @@
       return;
     }
 
-    if (!isDragging) return;
+    if (!isDragging) {
+      // Just in case
+      isPaused = false;
+      return;
+    }
 
     isDragging = false;
     viewport.classList.remove("is-dragging");
@@ -223,19 +235,40 @@
       // Add one-time click preventer
       track.addEventListener("click", preventClick, { capture: true, once: true });
 
-      // Start momentum animation
-      startAnimation();
+      // Momentum will die down in animate loop, then auto-scroll picks up
     } else {
       // Just a click - no momentum
       velocity = 0;
     }
+
+    // We don't strictly set receives isPaused = false here immediately if it's mouse,
+    // because mouseenter/leave handles hover pause. 
+    // But for touch, we need to resume.
+    if (e.type === 'touchend' || e.type === 'touchcancel') {
+      isPaused = false;
+    }
   };
+
+  // Hover events to pause/resume
+  viewport.addEventListener("mouseenter", () => {
+    isPaused = true;
+  });
+
+  viewport.addEventListener("mouseleave", () => {
+    if (!isDragging) {
+      isPaused = false;
+    }
+  });
+
 
   // Mouse events
   viewport.addEventListener("mousedown", onPointerDown);
   viewport.addEventListener("mousemove", onPointerMove);
   viewport.addEventListener("mouseup", onPointerUp);
-  viewport.addEventListener("mouseleave", onPointerUp);
+  // mouseleave handled above for pause logic, but we also want onPointerUp-like behavior if leaving while dragging
+  viewport.addEventListener("mouseleave", (e) => {
+    if (isDragging) onPointerUp(e);
+  });
 
   // Touch events
   viewport.addEventListener("touchstart", onPointerDown, { passive: true });
@@ -254,9 +287,10 @@
     setScrollLeft(scrollLeft);
   });
 
-  // Initialize position
+  // Initialize position and start loop
   setTimeout(() => {
     scrollLeft = wrapScroll(0);
     setScrollLeft(scrollLeft);
+    startAnimation();
   }, 100);
 })();

@@ -140,15 +140,19 @@ class CloudinaryGallery {
 
     // 画像読み込み成功時
     img.addEventListener('load', () => {
-      console.log('Image loaded successfully:', thumbnailUrl);
+      console.log('Thumbnail loaded successfully:', thumbnailUrl);
     });
 
     // 画像読み込みエラー時
     img.addEventListener('error', () => {
-      console.error('Failed to load image:', thumbnailUrl);
+      console.warn('Failed to load thumbnail, showing placeholder:', thumbnailUrl);
       // エラー時はプレースホルダーを表示
       item.style.background = 'var(--panel)';
       img.style.display = 'none';
+      // エラーメッセージを表示
+      const errorMsg = this.createEl('div', 'gallery-item-error', '画像が見つかりません');
+      errorMsg.style.cssText = 'padding: 20px; text-align: center; color: var(--text-muted);';
+      item.appendChild(errorMsg);
     });
 
     item.addEventListener('click', () => this.openGallery(event));
@@ -242,14 +246,20 @@ class CloudinaryGallery {
 
     this.modalImagesGrid.innerHTML = '';
 
+    let loadedCount = 0;
+
     this.currentImages.forEach((imageId, index) => {
-      const item = this.createModalGridItem(imageId, index);
+      const item = this.createModalGridItem(imageId, index, () => {
+        loadedCount++;
+        // 読み込み成功した画像の数でカウンターを更新
+        this.modalCounter.textContent = `${loadedCount}枚の写真`;
+      });
       this.modalImagesGrid.appendChild(item);
     });
   }
 
   // モーダルグリッドアイテムを作成
-  createModalGridItem(imageId, index) {
+  createModalGridItem(imageId, index, onLoadSuccess) {
     const imageUrl = this.getCloudinaryUrl(imageId, {
       width: 500,
       height: 667,
@@ -269,9 +279,17 @@ class CloudinaryGallery {
     item.appendChild(img);
     item.appendChild(loader);
 
-    // 画像読み込みエラー時は非表示
+    // 画像読み込み成功時
+    img.addEventListener('load', () => {
+      console.log('Modal image loaded successfully:', imageUrl);
+      if (onLoadSuccess) onLoadSuccess();
+    });
+
+    // 画像読み込みエラー時は非表示にし、コンソールに警告を出力
     img.addEventListener('error', () => {
+      console.warn('Failed to load modal image, hiding:', imageUrl);
       item.style.display = 'none';
+      item.remove(); // DOMから完全に削除してレイアウトへの影響をなくす
     });
 
     // クリックで拡大表示（オプション）
@@ -301,6 +319,15 @@ class CloudinaryGallery {
     const image = this.createEl('img', 'gallery-fullscreen-image');
     image.src = fullImageUrl;
     image.alt = '拡大画像';
+
+    // 画像読み込みエラー時の処理
+    image.addEventListener('error', () => {
+      console.warn('Failed to load fullscreen image:', fullImageUrl);
+      // エラーメッセージを表示
+      const errorMsg = this.createEl('div', 'gallery-fullscreen-error', '画像を読み込めませんでした');
+      errorMsg.style.cssText = 'position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 20px; text-align: center;';
+      fullscreen.appendChild(errorMsg);
+    });
 
     const closeBtn = this.createEl('button', 'gallery-fullscreen-close', '×');
     closeBtn.setAttribute('aria-label', '閉じる');
@@ -338,9 +365,24 @@ class CloudinaryGallery {
         format: 'auto',
       });
 
+      // 既存のエラーメッセージがあれば削除
+      const existingError = fullscreen.querySelector('.gallery-fullscreen-error');
+      if (existingError) existingError.remove();
+
       image.src = newImageUrl;
       counter.textContent = `${index + 1} / ${this.currentImages.length}`;
       currentFullscreenIndex = index;
+
+      // 新しい画像のエラーハンドリング
+      const handleImageError = () => {
+        console.warn('Failed to load fullscreen image:', newImageUrl);
+        const errorMsg = this.createEl('div', 'gallery-fullscreen-error', '画像を読み込めませんでした');
+        errorMsg.style.cssText = 'position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 20px; text-align: center;';
+        fullscreen.appendChild(errorMsg);
+        image.removeEventListener('error', handleImageError);
+      };
+
+      image.addEventListener('error', handleImageError, { once: true });
     };
 
     const showPrevImage = () => {
