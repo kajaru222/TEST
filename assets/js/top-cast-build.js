@@ -23,7 +23,7 @@
 
   const buildCard = (d) => {
     const id = norm(d.id);
-    const isDummy = id.startsWith('dummy-') || id === 'native';
+    const isDummy = id.startsWith('dummy-');
     const a = mk("a", "cast-card");
 
     if (isDummy) {

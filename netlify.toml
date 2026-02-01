@@ -4,6 +4,36 @@
 [functions]
   directory = "netlify/functions"
 
+[[redirects]]
+  from = "/intro"
+  to = "/intro.html"
+  status = 200
+
+[[redirects]]
+  from = "/stories"
+  to = "/stories.html"
+  status = 200
+
+[[redirects]]
+  from = "/cast"
+  to = "/cast.html"
+  status = 200
+
+[[redirects]]
+  from = "/access"
+  to = "/access.html"
+  status = 200
+
+[[redirects]]
+  from = "/gallery"
+  to = "/gallery.html"
+  status = 200
+
+[[redirects]]
+  from = "/about"
+  to = "/about.html"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
